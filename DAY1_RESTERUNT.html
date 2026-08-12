@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>仙台車站東口美食地圖 (Google Maps 版)</title>
+    <style>
+        :root {
+            --primary: #2b3a4a;
+            --accent: #d9534f;
+            --bg: #f8f9fa;
+            --card-bg: #ffffff;
+            --text: #333333;
+            --border: #e2e8f0;
+        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.5;
+            padding: 12px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        header {
+            text-align: center;
+            padding: 16px 12px;
+            background: linear-gradient(135deg, #2b3a4a, #4a607a);
+            color: #ffffff;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.08);
+        }
+        header h1 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        header p {
+            font-size: 0.85rem;
+            opacity: 0.9;
+        }
+        .start-point {
+            background-color: #eef6ff;
+            border: 1px solid #bedbfe;
+            border-radius: 8px;
+            padding: 10px 12px;
+            margin-bottom: 12px;
+            font-size: 0.88rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .start-point span {
+            font-weight: bold;
+            color: #1d4ed8;
+        }
+        
+        /* Sticky 地圖容器 */
+        .map-wrapper {
+            position: sticky;
+            top: 10px;
+            z-index: 1000;
+            margin-bottom: 16px;
+            background-color: var(--bg);
+        }
+        #gmap-iframe {
+            width: 100%;
+            height: 320px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            border: 2px solid #cbd5e1;
+            background-color: #e5e3df;
+        }
+
+        .restaurant-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .card {
+            background-color: var(--card-bg);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 14px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .card:hover {
+            border-color: #3b82f6;
+            transform: translateY(-2px);
+        }
+        .card.active {
+            border-color: #2563eb;
+            background-color: #f0f7ff;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+        }
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 8px;
+        }
+        .restaurant-name {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        .badge {
+            background-color: #fef2f2;
+            color: #dc2626;
+            border: 1px solid #fecaca;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 12px;
+            white-space: nowrap;
+        }
+        .info-row {
+            font-size: 0.85rem;
+            color: #555555;
+            display: flex;
+            align-items: flex-start;
+            gap: 6px;
+        }
+        .info-label {
+            font-weight: 600;
+            color: #666666;
+            min-width: 60px;
+        }
+        .btn-group {
+            display: flex;
+            gap: 8px;
+            margin-top: 6px;
+        }
+        .btn {
+            flex: 1;
+            text-align: center;
+            padding: 8px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            border-radius: 6px;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+        .btn-nav {
+            background-color: #059669;
+            color: #ffffff;
+        }
+        .btn-nav:hover {
+            background-color: #047857;
+        }
+        .click-hint {
+            font-size: 0.75rem;
+            color: #2563eb;
+            font-weight: 600;
+            text-align: right;
+            margin-top: -2px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>仙台車站東口美食地圖</h1>
+        <p>點擊下方卡片即可切換 Google 地圖顯示位置</p>
+    </header>
+
+    <div class="start-point">
+        📍 <span>出發地點：</span> ホテルグランバッハ仙台 (Hotel Grand Bach Sendai)
+    </div>
+
+    <!-- Google 地圖容器 (Sticky) -->
+    <div class="map-wrapper">
+        <iframe 
+            id="gmap-iframe"
+            src="https://maps.google.com/maps?q=ホテルグランバッハ仙台,仙台&t=&z=16&ie=UTF8&iwloc=&output=embed" 
+            allowfullscreen="" 
+            loading="lazy" 
+            referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+    </div>
+
+    <div class="restaurant-list" id="restaurant-list">
+        <!-- 由 JS 動態產生卡片 -->
+    </div>
+
+    <script>
+        const originName = "ホテルグランバッハ仙台";
+
+        const restaurants = [
+            {
+                id: 1,
+                name: "なか卯 仙台駅東口店",
+                query: "なか卯+仙台駅東口店",
+                walk: "3 分鐘",
+                hours: "24小時營業",
+                desc: "日式親子丼、烏龍麵、平價快速連鎖餐點"
+            },
+            {
+                id: 2,
+                name: "力寿司",
+                query: "力寿司+仙台",
+                walk: "5 分鐘",
+                hours: "11:00 - 22:00（依現場公告為主）",
+                desc: "傳統日式壽司、新鮮海鮮握壽司與刺身料理"
+            },
+            {
+                id: 3,
+                name: "吉野家 仙台駅東口店",
+                query: "吉野家+仙台駅東口店",
+                walk: "7 分鐘",
+                hours: "24小時營業",
+                desc: "經典日式牛丼、豬肉丼、定食"
+            },
+            {
+                id: 4,
+                name: "麥當勞 (マクドナルド 仙台駅東口店)",
+                query: "マクドナルド+仙台駅東口店",
+                walk: "7 分鐘",
+                hours: "06:00 - 23:00（早餐 06:00 - 10:30）",
+                desc: "美式速食、漢堡、薯條、咖啡點心"
+            },
+            {
+                id: 5,
+                name: "牛たん料理 閣 初恋通り店",
+                query: "牛たん料理+閣+初恋通り店",
+                walk: "8 分鐘",
+                hours: "[平日] 11:30 - 14:30, 17:00 - 22:30<br>[土日祝] 11:00 - 14:30, 17:00 - 22:30",
+                desc: "仙台名店、厚切炭烤牛舌、牛舌刺身"
+            },
+            {
+                id: 6,
+                name: "牛タン焼専門店 司 東口ダイワロイネット店",
+                query: "牛タン焼専門店+司+東口ダイワロイネット店",
+                walk: "8 分鐘",
+                hours: "11:00 - 14:00, 17:00 - 22:30",
+                desc: "極致軟嫩厚切牛舌、清爽牛尾湯"
+            },
+            {
+                id: 7,
+                name: "大阪とんかつ ニューベイブ (ヨドバシ仙台店)",
+                query: "ニューベイブ+ヨドバシ仙台",
+                walk: "10 分鐘",
+                hours: "11:00 - 23:00 (L.O. 22:00)",
+                desc: "位於 Yodobashi 6F，特色軟嫩厚切日式炸豬排"
+            }
+        ];
+
+        const iframe = document.getElementById('gmap-iframe');
+        const listContainer = document.getElementById('restaurant-list');
+
+        restaurants.forEach(item => {
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.id = `card-${item.id}`;
+            card.onclick = () => selectRestaurant(item);
+
+            card.innerHTML = `
+                <div class="card-header">
+                    <div class="restaurant-name">${item.name}</div>
+                    <span class="badge">🚶 步行 ${item.walk}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">🕒 營業：</span>
+                    <span>${item.hours}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">🍱 特色：</span>
+                    <span>${item.desc}</span>
+                </div>
+                <div class="click-hint">🗺️ 點擊卡片在上方 Google 地圖顯示位置</div>
+                <div class="btn-group" onclick="event.stopPropagation()">
+                    <a href="https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(originName)}&destination=${encodeURIComponent(item.query)}&travelmode=walking" target="_blank" class="btn btn-nav">開啟 Google Maps 步行導航</a>
+                </div>
+            `;
+
+            listContainer.appendChild(card);
+        });
+
+        function selectRestaurant(item) {
+            // 切換卡片高亮
+            document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
+            const activeCard = document.getElementById(`card-${item.id}`);
+            if (activeCard) activeCard.classList.add('active');
+
+            // 更新 Google Maps Iframe 的 URL 為該餐廳地點
+            const newMapUrl = `https://maps.google.com/maps?q=${encodeURIComponent(item.name + " 仙台")}&t=&z=17&ie=UTF8&iwloc=&output=embed`;
+            iframe.src = newMapUrl;
+        }
+    </script>
+</body>
+</html>
