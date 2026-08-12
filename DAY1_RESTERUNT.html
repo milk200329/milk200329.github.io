@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>仙台車站東口美食地圖 (Google Maps 版)</title>
+    <title>仙台車站東口美食地圖 (Google My Maps 多標記版)</title>
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
         :root {
             --primary: #2b3a4a;
@@ -69,13 +71,42 @@
             margin-bottom: 16px;
             background-color: var(--bg);
         }
-        #gmap-iframe {
+        #map {
             width: 100%;
-            height: 320px;
+            height: 380px;
             border-radius: 12px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.15);
             border: 2px solid #cbd5e1;
-            background-color: #e5e3df;
+        }
+
+        /* 自訂 Google Maps 風格 Marker Label */
+        .custom-label-icon {
+            background: transparent;
+            border: none;
+        }
+        .map-label {
+            background-color: white;
+            border: 1px solid #cbd5e1;
+            border-radius: 16px;
+            padding: 3px 8px;
+            font-size: 11px;
+            font-weight: 600;
+            color: #333333;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .map-label.hotel {
+            border-color: #2563eb;
+            color: #1d4ed8;
+            font-weight: 700;
+        }
+        .map-label.active {
+            background-color: #2563eb;
+            color: #ffffff;
+            border-color: #1d4ed8;
         }
 
         .restaurant-list {
@@ -172,102 +203,177 @@
 
     <header>
         <h1>仙台車站東口美食地圖</h1>
-        <p>點擊下方卡片即可切換 Google 地圖顯示位置</p>
+        <p>全景多標記地圖 — 點選卡片聚焦位置</p>
     </header>
 
     <div class="start-point">
         📍 <span>出發地點：</span> ホテルグランバッハ仙台 (Hotel Grand Bach Sendai)
     </div>
 
-    <!-- Google 地圖容器 (Sticky) -->
+    <!-- 地圖容器 -->
     <div class="map-wrapper">
-        <iframe 
-            id="gmap-iframe"
-            src="https://maps.google.com/maps?q=ホテルグランバッハ仙台,仙台&t=&z=16&ie=UTF8&iwloc=&output=embed" 
-            allowfullscreen="" 
-            loading="lazy" 
-            referrerpolicy="no-referrer-when-downgrade">
-        </iframe>
+        <div id="map"></div>
     </div>
 
     <div class="restaurant-list" id="restaurant-list">
-        <!-- 由 JS 動態產生卡片 -->
+        <!-- 卡片由 JS 動態生成 -->
     </div>
 
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        const originName = "ホテルグランバッハ仙台";
+        const origin = {
+            name: "Hotel Grand Bach S...",
+            fullTitle: "ホテルグランバッハ仙台",
+            lat: 38.259530,
+            lng: 140.884150,
+            icon: "🏨"
+        };
 
         const restaurants = [
             {
                 id: 1,
-                name: "なか卯 仙台駅東口店",
-                query: "なか卯+仙台駅東口店",
+                name: "Nakau",
+                fullTitle: "なか卯 仙台駅東口店",
+                lat: 38.258830,
+                lng: 140.883700,
+                icon: "🍴",
                 walk: "3 分鐘",
                 hours: "24小時營業",
-                desc: "日式親子丼、烏龍麵、平價快速連鎖餐點"
+                desc: "日式親子丼、烏龍麵、平價快速連鎖餐點",
+                query: "なか卯+仙台駅東口店"
             },
             {
                 id: 2,
                 name: "力寿司",
-                query: "力寿司+仙台",
+                fullTitle: "力寿司",
+                lat: 38.258280,
+                lng: 140.884650,
+                icon: "🍣",
                 walk: "5 分鐘",
                 hours: "11:00 - 22:00（依現場公告為主）",
-                desc: "傳統日式壽司、新鮮海鮮握壽司與刺身料理"
+                desc: "傳統日式壽司、新鮮海鮮握壽司與刺身料理",
+                query: "力寿司+仙台"
             },
             {
                 id: 3,
-                name: "吉野家 仙台駅東口店",
-                query: "吉野家+仙台駅東口店",
+                name: "Yoshinoya",
+                fullTitle: "吉野家 仙台駅東口店",
+                lat: 38.259850,
+                lng: 140.882100,
+                icon: "🍚",
                 walk: "7 分鐘",
                 hours: "24小時營業",
-                desc: "經典日式牛丼、豬肉丼、定食"
+                desc: "經典日式牛丼、豬肉丼、定食",
+                query: "吉野家+仙台駅東口店"
             },
             {
                 id: 4,
-                name: "麥當勞 (マクドナルド 仙台駅東口店)",
-                query: "マクドナルド+仙台駅東口店",
+                name: "麥當勞",
+                fullTitle: "麥當勞 (マクドナルド 仙台駅東口店)",
+                lat: 38.259700,
+                lng: 140.882400,
+                icon: "🍔",
                 walk: "7 分鐘",
                 hours: "06:00 - 23:00（早餐 06:00 - 10:30）",
-                desc: "美式速食、漢堡、薯條、咖啡點心"
+                desc: "美式速食、漢堡、薯條、咖啡點心",
+                query: "マクドナルド+仙台駅東口店"
             },
             {
                 id: 5,
-                name: "牛たん料理 閣 初恋通り店",
-                query: "牛たん料理+閣+初恋通り店",
+                name: "Gyutan Kaku Hatsu...",
+                fullTitle: "牛たん料理 閣 初恋通り店",
+                lat: 38.258900,
+                lng: 140.881200,
+                icon: "🍖",
                 walk: "8 分鐘",
                 hours: "[平日] 11:30 - 14:30, 17:00 - 22:30<br>[土日祝] 11:00 - 14:30, 17:00 - 22:30",
-                desc: "仙台名店、厚切炭烤牛舌、牛舌刺身"
+                desc: "仙台名店、厚切炭烤牛舌、牛舌刺身",
+                query: "牛たん料理+閣+初恋通り店"
             },
             {
                 id: 6,
-                name: "牛タン焼専門店 司 東口ダイワロイネット店",
-                query: "牛タン焼専門店+司+東口ダイワロイネット店",
+                name: "Gyutan Tsukasa Se...",
+                fullTitle: "牛タン焼専門店 司 東口ダイワロイネット店",
+                lat: 38.259100,
+                lng: 140.882800,
+                icon: "📍",
                 walk: "8 分鐘",
                 hours: "11:00 - 14:00, 17:00 - 22:30",
-                desc: "極致軟嫩厚切牛舌、清爽牛尾湯"
+                desc: "極致軟嫩厚切牛舌、清爽牛尾湯",
+                query: "牛タン焼専門店+司+東口ダイワロイネット店"
             },
             {
                 id: 7,
-                name: "大阪とんかつ ニューベイブ (ヨドバシ仙台店)",
-                query: "ニューベイブ+ヨドバシ仙台",
+                name: "Osaka Tonkatsu Ne...",
+                fullTitle: "大阪とんかつ ニューベイブ (ヨドバシ仙台店)",
+                lat: 38.258300,
+                lng: 140.882200,
+                icon: "🥩",
                 walk: "10 分鐘",
                 hours: "11:00 - 23:00 (L.O. 22:00)",
-                desc: "位於 Yodobashi 6F，特色軟嫩厚切日式炸豬排"
+                desc: "位於 Yodobashi 6F，特色軟嫩厚切日式炸豬排",
+                query: "ニューベイブ+ヨドバシ仙台"
             }
         ];
 
-        const iframe = document.getElementById('gmap-iframe');
+        // 初始化 Leaflet 地圖
+        const map = L.map('map', {
+            zoomControl: false
+        }).setView([38.259000, 140.883000], 16);
+
+        // 新增右下角 Zoom 控制鍵
+        L.control.zoom({ position: 'bottomright' }).addTo(map);
+
+        // 使用 OpenStreetMap 清爽風圖資
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '© OpenStreetMap'
+        }).addTo(map);
+
+        // 標記飯店標籤
+        const originIcon = L.divIcon({
+            className: 'custom-label-icon',
+            html: `<div class="map-label hotel">🏨 ${origin.name}</div>`,
+            iconSize: [120, 30],
+            iconAnchor: [60, 15]
+        });
+        const originMarker = L.marker([origin.lat, origin.lng], { icon: originIcon }).addTo(map);
+        originMarker.bindPopup(`<b>${origin.fullTitle}</b><br>(出發地點)`);
+
+        const markers = {};
+        const labelElements = {};
+
+        // 渲染餐廳卡片與地圖標籤（同時顯示所有標籤）
         const listContainer = document.getElementById('restaurant-list');
 
         restaurants.forEach(item => {
+            // 建立地圖 Marker Label（如您附圖風格）
+            const iconHtml = `<div class="map-label" id="label-${item.id}"><span>${item.icon}</span> ${item.name}</div>`;
+            const customIcon = L.divIcon({
+                className: 'custom-label-icon',
+                html: iconHtml,
+                iconSize: [130, 30],
+                iconAnchor: [65, 15]
+            });
+
+            const marker = L.marker([item.lat, item.lng], { icon: customIcon }).addTo(map);
+            marker.bindPopup(`<b>${item.fullTitle}</b><br>🚶 步行約 ${item.walk}`);
+            markers[item.id] = marker;
+
+            marker.on('click', () => {
+                selectRestaurant(item.id, false);
+            });
+
+            // 建立下方卡片
             const card = document.createElement('div');
             card.className = 'card';
             card.id = `card-${item.id}`;
-            card.onclick = () => selectRestaurant(item);
+            card.onclick = () => selectRestaurant(item.id, true);
 
             card.innerHTML = `
                 <div class="card-header">
-                    <div class="restaurant-name">${item.name}</div>
+                    <div class="restaurant-name">${item.fullTitle}</div>
                     <span class="badge">🚶 步行 ${item.walk}</span>
                 </div>
                 <div class="info-row">
@@ -278,24 +384,35 @@
                     <span class="info-label">🍱 特色：</span>
                     <span>${item.desc}</span>
                 </div>
-                <div class="click-hint">🗺️ 點擊卡片在上方 Google 地圖顯示位置</div>
+                <div class="click-hint">📍 點擊卡片地圖將聚焦至該標籤</div>
                 <div class="btn-group" onclick="event.stopPropagation()">
-                    <a href="https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(originName)}&destination=${encodeURIComponent(item.query)}&travelmode=walking" target="_blank" class="btn btn-nav">開啟 Google Maps 步行導航</a>
+                    <a href="https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(origin.fullTitle)}&destination=${encodeURIComponent(item.query)}&travelmode=walking" target="_blank" class="btn btn-nav">開啟 Google Maps 步行導航</a>
                 </div>
             `;
 
             listContainer.appendChild(card);
         });
 
-        function selectRestaurant(item) {
-            // 切換卡片高亮
+        function selectRestaurant(id, isCardClick) {
+            // 移除舊的 active 樣式
             document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
-            const activeCard = document.getElementById(`card-${item.id}`);
+            document.querySelectorAll('.map-label').forEach(l => l.classList.remove('active'));
+
+            const item = restaurants.find(r => r.id === id);
+            if (!item) return;
+
+            // 加上 active 樣式
+            const activeCard = document.getElementById(`card-${id}`);
             if (activeCard) activeCard.classList.add('active');
 
-            // 更新 Google Maps Iframe 的 URL 為該餐廳地點
-            const newMapUrl = `https://maps.google.com/maps?q=${encodeURIComponent(item.name + " 仙台")}&t=&z=17&ie=UTF8&iwloc=&output=embed`;
-            iframe.src = newMapUrl;
+            const activeLabel = document.getElementById(`label-${id}`);
+            if (activeLabel) activeLabel.classList.add('active');
+
+            const activeMarker = markers[id];
+            if (activeMarker) activeMarker.openPopup();
+
+            // 平滑放大移至選中點
+            map.flyTo([item.lat, item.lng], 17, { duration: 0.8 });
         }
     </script>
 </body>
