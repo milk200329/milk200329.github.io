@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>仙台車站東口美食地圖 (精確座標與方向優化版)</title>
+    <title>仙台車站東口美食地圖 (精確座標地圖校正版)</title>
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
@@ -233,7 +233,7 @@
 
     <header>
         <h1>仙台車站東口美食地圖</h1>
-        <p>精確地理座標・正北朝上方位校正</p>
+        <p>「閣 初恋通り店」精確實址定位校正</p>
     </header>
 
     <div class="start-point">
@@ -261,106 +261,113 @@
     <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        // 校正後的精確 GPS 緯經度 (Standard WGS84 - 正北朝上)
+        // 出發地點：Hotel Grand Bach Sendai
         const origin = {
             name: "Grand Bach Sendai",
             fullTitle: "ホテルグランバッハ仙台 (Hotel Grand Bach)",
-            lat: 38.258017,
-            lng: 140.884568,
+            lat: 38.259530,
+            lng: 140.884150,
             icon: "🏨"
         };
 
         const restaurants = [
             {
                 id: 1,
+                name: "Gyutan Kaku (閣)",
+                fullTitle: "牛たん料理 閣 初恋通り店",
+                lat: 38.259600,
+                lng: 140.883100, // 正確地址：宮城県仙台市宮城野区榴岡2-2-25 B1F (初恋通り與東七番丁通り交界)
+                icon: "🥩",
+                walk: "2 分鐘 (飯店西側・初恋通)",
+                hours: "[平日] 11:30 - 14:30, 17:00 - 22:30<br>[土日祝] 11:00 - 14:30, 17:00 - 22:30",
+                address: "宮城県仙台市宮城野区榴岡2-2-25 B1F",
+                desc: "仙台超人氣厚切炭烤牛舌名店、牛舌刺身（位於初恋通地下1樓）",
+                query: "宮城県仙台市宮城野区榴岡2-2-25"
+            },
+            {
+                id: 2,
                 name: "なか卯 (Nakau)",
                 fullTitle: "なか卯 仙台駅東口店",
-                lat: 38.258670,
-                lng: 140.883730,
+                lat: 38.258830,
+                lng: 140.883700,
                 icon: "🍴",
-                walk: "3 分鐘 (飯店西北側)",
+                walk: "3 分鐘 (飯店西南側)",
                 hours: "24小時營業",
+                address: "宮城県仙台市宮城野区榴岡1-6-30",
                 desc: "日式親子丼、烏龍麵、平價快速連鎖餐點",
                 query: "なか卯+仙台駅東口店"
             },
             {
-                id: 2,
+                id: 3,
                 name: "力寿司",
                 fullTitle: "力寿司",
-                lat: 38.259250,
-                lng: 140.884500,
+                lat: 38.260500,
+                lng: 140.884200,
                 icon: "🍣",
-                walk: "3 分鐘 (飯店正北側)",
+                walk: "2 分鐘 (飯店北側)",
                 hours: "11:00 - 22:00（依現場公告為主）",
+                address: "宮城県仙台市宮城野区東八番丁",
                 desc: "傳統日式壽司、新鮮海鮮握壽司與刺身料理",
                 query: "力寿司+仙台"
             },
             {
-                id: 3,
-                name: "Gyutan Tsukasa",
+                id: 4,
+                name: "Gyutan Tsukasa (司)",
                 fullTitle: "牛タン焼専門店 司 東口ダイワロイネット店",
-                lat: 38.257050,
-                lng: 140.883800,
+                lat: 38.258600,
+                lng: 140.882900,
                 icon: "🍖",
-                walk: "4 分鐘 (飯店西南側)",
+                walk: "3 分鐘 (Daiwa Roynet 飯店 1F)",
                 hours: "11:00 - 14:00, 17:00 - 22:30",
+                address: "宮城県仙台市宮城野区榴岡1-2-37 1F",
                 desc: "極致軟嫩厚切牛舌、清爽牛尾湯",
                 query: "牛タン焼専門店+司+東口ダイワロイネット店"
             },
             {
-                id: 4,
-                name: "Yoshinoya",
+                id: 5,
+                name: "Yoshinoya (吉野家)",
                 fullTitle: "吉野家 仙台駅東口店",
-                lat: 38.259050,
-                lng: 140.882400,
+                lat: 38.259700,
+                lng: 140.882500,
                 icon: "🍚",
-                walk: "6 分鐘 (飯店西北方向)",
+                walk: "4 分鐘 (仙台車站東口路口)",
                 hours: "24小時營業",
+                address: "宮城県仙台市宮城野区榴岡1-2-10",
                 desc: "經典日式牛丼、豬肉丼、定食",
                 query: "吉野家+仙台駅東口店"
             },
             {
-                id: 5,
+                id: 6,
                 name: "麥當勞",
                 fullTitle: "麥當勞 (マクドナルド 仙台駅東口店)",
-                lat: 38.258850,
-                lng: 140.882100,
+                lat: 38.259800,
+                lng: 140.882200,
                 icon: "🍔",
-                walk: "6 分鐘 (飯店西北方向)",
+                walk: "4 分鐘 (仙台車站東口路口)",
                 hours: "06:00 - 23:00（早餐 06:00 - 10:30）",
+                address: "宮城県仙台市宮城野区榴岡1-2-10",
                 desc: "美式速食、漢堡、薯條、咖啡點心",
                 query: "マクドナルド+仙台駅東口店"
-            },
-            {
-                id: 6,
-                name: "Gyutan Kaku",
-                fullTitle: "牛たん料理 閣 初恋通り店",
-                lat: 38.259550,
-                lng: 140.882500,
-                icon: "🥩",
-                walk: "7 分鐘 (飯店西北側)",
-                hours: "[平日] 11:30 - 14:30, 17:00 - 22:30<br>[土日祝] 11:00 - 14:30, 17:00 - 22:30",
-                desc: "仙台名店、厚切炭烤牛舌、牛舌刺身",
-                query: "牛たん料理+閣+初恋通り店"
             },
             {
                 id: 7,
                 name: "Osaka Tonkatsu",
                 fullTitle: "大阪とんかつ ニューベイブ (ヨドバシ仙台店)",
-                lat: 38.257500,
-                lng: 140.882300,
+                lat: 38.258300,
+                lng: 140.882200,
                 icon: "🍱",
-                walk: "7 分鐘 (仙台車站東口 Yodobashi 6F)",
+                walk: "5 分鐘 (Yodobashi 仙台 6F)",
                 hours: "11:00 - 23:00 (L.O. 22:00)",
+                address: "宮城県仙台市宮城野区榴岡1-3-1 6F",
                 desc: "位於 Yodobashi 6F，特色軟嫩厚切日式炸豬排",
                 query: "ニューベイブ+ヨドバシ仙台"
             }
         ];
 
-        // 初始化 Leaflet 地圖，中心設在 Grand Bach 飯店
+        // 初始化 Leaflet 地圖，中心設在 Hotel Grand Bach
         const map = L.map('map', {
             zoomControl: false
-        }).setView([38.258300, 140.883500], 17);
+        }).setView([38.259300, 140.883500], 17);
 
         L.control.zoom({ position: 'bottomright' }).addTo(map);
 
@@ -420,7 +427,7 @@
             });
 
             const marker = L.marker([item.lat, item.lng], { icon: customIcon }).addTo(map);
-            marker.bindPopup(`<b>${item.fullTitle}</b><br>🚶 步行約 ${item.walk}`);
+            marker.bindPopup(`<b>${item.fullTitle}</b><br>📍 ${item.address}<br>🚶 步行約 ${item.walk}`);
             markers[item.id] = marker;
 
             marker.on('click', () => {
@@ -436,6 +443,10 @@
                 <div class="card-header">
                     <div class="restaurant-name">${item.fullTitle}</div>
                     <span class="badge">🚶 ${item.walk}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">📍 地址：</span>
+                    <span>${item.address}</span>
                 </div>
                 <div class="info-row">
                     <span class="info-label">🕒 營業：</span>
