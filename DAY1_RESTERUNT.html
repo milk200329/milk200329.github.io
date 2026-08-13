@@ -3,485 +3,251 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>仙台車站東口美食地圖 (精確座標地圖校正版)</title>
+    <title>仙台車站美食地圖 & 步行時間</title>
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
-        :root {
-            --primary: #2b3a4a;
-            --accent: #d9534f;
-            --bg: #f8f9fa;
-            --card-bg: #ffffff;
-            --text: #333333;
-            --border: #cbd5e1;
-        }
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
         }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
-            line-height: 1.5;
-            padding: 12px;
-            max-width: 600px;
+            background-color: #f8f9fa;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            max-width: 480px;
             margin: 0 auto;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
         header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 12px 16px;
             text-align: center;
-            padding: 16px 12px;
-            background: linear-gradient(135deg, #1e293b, #334155);
-            color: #ffffff;
-            border-radius: 12px;
-            margin-bottom: 12px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.08);
-        }
-        header h1 {
-            font-size: 1.2rem;
-            font-weight: 700;
-            margin-bottom: 4px;
-        }
-        header p {
-            font-size: 0.82rem;
-            opacity: 0.9;
-        }
-        .start-point {
-            background-color: #eff6ff;
-            border: 1px solid #bfdbfe;
-            border-radius: 8px;
-            padding: 10px 12px;
-            margin-bottom: 12px;
-            font-size: 0.85rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .start-point span {
+            font-size: 16px;
             font-weight: bold;
-            color: #1d4ed8;
-        }
-        
-        /* 切換地圖底圖選單 */
-        .map-controls {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 8px;
-            background: #ffffff;
-            padding: 6px;
-            border-radius: 8px;
-            border: 1px solid var(--border);
-            align-items: center;
-        }
-        .map-controls label {
-            font-size: 0.8rem;
-            font-weight: 700;
-            color: #475569;
-            white-space: nowrap;
-        }
-        .map-controls select {
-            flex: 1;
-            padding: 6px 10px;
-            font-size: 0.82rem;
-            border-radius: 6px;
-            border: 1px solid #94a3b8;
-            background-color: #f8fafc;
-            color: #0f172a;
-            font-weight: 600;
-            outline: none;
-        }
-
-        /* Sticky 地圖容器 */
-        .map-wrapper {
-            position: sticky;
-            top: 10px;
-            z-index: 1000;
-            margin-bottom: 16px;
-            background-color: var(--bg);
+            flex-shrink: 0;
         }
         #map {
+            height: 40vh;
             width: 100%;
-            height: 380px;
-            border-radius: 12px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-            border: 2px solid #94a3b8;
+            flex-shrink: 0;
+            z-index: 1;
         }
-
-        /* 自訂 Google Maps 風格 Marker Label */
-        .custom-label-icon {
-            background: transparent;
-            border: none;
+        .container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 12px;
         }
-        .map-label {
-            background-color: #ffffff;
-            border: 1px solid #64748b;
-            border-radius: 16px;
-            padding: 3px 8px;
-            font-size: 11px;
-            font-weight: 700;
-            color: #1e293b;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.25);
-            white-space: nowrap;
-            display: flex;
-            align-items: center;
-            gap: 4px;
+        .origin-card {
+            background-color: #e8f4f8;
+            border-left: 4px solid #3498db;
+            padding: 10px 12px;
+            border-radius: 6px;
+            margin-bottom: 12px;
+            font-size: 13px;
         }
-        .map-label.hotel {
-            border-color: #2563eb;
-            background-color: #eff6ff;
-            color: #1d4ed8;
-            font-weight: 800;
+        .origin-title {
+            font-weight: bold;
+            color: #2980b9;
+            margin-bottom: 2px;
         }
-        .map-label.active {
-            background-color: #2563eb;
-            color: #ffffff;
-            border-color: #1d4ed8;
-        }
-
         .restaurant-list {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 10px;
         }
         .card {
-            background-color: var(--card-bg);
-            border: 2px solid var(--border);
-            border-radius: 12px;
-            padding: 14px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.04);
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
+            background: white;
+            border-radius: 10px;
+            padding: 12px 14px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            border: 1px solid #eee;
             cursor: pointer;
             transition: all 0.2s ease;
-        }
-        .card:hover {
-            border-color: #3b82f6;
-            transform: translateY(-2px);
-        }
-        .card.active {
-            border-color: #2563eb;
-            background-color: #f0f7ff;
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
-        }
-        .card-header {
             display: flex;
             justify-content: space-between;
-            align-items: flex-start;
-            gap: 8px;
+            align-items: center;
         }
-        .restaurant-name {
-            font-size: 1.02rem;
-            font-weight: 700;
-            color: var(--primary);
+        .card:hover, .card.active {
+            border-color: #e74c3c;
+            background-color: #fff9f9;
+            transform: translateY(-1px);
+        }
+        .info {
+            flex: 1;
+            padding-right: 10px;
+        }
+        .name {
+            font-size: 15px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 4px;
+        }
+        .address {
+            font-size: 12px;
+            color: #7f8c8d;
+            line-height: 1.3;
         }
         .badge {
-            background-color: #fef2f2;
-            color: #dc2626;
-            border: 1px solid #fecaca;
-            font-size: 0.75rem;
-            font-weight: 600;
-            padding: 2px 8px;
+            background-color: #e74c3c;
+            color: white;
+            padding: 4px 8px;
             border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
             white-space: nowrap;
-        }
-        .info-row {
-            font-size: 0.85rem;
-            color: #475569;
             display: flex;
-            align-items: flex-start;
-            gap: 6px;
+            align-items: center;
+            gap: 3px;
         }
-        .info-label {
-            font-weight: 600;
-            color: #64748b;
-            min-width: 60px;
+        .badge-origin {
+            background-color: #3498db;
         }
-        .btn-group {
-            display: flex;
-            gap: 8px;
-            margin-top: 6px;
-        }
-        .btn {
-            flex: 1;
+        .footer-note {
             text-align: center;
-            padding: 8px;
-            font-size: 0.82rem;
-            font-weight: 600;
-            border-radius: 6px;
-            text-decoration: none;
-            transition: background 0.2s;
-        }
-        .btn-nav {
-            background-color: #059669;
-            color: #ffffff;
-        }
-        .btn-nav:hover {
-            background-color: #047857;
-        }
-        .click-hint {
-            font-size: 0.75rem;
-            color: #2563eb;
-            font-weight: 600;
-            text-align: right;
-            margin-top: -2px;
+            font-size: 11px;
+            color: #95a5a6;
+            margin-top: 15px;
+            margin-bottom: 10px;
         }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>仙台車站東口美食地圖</h1>
-        <p>「閣 初恋通り店」精確實址定位校正</p>
+        仙台美食地圖 ＆ 步行指南
     </header>
 
-    <div class="start-point">
-        🏨 <span>出發地點：</span> ホテルグランバッハ仙台 (Hotel Grand Bach Sendai)
-    </div>
+    <div id="map"></div>
 
-    <div class="map-wrapper">
-        <!-- 切換圖層下拉式選單 -->
-        <div class="map-controls">
-            <label for="tileSelect">🗺️ 切換地圖風格：</label>
-            <select id="tileSelect" onchange="changeTileLayer(this.value)">
-                <option value="carto">CartoDB Positron (淺色清爽版 - 類似 Google Maps)</option>
-                <option value="osm">OpenStreetMap (經典標準街道地圖)</option>
-                <option value="esri_sat">Esri World Imagery (衛星實景地圖)</option>
-                <option value="carto_dark">CartoDB Dark Matter (深色夜間模式)</option>
-            </select>
+    <div class="container">
+        <div class="origin-card">
+            <div class="origin-title">📍 出發地</div>
+            <div style="font-size: 14px; font-weight: bold; color: #333;">ホテルグランバッハ仙台 (Hotel Grand Bach Sendai)</div>
+            <div style="color: #666; font-size: 12px; margin-top: 2px;">宮城県仙台市宮城野区榴岡3-7-33</div>
         </div>
-        <div id="map"></div>
-    </div>
 
-    <div class="restaurant-list" id="restaurant-list">
-        <!-- 卡片由 JS 動態生成 -->
+        <div class="restaurant-list">
+            <div class="card" onclick="focusLocation(0)">
+                <div class="info">
+                    <div class="name">力寿司</div>
+                    <div class="address">宮城県仙台市青葉区小田原1-1-5</div>
+                </div>
+                <div class="badge">🚶 約 5 分</div>
+            </div>
+
+            <div class="card" onclick="focusLocation(1)">
+                <div class="info">
+                    <div class="name">牛たん料理 閣 初恋通り店</div>
+                    <div class="address">宮城県仙台市青葉区中央2-8-26 AONEビル 1F</div>
+                </div>
+                <div class="badge">🚶 約 8 分</div>
+            </div>
+
+            <div class="card" onclick="focusLocation(2)">
+                <div class="info">
+                    <div class="name">牛タン焼専門店 司 東口ダイワロイネット店</div>
+                    <div class="address">宮城県仙台市宮城野区榴岡1-2-37</div>
+                </div>
+                <div class="badge">🚶 約 8 分</div>
+            </div>
+
+            <div class="card" onclick="focusLocation(3)">
+                <div class="info">
+                    <div class="name">大阪とんかつ ニューベイブ 仙台店</div>
+                    <div class="address">宮城県仙台市青葉区一番町3-1-11</div>
+                </div>
+                <div class="badge">🚶 約 10 分</div>
+            </div>
+        </div>
+
+        <div class="footer-note">
+            點擊上方卡片即可在地圖中定位並查看店家名稱與步行時間
+        </div>
     </div>
 
     <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        // 出發地點：Hotel Grand Bach Sendai
+        // 初始化地圖 (中心設在仙台車站附近)
+        const map = L.map('map').setView([38.2598, 140.8825], 15);
+
+        // 使用 OpenStreetMap 圖資
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        // 地點資料
         const origin = {
-            name: "Grand Bach Sendai",
-            fullTitle: "ホテルグランバッハ仙台 (Hotel Grand Bach)",
-            lat: 38.259530,
-            lng: 140.884150,
-            icon: "🏨"
+            name: "ホテルグランバッハ仙台",
+            lat: 38.2585,
+            lng: 140.8860,
+            address: "宮城県仙台市宮城野区榴岡3-7-33"
         };
 
         const restaurants = [
-            {
-                id: 1,
-                name: "Gyutan Kaku (閣)",
-                fullTitle: "牛たん料理 閣 初恋通り店",
-                lat: 38.259600,
-                lng: 140.883100, // 正確地址：宮城県仙台市宮城野区榴岡2-2-25 B1F (初恋通り與東七番丁通り交界)
-                icon: "🥩",
-                walk: "2 分鐘 (飯店西側・初恋通)",
-                hours: "[平日] 11:30 - 14:30, 17:00 - 22:30<br>[土日祝] 11:00 - 14:30, 17:00 - 22:30",
-                address: "宮城県仙台市宮城野区榴岡2-2-25 B1F",
-                desc: "仙台超人氣厚切炭烤牛舌名店、牛舌刺身（位於初恋通地下1樓）",
-                query: "宮城県仙台市宮城野区榴岡2-2-25"
-            },
-            {
-                id: 2,
-                name: "なか卯 (Nakau)",
-                fullTitle: "なか卯 仙台駅東口店",
-                lat: 38.258830,
-                lng: 140.883700,
-                icon: "🍴",
-                walk: "3 分鐘 (飯店西南側)",
-                hours: "24小時營業",
-                address: "宮城県仙台市宮城野区榴岡1-6-30",
-                desc: "日式親子丼、烏龍麵、平價快速連鎖餐點",
-                query: "なか卯+仙台駅東口店"
-            },
-            {
-                id: 3,
-                name: "力寿司",
-                fullTitle: "力寿司",
-                lat: 38.260500,
-                lng: 140.884200,
-                icon: "🍣",
-                walk: "2 分鐘 (飯店北側)",
-                hours: "11:00 - 22:00（依現場公告為主）",
-                address: "宮城県仙台市宮城野区東八番丁",
-                desc: "傳統日式壽司、新鮮海鮮握壽司與刺身料理",
-                query: "力寿司+仙台"
-            },
-            {
-                id: 4,
-                name: "Gyutan Tsukasa (司)",
-                fullTitle: "牛タン焼専門店 司 東口ダイワロイネット店",
-                lat: 38.258600,
-                lng: 140.882900,
-                icon: "🍖",
-                walk: "3 分鐘 (Daiwa Roynet 飯店 1F)",
-                hours: "11:00 - 14:00, 17:00 - 22:30",
-                address: "宮城県仙台市宮城野区榴岡1-2-37 1F",
-                desc: "極致軟嫩厚切牛舌、清爽牛尾湯",
-                query: "牛タン焼専門店+司+東口ダイワロイネット店"
-            },
-            {
-                id: 5,
-                name: "Yoshinoya (吉野家)",
-                fullTitle: "吉野家 仙台駅東口店",
-                lat: 38.259700,
-                lng: 140.882500,
-                icon: "🍚",
-                walk: "4 分鐘 (仙台車站東口路口)",
-                hours: "24小時營業",
-                address: "宮城県仙台市宮城野区榴岡1-2-10",
-                desc: "經典日式牛丼、豬肉丼、定食",
-                query: "吉野家+仙台駅東口店"
-            },
-            {
-                id: 6,
-                name: "麥當勞",
-                fullTitle: "麥當勞 (マクドナルド 仙台駅東口店)",
-                lat: 38.259800,
-                lng: 140.882200,
-                icon: "🍔",
-                walk: "4 分鐘 (仙台車站東口路口)",
-                hours: "06:00 - 23:00（早餐 06:00 - 10:30）",
-                address: "宮城県仙台市宮城野区榴岡1-2-10",
-                desc: "美式速食、漢堡、薯條、咖啡點心",
-                query: "マクドナルド+仙台駅東口店"
-            },
-            {
-                id: 7,
-                name: "Osaka Tonkatsu",
-                fullTitle: "大阪とんかつ ニューベイブ (ヨドバシ仙台店)",
-                lat: 38.258300,
-                lng: 140.882200,
-                icon: "🍱",
-                walk: "5 分鐘 (Yodobashi 仙台 6F)",
-                hours: "11:00 - 23:00 (L.O. 22:00)",
-                address: "宮城県仙台市宮城野区榴岡1-3-1 6F",
-                desc: "位於 Yodobashi 6F，特色軟嫩厚切日式炸豬排",
-                query: "ニューベイブ+ヨドバシ仙台"
-            }
+            { name: "力寿司", lat: 38.2635, lng: 140.8858, time: "5分鐘", address: "宮城県仙台市青葉区小田原1-1-5" },
+            { name: "牛たん料理 閣 初恋通り店", lat: 38.2612, lng: 140.8785, time: "8分鐘", address: "宮城県仙台市青葉区中央2-8-26" },
+            { name: "牛タン焼専門店 司 東口ダイワロイネット店", lat: 38.2598, lng: 140.8835, time: "8分鐘", address: "宮城県仙台市宮城野区榴岡1-2-37" },
+            { name: "大阪とんかつ ニューベイブ 仙台店", lat: 38.2595, lng: 140.8738, time: "10分鐘", address: "宮城県仙台市青葉区一番町3-1-11" }
         ];
 
-        // 初始化 Leaflet 地圖，中心設在 Hotel Grand Bach
-        const map = L.map('map', {
-            zoomControl: false
-        }).setView([38.259300, 140.883500], 17);
-
-        L.control.zoom({ position: 'bottomright' }).addTo(map);
-
-        // 各種地圖底圖圖層設定
-        const tileProviders = {
-            carto: L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-                maxZoom: 19,
-                attribution: '&copy; <a href="https://carto.com/">CARTO</a>'
-            }),
-            osm: L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                maxZoom: 19,
-                attribution: '&copy; OpenStreetMap'
-            }),
-            esri_sat: L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-                maxZoom: 18,
-                attribution: '&copy; Esri'
-            }),
-            carto_dark: L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-                maxZoom: 19,
-                attribution: '&copy; CARTO'
-            })
-        };
-
-        let currentTileLayer = tileProviders.carto;
-        currentTileLayer.addTo(map);
-
-        function changeTileLayer(key) {
-            if (currentTileLayer) {
-                map.removeLayer(currentTileLayer);
-            }
-            currentTileLayer = tileProviders[key];
-            currentTileLayer.addTo(map);
-        }
-
-        // 標記飯店標籤
-        const originIcon = L.divIcon({
-            className: 'custom-label-icon',
-            html: `<div class="map-label hotel">🏨 ${origin.name}</div>`,
-            iconSize: [130, 30],
-            iconAnchor: [65, 15]
-        });
-        const originMarker = L.marker([origin.lat, origin.lng], { icon: originIcon }).addTo(map);
-        originMarker.bindPopup(`<b>${origin.fullTitle}</b><br>(出發地點)`);
-
-        const markers = {};
-
-        // 渲染餐廳卡片與地圖標籤
-        const listContainer = document.getElementById('restaurant-list');
-
-        restaurants.forEach(item => {
-            const iconHtml = `<div class="map-label" id="label-${item.id}"><span>${item.icon}</span> ${item.name}</div>`;
-            const customIcon = L.divIcon({
-                className: 'custom-label-icon',
-                html: iconHtml,
-                iconSize: [130, 30],
-                iconAnchor: [65, 15]
-            });
-
-            const marker = L.marker([item.lat, item.lng], { icon: customIcon }).addTo(map);
-            marker.bindPopup(`<b>${item.fullTitle}</b><br>📍 ${item.address}<br>🚶 步行約 ${item.walk}`);
-            markers[item.id] = marker;
-
-            marker.on('click', () => {
-                selectRestaurant(item.id, false);
-            });
-
-            const card = document.createElement('div');
-            card.className = 'card';
-            card.id = `card-${item.id}`;
-            card.onclick = () => selectRestaurant(item.id, true);
-
-            card.innerHTML = `
-                <div class="card-header">
-                    <div class="restaurant-name">${item.fullTitle}</div>
-                    <span class="badge">🚶 ${item.walk}</span>
-                </div>
-                <div class="info-row">
-                    <span class="info-label">📍 地址：</span>
-                    <span>${item.address}</span>
-                </div>
-                <div class="info-row">
-                    <span class="info-label">🕒 營業：</span>
-                    <span>${item.hours}</span>
-                </div>
-                <div class="info-row">
-                    <span class="info-label">🍱 特色：</span>
-                    <span>${item.desc}</span>
-                </div>
-                <div class="click-hint">📍 點擊卡片地圖將聚焦至該標籤</div>
-                <div class="btn-group" onclick="event.stopPropagation()">
-                    <a href="https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(origin.fullTitle)}&destination=${encodeURIComponent(item.query)}&travelmode=walking" target="_blank" class="btn btn-nav">開啟 Google Maps 步行導航</a>
-                </div>
-            `;
-
-            listContainer.appendChild(card);
+        // 建立藍色圖標 (出發地)
+        const blueIcon = L.icon({
+            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png',
+            shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowSize: [41, 41]
         });
 
-        function selectRestaurant(id, isCardClick) {
-            document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
-            document.querySelectorAll('.map-label').forEach(l => l.classList.remove('active'));
+        // 建立紅色圖標 (餐廳)
+        const redIcon = L.icon({
+            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+            shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowSize: [41, 41]
+        });
 
-            const item = restaurants.find(r => r.id === id);
-            if (!item) return;
+        // 標記出發地
+        L.marker([origin.lat, origin.lng], {icon: blueIcon})
+            .addTo(map)
+            .bindPopup(`<b>📍 出發地: ${origin.name}</b><br>${origin.address}`);
 
-            const activeCard = document.getElementById(`card-${id}`);
-            if (activeCard) activeCard.classList.add('active');
+        // 標記餐廳並儲存 marker 物件
+        const markers = [];
+        restaurants.forEach((r, index) => {
+            const marker = L.marker([r.lat, r.lng], {icon: redIcon})
+                .addTo(map)
+                .bindPopup(`<b>${r.name}</b><br>🚶 步行約 ${r.time}<br><small>${r.address}</small>`);
+            markers.push(marker);
+        });
 
-            const activeLabel = document.getElementById(`label-${id}`);
-            if (activeLabel) activeLabel.classList.add('active');
+        // 點擊卡片定位
+        function focusLocation(index) {
+            const target = restaurants[index];
+            map.flyTo([target.lat, target.lng], 17, {
+                duration: 1
+            });
+            markers[index].openPopup();
 
-            const activeMarker = markers[id];
-            if (activeMarker) activeMarker.openPopup();
-
-            map.flyTo([item.lat, item.lng], 18, { duration: 0.8 });
+            // 更新卡片選取樣式
+            const cards = document.querySelectorAll('.card');
+            cards.forEach((card, i) => {
+                if (i === index) {
+                    card.classList.add('active');
+                } else {
+                    card.classList.remove('active');
+                }
+            });
         }
     </script>
 </body>
