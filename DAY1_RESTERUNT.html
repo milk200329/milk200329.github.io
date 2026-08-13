@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>仙台美食步行地圖</title>
+  <title>仙台美食步行地圖 & 餐廳投票</title>
   <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <style>
@@ -24,7 +24,7 @@
     /* 上方地圖區域 */
     #map {
       width: 100%;
-      height: 48vh;
+      height: 38vh;
       z-index: 1;
     }
     /* 下方餐廳清單區域 */
@@ -39,12 +39,38 @@
       margin-top: -15px;
       z-index: 10;
     }
+    /* 投票者輸入區 */
+    .user-input-box {
+      background: #fff8e1;
+      border: 1px solid #ffe082;
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .user-input-box label {
+      font-size: 0.85rem;
+      font-weight: bold;
+      color: #f57f17;
+      white-space: nowrap;
+    }
+    .user-input-box input {
+      flex: 1;
+      padding: 8px 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      outline: none;
+    }
     .origin-card {
       background: #eef4ff;
       border: 1px solid #c7d8ff;
       border-radius: 12px;
       padding: 12px 16px;
       margin-bottom: 14px;
+      cursor: pointer;
     }
     .origin-title {
       font-weight: bold;
@@ -62,16 +88,22 @@
       border: 1px solid #e0e0e0;
       border-radius: 12px;
       padding: 14px 16px;
-      margin-bottom: 10px;
-      cursor: pointer;
+      margin-bottom: 12px;
       transition: all 0.2s ease;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
     }
     .restaurant-card.active {
       border-color: #ea4335;
-      background-color: #fce8e6;
+      background-color: #fef7f7;
+    }
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      cursor: pointer;
+    }
+    .restaurant-info {
+      flex: 1;
+      padding-right: 8px;
     }
     .restaurant-info h3 {
       font-size: 0.95rem;
@@ -81,6 +113,12 @@
     .restaurant-info p {
       font-size: 0.8rem;
       color: #5f6368;
+      line-height: 1.4;
+    }
+    .hours {
+      color: #d93025;
+      font-weight: 500;
+      margin-top: 2px;
     }
     .badge {
       background-color: #34a853;
@@ -91,6 +129,53 @@
       border-radius: 16px;
       white-space: nowrap;
     }
+    /* 投票區塊樣式 */
+    .vote-section {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px dashed #e0e0e0;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .vote-btn-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .vote-btn {
+      background-color: #1a73e8;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+    .vote-btn:hover {
+      background-color: #1557b0;
+    }
+    .vote-count {
+      font-size: 0.8rem;
+      font-weight: bold;
+      color: #5f6368;
+    }
+    .voters-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-top: 4px;
+    }
+    .voter-tag {
+      background-color: #e8f0fe;
+      color: #1967d2;
+      font-size: 0.75rem;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-weight: 500;
+    }
   </style>
 </head>
 <body>
@@ -98,59 +183,144 @@
   <!-- 地圖容器 -->
   <div id="map"></div>
 
-  <!-- 下方清單 -->
+  <!-- 下方清單與投票區 -->
   <div class="list-container">
+    
+    <!-- 輸入姓名 -->
+    <div class="user-input-box">
+      <label for="userName">🙋‍♂️ 您的名字：</label>
+      <input type="text" id="userName" placeholder="請輸入名字後點選投票" value="小明">
+    </div>
+
+    <!-- 出發飯店卡片 -->
     <div class="origin-card" onclick="focusLocation(38.260012775444274, 140.8890768619294, 'hotel')">
       <div class="origin-title">🚩 出發地飯店</div>
       <div class="origin-name">Hotel Grand Bach Sendai</div>
     </div>
 
-    <div class="restaurant-card" id="card-0" onclick="focusLocation(38.262118838807446, 140.88757482487594, 0)">
-      <div class="restaurant-info">
-        <h3>力寿司</h3>
-        <p>距離約 400 公尺</p>
+    <!-- 餐廳卡片清單 -->
+    <div class="restaurant-card" id="card-0">
+      <div class="card-top" onclick="focusLocation(38.262118838807446, 140.88757482487594, 0)">
+        <div class="restaurant-info">
+          <h3>力寿司</h3>
+          <p>距離約 400 公尺</p>
+          <p class="hours">🕒 11:00–14:00, 17:00–23:00</p>
+        </div>
+        <div class="badge">步行 5 分</div>
       </div>
-      <div class="badge">步行 5 分</div>
+      <div class="vote-section">
+        <div class="vote-btn-row">
+          <button class="vote-btn" onclick="vote(0)">🗳️ 投這間一票</button>
+          <span class="vote-count" id="count-0">得票數：0</span>
+        </div>
+        <div class="voters-list" id="voters-0"></div>
+      </div>
     </div>
 
-    <div class="restaurant-card" id="card-1" onclick="focusLocation(38.26152914721989, 140.88479605632713, 1)">
-      <div class="restaurant-info">
-        <h3>牛たん料理 閣 初恋通り店</h3>
-        <p>距離約 550 公尺</p>
+    <div class="restaurant-card" id="card-1">
+      <div class="card-top" onclick="focusLocation(38.26152914721989, 140.88479605632713, 1)">
+        <div class="restaurant-info">
+          <h3>牛たん料理 閣 初恋通り店</h3>
+          <p>距離約 550 公尺</p>
+          <p class="hours">🕒 11:30–14:30, 17:00–22:30 (週三公休)</p>
+        </div>
+        <div class="badge">步行 8 分</div>
       </div>
-      <div class="badge">步行 8 分</div>
+      <div class="vote-section">
+        <div class="vote-btn-row">
+          <button class="vote-btn" onclick="vote(1)">🗳️ 投這間一票</button>
+          <span class="vote-count" id="count-1">得票數：0</span>
+        </div>
+        <div class="voters-list" id="voters-1"></div>
+      </div>
     </div>
 
-    <div class="restaurant-card" id="card-2" onclick="focusLocation(38.2587491081213, 140.88545051532898, 2)">
-      <div class="restaurant-info">
-        <h3>牛タン焼専門店 司 東口ダイワロイネット店</h3>
-        <p>距離約 500 公尺</p>
+    <div class="restaurant-card" id="card-2">
+      <div class="card-top" onclick="focusLocation(38.2587491081213, 140.88545051532898, 2)">
+        <div class="restaurant-info">
+          <h3>牛タン焼専門店 司 東口ダイワロイネット店</h3>
+          <p>距離約 500 公尺</p>
+          <p class="hours">🕒 11:00–14:00, 17:00–23:00</p>
+        </div>
+        <div class="badge">步行 8 分</div>
       </div>
-      <div class="badge">步行 8 分</div>
+      <div class="vote-section">
+        <div class="vote-btn-row">
+          <button class="vote-btn" onclick="vote(2)">🗳️ 投這間一票</button>
+          <span class="vote-count" id="count-2">得票數：0</span>
+        </div>
+        <div class="voters-list" id="voters-2"></div>
+      </div>
     </div>
 
-    <div class="restaurant-card" id="card-3" onclick="focusLocation(38.258816504266704, 140.8838948340951, 3)">
-      <div class="restaurant-info">
-        <h3>大阪とんかつ ニューベイブ 仙台店</h3>
-        <p>距離約 650 公尺</p>
+    <div class="restaurant-card" id="card-3">
+      <div class="card-top" onclick="focusLocation(38.258816504266704, 140.8838948340951, 3)">
+        <div class="restaurant-info">
+          <h3>大阪とんかつ ニューベイブ 仙台店</h3>
+          <p>距離約 650 公尺</p>
+          <p class="hours">🕒 11:00–23:00 (L.O. 22:00)</p>
+        </div>
+        <div class="badge">步行 10 分</div>
       </div>
-      <div class="badge">步行 10 分</div>
+      <div class="vote-section">
+        <div class="vote-btn-row">
+          <button class="vote-btn" onclick="vote(3)">🗳️ 投這間一票</button>
+          <span class="vote-count" id="count-3">得票數：0</span>
+        </div>
+        <div class="voters-list" id="voters-3"></div>
+      </div>
     </div>
+
+    <div class="restaurant-card" id="card-4">
+      <div class="card-top" onclick="focusLocation(38.260833, 140.881944, 4)">
+        <div class="restaurant-info">
+          <h3>米居 (Miju)</h3>
+          <p>距離約 700 公尺</p>
+          <p class="hours">🕒 11:30–14:30, 17:30–22:00</p>
+        </div>
+        <div class="badge">步行 10 分</div>
+      </div>
+      <div class="vote-section">
+        <div class="vote-btn-row">
+          <button class="vote-btn" onclick="vote(4)">🗳️ 投這間一票</button>
+          <span class="vote-count" id="count-4">得票數：0</span>
+        </div>
+        <div class="voters-list" id="voters-4"></div>
+      </div>
+    </div>
+
+    <div class="restaurant-card" id="card-5">
+      <div class="card-top" onclick="focusLocation(38.261944, 140.882500, 5)">
+        <div class="restaurant-info">
+          <h3>拎拎 (Rinrin)</h3>
+          <p>距離約 750 公尺</p>
+          <p class="hours">🕒 11:30–15:00, 17:00–22:30</p>
+        </div>
+        <div class="badge">步行 11 分</div>
+      </div>
+      <div class="vote-section">
+        <div class="vote-btn-row">
+          <button class="vote-btn" onclick="vote(5)">🗳️ 投這間一票</button>
+          <span class="vote-count" id="count-5">得票數：0</span>
+        </div>
+        <div class="voters-list" id="voters-5"></div>
+      </div>
+    </div>
+
   </div>
 
   <!-- Leaflet JS -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>
-    // 初始化地圖（預設中心點設在所有點的中心）
+    // 初始化地圖
     const map = L.map('map').setView([38.2602, 140.8865], 16);
 
-    // 載入 OpenStreetMap 圖層
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
       attribution: '© OpenStreetMap'
     }).addTo(map);
 
-    // 自訂圖示：藍色（飯店）、紅色（餐廳）
+    // 圖示
     const blueIcon = L.icon({
       iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png',
       shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
@@ -169,17 +339,19 @@
       shadowSize: [41, 41]
     });
 
-    // 1. 標記出發飯店
-    const hotelMarker = L.marker([38.25988635748767, 140.88836241551408], { icon: blueIcon })
+    // 飯店標記
+    const hotelMarker = L.marker([38.260012775444274, 140.8890768619294], { icon: blueIcon })
       .addTo(map)
       .bindPopup("<b>🚩 Hotel Grand Bach Sendai</b><br>出發地");
 
-    // 2. 標記所有餐廳
+    // 餐廳資料與標記
     const restaurants = [
-      { name: "力寿司", lat: 38.26197705100993, lng: 140.8868729001644, time: "步行 5 分" },
-      { name: "牛たん料理 閣 初恋通り店", lat: 38.26148928132024, lng: 140.88423436358133, time: "步行 8 分" },
-      { name: "牛タン焼専門店 司 東口ダイワロイネット店", lat: 38.258614959873135, lng: 140.88487216211394, time: "步行 8 分" },
-      { name: "大阪とんかつ ニューベイブ 仙台店", lat: 38.258816504266704, lng: 140.8838948340951, time: "步行 10 分" }
+      { name: "力寿司", lat: 38.262118838807446, lng: 140.88757482487594, time: "步行 5 分", hours: "11:00–14:00, 17:00–23:00" },
+      { name: "牛たん料理 閣 初恋通り店", lat: 38.26152914721989, lng: 140.88479605632713, time: "步行 8 分", hours: "11:30–14:30, 17:00–22:30" },
+      { name: "牛タン焼専門店 司 東口ダイワロイネット店", lat: 38.2587491081213, lng: 140.88545051532898, time: "步行 8 分", hours: "11:00–14:00, 17:00–23:00" },
+      { name: "大阪とんかつ ニューベイブ 仙台店", lat: 38.258816504266704, lng: 140.8838948340951, time: "步行 10 分", hours: "11:00–23:00" },
+      { name: "米居 (Miju)", lat: 38.260833, lng: 140.881944, time: "步行 10 分", hours: "11:30–14:30, 17:30–22:00" },
+      { name: "拎拎 (Rinrin)", lat: 38.261944, lng: 140.882500, time: "步行 11 分", hours: "11:30–15:00, 17:00–22:30" }
     ];
 
     const restaurantMarkers = [];
@@ -187,16 +359,13 @@
     restaurants.forEach((item, index) => {
       const marker = L.marker([item.lat, item.lng], { icon: redIcon })
         .addTo(map)
-        .bindPopup(`<b>${item.name}</b><br>${item.time}`);
-      
+        .bindPopup(`<b>${item.name}</b><br>${item.time}<br>🕒 ${item.hours}`);
       restaurantMarkers.push(marker);
     });
 
-    // 點選列表卡片時自動平移地圖並彈出標記訊息
+    // 定位地圖函數
     function focusLocation(lat, lng, index) {
       map.flyTo([lat, lng], 17, { duration: 0.8 });
-
-      // 移除所有高亮狀態
       document.querySelectorAll('.restaurant-card').forEach(card => card.classList.remove('active'));
 
       if (index === 'hotel') {
@@ -205,6 +374,51 @@
         document.getElementById(`card-${index}`).classList.add('active');
         restaurantMarkers[index].openPopup();
       }
+    }
+
+    // 投票邏輯資料結構
+    const votesData = {
+      0: [],
+      1: [],
+      2: [],
+      3: [],
+      4: [],
+      5: []
+    };
+
+    // 投票函數
+    function vote(index) {
+      const nameInput = document.getElementById('userName');
+      const voterName = nameInput.value.trim();
+
+      if (!voterName) {
+        alert('請先輸入您的名字！');
+        nameInput.focus();
+        return;
+      }
+
+      // 檢查該使用者是否已經投過這家餐廳
+      if (votesData[index].includes(voterName)) {
+        alert(`${voterName}，您已經投過這間餐廳囉！`);
+        return;
+      }
+
+      // 新增投票紀錄
+      votesData[index].push(voterName);
+
+      // 更新畫面 UI
+      renderVotes(index);
+    }
+
+    // 更新投票 UI
+    function renderVotes(index) {
+      const countEl = document.getElementById(`count-${index}`);
+      const votersEl = document.getElementById(`voters-${index}`);
+
+      const voters = votesData[index];
+      countEl.innerText = `得票數：${voters.length}`;
+
+      votersEl.innerHTML = voters.map(name => `<span class="voter-tag">👤 ${name}</span>`).join('');
     }
   </script>
 </body>
