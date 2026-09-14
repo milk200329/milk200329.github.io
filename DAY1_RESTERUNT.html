@@ -1,425 +1,1243 @@
-<!DOCTYPE html>
-<html lang="zh-TW">
+<!doctype html>
+<html lang="zh-Hant">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>仙台美食步行地圖 & 餐廳投票</title>
-  <!-- Leaflet CSS -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    }
-    body {
-      background-color: #f5f5f7;
-      color: #333;
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-      overflow: hidden;
-    }
-    /* 上方地圖區域 */
-    #map {
-      width: 100%;
-      height: 38vh;
-      z-index: 1;
-    }
-    /* 下方餐廳清單區域 */
-    .list-container {
-      flex: 1;
-      overflow-y: auto;
-      padding: 16px;
-      background: #ffffff;
-      border-top-left-radius: 20px;
-      border-top-right-radius: 20px;
-      box-shadow: 0 -4px 12px rgba(0,0,0,0.1);
-      margin-top: -15px;
-      z-index: 10;
-    }
-    /* 投票者輸入區 */
-    .user-input-box {
-      background: #fff8e1;
-      border: 1px solid #ffe082;
-      border-radius: 12px;
-      padding: 12px;
-      margin-bottom: 12px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .user-input-box label {
-      font-size: 0.85rem;
-      font-weight: bold;
-      color: #f57f17;
-      white-space: nowrap;
-    }
-    .user-input-box input {
-      flex: 1;
-      padding: 8px 12px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      font-size: 0.9rem;
-      outline: none;
-    }
-    .origin-card {
-      background: #eef4ff;
-      border: 1px solid #c7d8ff;
-      border-radius: 12px;
-      padding: 12px 16px;
-      margin-bottom: 14px;
-      cursor: pointer;
-    }
-    .origin-title {
-      font-weight: bold;
-      color: #1a73e8;
-      font-size: 0.85rem;
-      margin-bottom: 2px;
-    }
-    .origin-name {
-      font-weight: 600;
-      font-size: 0.95rem;
-      color: #202124;
-    }
-    .restaurant-card {
-      background: #fff;
-      border: 1px solid #e0e0e0;
-      border-radius: 12px;
-      padding: 14px 16px;
-      margin-bottom: 12px;
-      transition: all 0.2s ease;
-    }
-    .restaurant-card.active {
-      border-color: #ea4335;
-      background-color: #fef7f7;
-    }
-    .card-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      cursor: pointer;
-    }
-    .restaurant-info {
-      flex: 1;
-      padding-right: 8px;
-    }
-    .restaurant-info h3 {
-      font-size: 0.95rem;
-      margin-bottom: 4px;
-      color: #202124;
-    }
-    .restaurant-info p {
-      font-size: 0.8rem;
-      color: #5f6368;
-      line-height: 1.4;
-    }
-    .hours {
-      color: #d93025;
-      font-weight: 500;
-      margin-top: 2px;
-    }
-    .badge {
-      background-color: #34a853;
-      color: white;
-      font-size: 0.8rem;
-      font-weight: bold;
-      padding: 6px 10px;
-      border-radius: 16px;
-      white-space: nowrap;
-    }
-    /* 投票區塊樣式 */
-    .vote-section {
-      margin-top: 10px;
-      padding-top: 10px;
-      border-top: 1px dashed #e0e0e0;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-    .vote-btn-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .vote-btn {
-      background-color: #1a73e8;
-      color: white;
-      border: none;
-      padding: 6px 12px;
-      border-radius: 8px;
-      font-size: 0.8rem;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background-color 0.2s;
-    }
-    .vote-btn:hover {
-      background-color: #1557b0;
-    }
-    .vote-count {
-      font-size: 0.8rem;
-      font-weight: bold;
-      color: #5f6368;
-    }
-    .voters-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 4px;
-      margin-top: 4px;
-    }
-    .voter-tag {
-      background-color: #e8f0fe;
-      color: #1967d2;
-      font-size: 0.75rem;
-      padding: 2px 8px;
-      border-radius: 12px;
-      font-weight: 500;
-    }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>計畫盤 Trip Board</title>
+<style>
+:root{
+  --paper:#f2f3ef;
+  --plate:#ffffff;
+  --ink:#1f2d47;
+  --sub:#5b6880;
+  --line:#d9dde3;
+  --amber:#d98a1f;
+  --amber-soft:#fdf3e2;
+  --amber-ink:#7a4d0c;
+  --silver-a:#c8cfd8; --silver-b:#eef1f5;
+  --danger:#b0392f;
+  --c-spot:#4a7c59;
+  --c-food:#b8473d;
+  --c-move:#31589f;
+  --c-shop:#7b6ba8;
+  --c-onsen:#3f8f8a;
+  --c-other:#87909c;
+  --r:14px;
+  --shadow:0 1px 2px rgba(31,45,71,.08),0 4px 14px rgba(31,45,71,.07);
+  --dispfont:"Avenir Next","Futura","Trebuchet MS","Hiragino Sans","Noto Sans TC",sans-serif;
+  --font:"Hiragino Sans","Noto Sans TC","Noto Sans CJK TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font);font-size:15px;line-height:1.55;
+  padding-bottom:calc(120px + env(safe-area-inset-bottom));}
+body.dragging{user-select:none;-webkit-user-select:none;overscroll-behavior:none}
+button{font-family:inherit;font-size:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:2px solid var(--amber);outline-offset:2px;border-radius:6px}
+a{color:var(--c-move)}
+input,textarea,select{font-family:inherit;font-size:15px;color:var(--ink);background:#fff;border:1.5px solid var(--line);border-radius:10px;padding:9px 11px;width:100%}
+textarea{resize:vertical;min-height:64px}
+label{display:block;font-size:12.5px;font-weight:700;color:var(--sub);margin:12px 0 5px;letter-spacing:.04em}
+
+/* ── App bar ─────────────────────── */
+.appbar{position:sticky;top:0;z-index:40;background:rgba(242,243,239,.95);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);padding:10px 14px calc(0px + 8px);padding-top:calc(10px + env(safe-area-inset-top))}
+.appbar-row{display:flex;align-items:center;gap:10px}
+.brand{flex:1;min-width:0;cursor:pointer;border-radius:8px}
+.brand .sub .pen{opacity:.55}
+.advtoggle{display:block;font-size:12.5px;font-weight:700;color:var(--sub);margin:14px 0 0;padding:6px 0}
+.advtoggle::before{content:'▸ '}
+.advtoggle.open::before{content:'▾ '}
+.brand h1{margin:0;font-size:17px;font-weight:800;letter-spacing:.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand .sub{font-size:11.5px;color:var(--sub);letter-spacing:.06em;font-variant-numeric:tabular-nums}
+.savepill{font-size:11px;font-weight:700;padding:4px 9px;border-radius:99px;background:#e6ece4;color:#33623f;white-space:nowrap}
+.savepill.warn{background:var(--amber-soft);color:var(--amber-ink)}
+.iconbtn{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:18px;background:var(--plate);border:1px solid var(--line);box-shadow:0 1px 2px rgba(31,45,71,.06)}
+.iconbtn:active{transform:scale(.94)}
+.iconbtn[disabled]{opacity:.35}
+
+/* ── 底部 App 導覽列 (新增) ─────────────────────── */
+.bottom-nav{
+  position:fixed;bottom:0;left:0;right:0;z-index:90;
+  background:rgba(255,255,255,.96);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border-top:1px solid var(--line);
+  padding:6px 8px calc(6px + env(safe-area-inset-bottom));
+  display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;
+}
+.bottom-nav::-webkit-scrollbar{display:none}
+.tab-btn{
+  flex:0 0 auto;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:6px 12px;border-radius:10px;color:var(--sub);font-size:11px;font-weight:700;
+  transition:all .15s ease;
+}
+.tab-btn b{font-size:13px;font-weight:800}
+.tab-btn.active{background:var(--ink);color:#fff}
+.tab-btn.active b{color:#fff}
+
+/* ── Tab 切換頁面 ─────────────────────── */
+.tab-pane{display:none}
+.tab-pane.active{display:block}
+
+/* ── Sections ─────────────────────── */
+main{max-width:680px;margin:0 auto;padding:14px 12px 0}
+.section-head{display:flex;align-items:baseline;gap:10px;margin:10px 2px 10px}
+.section-head h2{margin:0;font-size:16px;font-weight:800;letter-spacing:.08em}
+.section-head .hint{font-size:11.5px;color:var(--sub)}
+.section-head .grow{flex:1}
+.addbtn{font-size:12.5px;font-weight:700;color:var(--amber-ink);background:var(--amber-soft);border:1px solid #ecd6ae;border-radius:99px;padding:5px 12px}
+
+/* ── Day plate (駅名標) ───────────── */
+.day{margin:0 0 22px}
+.day-plate{position:relative;background:var(--plate);border:1.5px solid var(--ink);border-radius:12px;box-shadow:var(--shadow);overflow:hidden}
+.day-plate-top{display:flex;align-items:center;gap:12px;padding:10px 12px 8px}
+.day-datenum{font-family:var(--dispfont);font-weight:800;font-size:34px;line-height:1;letter-spacing:-.01em;font-variant-numeric:tabular-nums}
+.day-datenum small{font-size:13px;font-weight:700;letter-spacing:.05em;vertical-align:18px;margin-right:1px;color:var(--sub)}
+.day-mid{flex:1;min-width:0}
+.day-title{font-size:16px;font-weight:800;letter-spacing:.03em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.day-note{font-size:11.5px;color:var(--sub);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.day-dow{font-size:12px;font-weight:800;border:1.5px solid var(--ink);border-radius:8px;padding:2px 7px;flex:0 0 auto}
+.day-actions{display:flex;gap:4px;flex:0 0 auto}
+.day-actions .iconbtn{width:34px;height:34px;font-size:15px;border-radius:99px}
+.day-band{position:relative;height:24px;display:flex;align-items:center;justify-content:space-between;padding:0 10px;
+  font-size:10.5px;font-weight:800;letter-spacing:.1em;color:#fff;font-variant-numeric:tabular-nums}
+.day-band .bandtag{background:rgba(255,255,255,.24);border-radius:99px;padding:1px 9px}
+.day-band .adj{opacity:.85}
+.band-holiday{background:linear-gradient(100deg,var(--silver-a),var(--silver-b) 45%,var(--silver-a));color:#3d4a5c;text-shadow:0 1px 0 rgba(255,255,255,.6)}
+.band-holiday .bandtag{background:rgba(61,74,92,.14)}
+.band-car{background:linear-gradient(100deg,#c47c14,var(--amber))}
+.band-buffer{background:linear-gradient(100deg,#7d8794,#98a1ad)}
+.band-plain{background:var(--ink)}
+
+/* ── Card list / dropzone ─────────── */
+.dropzone{padding:10px 2px 2px;min-height:14px}
+.dropzone.hot{background:rgba(217,138,31,.07);border-radius:12px}
+.empty-drop{border:1.5px dashed var(--line);border-radius:12px;color:var(--sub);font-size:12.5px;text-align:center;padding:16px 10px}
+.dropzone.hot .empty-drop{border-color:var(--amber);color:var(--amber-ink)}
+.dropbar{height:4px;border-radius:99px;background:var(--amber);margin:5px 6px;box-shadow:0 0 0 3px rgba(217,138,31,.18)}
+
+/* ── Card ─────────────────────────── */
+.card{position:relative;background:var(--plate);border:1px solid var(--line);border-left:5px solid var(--c-other);
+  border-radius:var(--r);box-shadow:var(--shadow);padding:10px 40px 10px 12px;margin:0 0 9px;touch-action:pan-y;
+  user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+.card[data-cat=spot]{border-left-color:var(--c-spot)}
+.card[data-cat=food]{border-left-color:var(--c-food)}
+.card[data-cat=move]{border-left-color:var(--c-move)}
+.card[data-cat=shop]{border-left-color:var(--c-shop)}
+.card[data-cat=onsen]{border-left-color:var(--c-onsen)}
+.card-row1{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.timechip{font-size:11px;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:.02em;background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:1px 6px;color:var(--sub)}
+.catdot{font-size:10.5px;font-weight:800;letter-spacing:.06em;color:#fff;border-radius:6px;padding:1px 6px}
+.card[data-cat=spot] .catdot{background:var(--c-spot)}
+.card[data-cat=food] .catdot{background:var(--c-food)}
+.card[data-cat=move] .catdot{background:var(--c-move)}
+.card[data-cat=shop] .catdot{background:var(--c-shop)}
+.card[data-cat=onsen] .catdot{background:var(--c-onsen)}
+.card[data-cat=other] .catdot{background:var(--c-other)}
+.card-name{font-size:15px;font-weight:800;margin-top:3px;letter-spacing:.01em}
+.card-addr{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--sub);margin-top:3px}
+.card-addr .txt{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card-note{font-size:12.5px;color:var(--sub);margin-top:4px}
+.card-warn{font-size:12px;font-weight:600;color:var(--amber-ink);background:var(--amber-soft);border:1px solid #ecd6ae;border-radius:99px;padding:5px 9px;margin-top:7px}
+.card-menu{position:absolute;top:6px;right:5px;width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;color:var(--sub);font-size:17px;font-weight:800}
+.maplink{flex:0 0 auto;font-size:11.5px;font-weight:700;color:var(--c-move);text-decoration:none;border:1px solid #c6d2ea;background:#eef2fa;border-radius:99px;padding:2px 9px}
+.card.drag-src{opacity:.35}
+.ghost{position:fixed;z-index:90;left:0;top:0;pointer-events:none;box-shadow:0 10px 30px rgba(31,45,71,.3);transform-origin:center;border-left-width:5px;margin:0}
+
+/* ── Pool (側線) ──────────────────── */
+.pool-wrap{border:1.5px dashed #b8bfca;border-radius:16px;padding:10px 10px 4px;
+  background:repeating-linear-gradient(-45deg,rgba(31,45,71,.028) 0 8px,transparent 8px 20px)}
+.pool-wrap .dropzone{padding-top:2px}
+
+/* ── Tasks / notes ────────────────── */
+.task{display:flex;align-items:flex-start;gap:10px;background:var(--plate);border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:8px}
+.task input[type=checkbox]{width:20px;height:20px;flex:0 0 auto;margin-top:1px;accent-color:var(--c-spot)}
+.task .t-main{flex:1;min-width:0}
+.task .t-text{font-weight:600;font-size:14px}
+.task.done .t-text{text-decoration:line-through;color:var(--sub);font-weight:500}
+.task .t-due{font-size:11px;font-weight:800;color:var(--amber-ink);background:var(--amber-soft);border-radius:6px;padding:1px 7px;display:inline-block;margin-top:3px}
+.note{background:var(--plate);border:1px solid var(--line);border-radius:12px;padding:10px 40px 10px 12px;margin-bottom:8px;font-size:13.5px;position:relative}
+.note.warn{border-color:#ecd6ae;background:var(--amber-soft)}
+.mini-edit{position:absolute;top:5px;right:4px;width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--sub);font-size:14px}
+
+/* ── Drag dock ────────────────────── */
+.dock{position:fixed;left:0;right:0;bottom:60px;z-index:95;display:none;gap:10px;padding:12px 14px;
+  background:rgba(31,45,71,.92);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+body.dragging .dock{display:flex}
+.dock-chip{flex:1;text-align:center;font-size:14px;font-weight:800;color:#fff;border:1.5px dashed rgba(255,255,255,.5);border-radius:14px;padding:15px 8px}
+.dock-chip.hot{background:var(--amber);border-color:var(--amber);color:#fff}
+
+/* ── Modals ───────────────────────── */
+.backdrop{position:fixed;inset:0;z-index:100;background:rgba(20,28,44,.45);display:flex;align-items:flex-end;justify-content:center;
+  animation:fade .16s}
+.sheet{background:var(--paper);width:100%;max-width:680px;max-height:86vh;overflow:auto;border-radius:20px 20px 0 0;padding:16px 16px calc(20px + env(safe-area-inset-bottom));
+  animation:up .2s cubic-bezier(.2,.8,.3,1)}
+.sheet h3{margin:2px 0 4px;font-size:16px;font-weight:800;letter-spacing:.06em}
+.sheet .grab{width:40px;height:4px;border-radius:99px;background:#c6ccd6;margin:0 auto 12px}
+.seg{display:flex;flex-wrap:wrap;gap:7px}
+.seg button{font-size:13px;font-weight:700;border:1.5px solid var(--line);background:#fff;border-radius:99px;padding:7px 13px;color:var(--sub)}
+.seg button.on{color:#fff;border-color:transparent;background:var(--ink)}
+.seg button[data-v=warnN].on{background:var(--amber)}
+.seg button[data-v=spot].on{background:var(--c-spot)}
+.seg button[data-v=food].on{background:var(--c-food)}
+.seg button[data-v=move].on{background:var(--c-move)}
+.seg button[data-v=shop].on{background:var(--c-shop)}
+.seg button[data-v=onsen].on{background:var(--c-onsen)}
+.seg button[data-v=other].on{background:var(--c-other)}
+.seg button[data-v=holiday].on{background:#7d8fa8}
+.seg button[data-v=car].on{background:var(--amber)}
+.seg button[data-v=buffer].on{background:#98a1ad}
+.seg button[data-v=plain].on{background:var(--ink)}
+.btnrow{display:flex;gap:10px;margin-top:18px}
+.btn{flex:1;text-align:center;font-size:15px;font-weight:800;border-radius:12px;padding:13px 10px;border:1.5px solid var(--line);background:#fff}
+.btn.primary{background:var(--ink);border-color:var(--ink);color:#fff}
+.btn.danger{color:var(--danger);border-color:#e0b7b3}
+.sheetlist{display:flex;flex-direction:column;gap:8px}
+.sheetlist button{text-align:left;background:#fff;border:1px solid var(--line);border-radius:12px;padding:13px 14px;font-weight:700;font-size:14.5px}
+.sheetlist button[disabled]{opacity:.4}
+.sheetlist button.danger{color:var(--danger)}
+.sheetlist .small{font-size:12px;color:var(--sub);font-weight:500;display:block;margin-top:1px}
+
+/* ── Toast ────────────────────────── */
+.toast{position:fixed;left:50%;bottom:calc(70px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:120;
+  background:var(--ink);color:#fff;font-size:13.5px;font-weight:600;border-radius:99px;padding:11px 18px;box-shadow:0 8px 24px rgba(31,45,71,.35);
+  display:flex;align-items:center;gap:14px;white-space:nowrap;animation:up .2s}
+.toast button{color:#ffc873;font-weight:800;font-size:13.5px}
+body.dragging .toast{display:none}
+body.selecting .dock{display:flex}
+.dock-chip.mini{padding:12px 4px;font-size:13px}
+.dock-chip.ghosty{flex:.55}
+
+/* ── 批次選取 ─────────────────────── */
+.selecting .card{cursor:pointer}
+.selecting .card .card-menu{display:none}
+.selecting .card::after{content:'○';position:absolute;top:7px;right:9px;font-size:16px;color:#b9c0cc;font-weight:800}
+.selecting .card.picked{outline:2.5px solid var(--amber);background:#fff9ee}
+.selecting .card.picked::after{content:'●';color:var(--amber)}
+.untitled{opacity:.45;font-weight:600}
+
+/* ── 日期選取器 ───────────────────── */
+.cal-head{display:flex;align-items:center;justify-content:space-between;margin:8px 0 6px}
+.cal-head b{font-size:15px;letter-spacing:.06em;font-variant-numeric:tabular-nums}
+.cal-nav{width:38px;height:34px;border-radius:9px;background:#fff;border:1px solid var(--line);font-size:15px;font-weight:800}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
+.cal-wd{text-align:center;font-size:10.5px;font-weight:800;color:var(--sub);padding:4px 0;letter-spacing:.06em}
+.cal-cell{height:40px;border-radius:9px;background:#fff;border:1px solid var(--line);font-size:13.5px;font-weight:700;font-variant-numeric:tabular-nums;color:var(--ink)}
+.cal-cell:disabled{opacity:0;pointer-events:none}
+.cal-cell.today{border-color:var(--ink);border-width:1.5px}
+.cal-cell.sel{background:var(--amber-soft);border-color:#ecd6ae;color:var(--amber-ink)}
+.cal-cell.edge{background:var(--amber);border-color:var(--amber);color:#fff}
+.cal-cell.pend{outline:2px dashed var(--amber);outline-offset:-2px}
+.cal-segs{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px;min-height:30px}
+.cal-seg{display:flex;align-items:center;gap:7px;font-size:12.5px;font-weight:800;font-variant-numeric:tabular-nums;background:#fff;border:1.5px solid var(--amber);color:var(--amber-ink);border-radius:99px;padding:5px 6px 5px 12px}
+.cal-seg button{width:20px;height:20px;border-radius:99px;background:var(--amber-soft);font-size:11px;font-weight:800;color:var(--amber-ink)}
+.cal-clear{font-size:12px;font-weight:700;color:var(--sub);padding:6px 4px}
+.cal-opt{display:flex;align-items:flex-start;gap:9px;margin-top:14px;font-size:13px;color:var(--sub)}
+.cal-opt input{width:19px;height:19px;flex:0 0 auto;margin-top:1px;accent-color:var(--amber)}
+
+.footer{max-width:680px;margin:24px auto 0;padding:0 14px;font-size:11px;color:var(--sub);text-align:center;letter-spacing:.04em}
+
+@keyframes fade{from{opacity:0}}
+@keyframes up{from{transform:translateY(24px);opacity:.4}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+@media (min-width:700px){
+  .backdrop{align-items:center}
+  .sheet{border-radius:20px}
+}
+</style>
 </head>
 <body>
-
-  <!-- 地圖容器 -->
-  <div id="map"></div>
-
-  <!-- 下方清單與投票區 -->
-  <div class="list-container">
-    
-    <!-- 輸入姓名 -->
-    <div class="user-input-box">
-      <label for="userName">🙋‍♂️ 您的名字：</label>
-      <input type="text" id="userName" placeholder="請輸入名字後點選投票" value="小明">
+<header class="appbar">
+  <div class="appbar-row">
+    <div class="brand" id="brandbtn" role="button" tabindex="0" title="編輯旅程名稱與副標">
+      <h1 id="triptitle">計畫盤</h1>
+      <div class="sub" id="tripsub"></div>
     </div>
+    <span class="savepill" id="savepill">…</span>
+    <button class="iconbtn" id="undobtn" title="復原上一步" disabled>↩</button>
+    <button class="iconbtn" id="menubtn" title="選單">⋯</button>
+  </div>
+</header>
 
-    <!-- 出發飯店卡片 -->
-    <div class="origin-card" onclick="focusLocation(38.260012775444274, 140.8890768619294, 'hotel')">
-      <div class="origin-title">🚩 出發地飯店</div>
-      <div class="origin-name">Hotel Grand Bach Sendai</div>
+<main>
+  <!-- 天數區域 (依照 Tab 分頁顯示) -->
+  <div id="daysWrap"></div>
+
+  <!-- 備案池 (Tab) -->
+  <div id="tab-pool" class="tab-pane">
+    <div class="section-head" id="sec-pool">
+      <h2>備案池（側線）</h2>
+      <span class="hint">待命點子停這裡</span>
+      <span class="grow"></span>
+      <button class="addbtn" data-addcard="pool">＋ 新增</button>
     </div>
-
-    <!-- 餐廳卡片清單 -->
-    <div class="restaurant-card" id="card-0">
-      <div class="card-top" onclick="focusLocation(38.262118838807446, 140.88757482487594, 0)">
-        <div class="restaurant-info">
-          <h3>力寿司</h3>
-          <p>距離約 400 公尺</p>
-          <p class="hours">🕒 11:00–14:00, 17:00–23:00</p>
-        </div>
-        <div class="badge">步行 5 分</div>
-      </div>
-      <div class="vote-section">
-        <div class="vote-btn-row">
-          <button class="vote-btn" onclick="vote(0)">🗳️ 投這間一票</button>
-          <span class="vote-count" id="count-0">得票數：0</span>
-        </div>
-        <div class="voters-list" id="voters-0"></div>
-      </div>
-    </div>
-
-    <div class="restaurant-card" id="card-1">
-      <div class="card-top" onclick="focusLocation(38.26152914721989, 140.88479605632713, 1)">
-        <div class="restaurant-info">
-          <h3>牛たん料理 閣 初恋通り店</h3>
-          <p>距離約 550 公尺</p>
-          <p class="hours">🕒 11:30–14:30, 17:00–22:30 (週三公休)</p>
-        </div>
-        <div class="badge">步行 8 分</div>
-      </div>
-      <div class="vote-section">
-        <div class="vote-btn-row">
-          <button class="vote-btn" onclick="vote(1)">🗳️ 投這間一票</button>
-          <span class="vote-count" id="count-1">得票數：0</span>
-        </div>
-        <div class="voters-list" id="voters-1"></div>
-      </div>
-    </div>
-
-    <div class="restaurant-card" id="card-2">
-      <div class="card-top" onclick="focusLocation(38.2587491081213, 140.88545051532898, 2)">
-        <div class="restaurant-info">
-          <h3>牛タン焼専門店 司 東口ダイワロイネット店</h3>
-          <p>距離約 500 公尺</p>
-          <p class="hours">🕒 11:00–14:00, 17:00–23:00</p>
-        </div>
-        <div class="badge">步行 8 分</div>
-      </div>
-      <div class="vote-section">
-        <div class="vote-btn-row">
-          <button class="vote-btn" onclick="vote(2)">🗳️ 投這間一票</button>
-          <span class="vote-count" id="count-2">得票數：0</span>
-        </div>
-        <div class="voters-list" id="voters-2"></div>
-      </div>
-    </div>
-
-    <div class="restaurant-card" id="card-3">
-      <div class="card-top" onclick="focusLocation(38.258816504266704, 140.8838948340951, 3)">
-        <div class="restaurant-info">
-          <h3>大阪とんかつ ニューベイブ 仙台店</h3>
-          <p>距離約 650 公尺</p>
-          <p class="hours">🕒 11:00–23:00 (L.O. 22:00)</p>
-        </div>
-        <div class="badge">步行 10 分</div>
-      </div>
-      <div class="vote-section">
-        <div class="vote-btn-row">
-          <button class="vote-btn" onclick="vote(3)">🗳️ 投這間一票</button>
-          <span class="vote-count" id="count-3">得票數：0</span>
-        </div>
-        <div class="voters-list" id="voters-3"></div>
-      </div>
-    </div>
-
-    <div class="restaurant-card" id="card-4">
-      <div class="card-top" onclick="focusLocation(38.260833, 140.881944, 4)">
-        <div class="restaurant-info">
-          <h3>米居 (Miju)</h3>
-          <p>距離約 700 公尺</p>
-          <p class="hours">🕒 11:30–14:30, 17:30–22:00</p>
-        </div>
-        <div class="badge">步行 10 分</div>
-      </div>
-      <div class="vote-section">
-        <div class="vote-btn-row">
-          <button class="vote-btn" onclick="vote(4)">🗳️ 投這間一票</button>
-          <span class="vote-count" id="count-4">得票數：0</span>
-        </div>
-        <div class="voters-list" id="voters-4"></div>
-      </div>
-    </div>
-
-    <div class="restaurant-card" id="card-5">
-      <div class="card-top" onclick="focusLocation(38.261944, 140.882500, 5)">
-        <div class="restaurant-info">
-          <h3>拎拎 (Rinrin)</h3>
-          <p>距離約 750 公尺</p>
-          <p class="hours">🕒 11:30–15:00, 17:00–22:30</p>
-        </div>
-        <div class="badge">步行 11 分</div>
-      </div>
-      <div class="vote-section">
-        <div class="vote-btn-row">
-          <button class="vote-btn" onclick="vote(5)">🗳️ 投這間一票</button>
-          <span class="vote-count" id="count-5">得票數：0</span>
-        </div>
-        <div class="voters-list" id="voters-5"></div>
-      </div>
-    </div>
-
+    <div class="pool-wrap"><div class="dropzone" data-cont="pool" id="poolZone"></div></div>
   </div>
 
-  <!-- Leaflet JS -->
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script>
-    // 初始化地圖
-    const map = L.map('map').setView([38.2602, 140.8865], 16);
+  <!-- 行前任務 (Tab) -->
+  <div id="tab-tasks" class="tab-pane">
+    <div class="section-head" id="sec-tasks">
+      <h2>行前任務</h2>
+      <span class="hint" id="taskhint"></span>
+      <span class="grow"></span>
+      <button class="addbtn" id="addtaskbtn">＋ 新增</button>
+    </div>
+    <div id="tasksWrap"></div>
+  </div>
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 19,
-      attribution: '© OpenStreetMap'
-    }).addTo(map);
+  <!-- 重要備註 (Tab) -->
+  <div id="tab-notes" class="tab-pane">
+    <div class="section-head" id="sec-notes">
+      <h2>重要備註</h2>
+      <span class="grow"></span>
+      <button class="addbtn" id="addnotebtn">＋ 新增</button>
+    </div>
+    <div id="notesWrap"></div>
+  </div>
+</main>
 
-    // 圖示
-    const blueIcon = L.icon({
-      iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png',
-      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-      iconSize: [25, 41],
-      iconAnchor: [12, 41],
-      popupAnchor: [1, -34],
-      shadowSize: [41, 41]
-    });
+<!-- 底部固定選單 App Style (天數 / 備案池 / 任務 / 備註) -->
+<nav class="bottom-nav" id="bottomNav"></nav>
 
-    const redIcon = L.icon({
-      iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
-      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-      iconSize: [25, 41],
-      iconAnchor: [12, 41],
-      popupAnchor: [1, -34],
-      shadowSize: [41, 41]
-    });
+<div class="footer">計畫盤 ─ 離線可用・資料存在本機。換裝置或分享前記得「⋯ → 匯出」。</div>
 
-    // 飯店標記
-    const hotelMarker = L.marker([38.260012775444274, 140.8890768619294], { icon: blueIcon })
-      .addTo(map)
-      .bindPopup("<b>🚩 Hotel Grand Bach Sendai</b><br>出發地");
+<div class="dock" id="dock">
+  <div class="dock-chip" data-dock="pool">📦 放進備案池</div>
+  <div class="dock-chip" data-dock="pick">📅 放到某一天…</div>
+</div>
+<div id="modalRoot"></div>
+<div id="toastRoot"></div>
 
-    // 餐廳資料與標記
-    const restaurants = [
-      { name: "力寿司", lat: 38.262118838807446, lng: 140.88757482487594, time: "步行 5 分", hours: "11:00–14:00, 17:00–23:00" },
-      { name: "牛たん料理 閣 初恋通り店", lat: 38.26152914721989, lng: 140.88479605632713, time: "步行 8 分", hours: "11:30–14:30, 17:00–22:30" },
-      { name: "牛タン焼専門店 司 東口ダイワロイネット店", lat: 38.2587491081213, lng: 140.88545051532898, time: "步行 8 分", hours: "11:00–14:00, 17:00–23:00" },
-      { name: "大阪とんかつ ニューベイブ 仙台店", lat: 38.258816504266704, lng: 140.8838948340951, time: "步行 10 分", hours: "11:00–23:00" },
-      { name: "米居 (Miju)", lat: 38.260833, lng: 140.881944, time: "步行 10 分", hours: "11:30–14:30, 17:30–22:00" },
-      { name: "拎拎 (Rinrin)", lat: 38.261944, lng: 140.882500, time: "步行 11 分", hours: "11:30–15:00, 17:00–22:30" }
-    ];
+<script>
+'use strict';
+/* ══════════════ 預設資料 ══════════════ */
+const CATS={spot:'景點',food:'食',move:'交通',shop:'購物',onsen:'溫泉',other:'其他'};
+const TAGS={holiday:'白銀週連休',car:'有車日',buffer:'緩衝日',plain:'一般'};
+function C(o){return Object.assign({id:uid(),name:'',time:'',addr:'',map:'',cat:'spot',note:'',warn:''},o)}
+const SENDAI={v:2,
+trip:{title:'仙台之旅 9/19–9/26',sub:'5人｜IT772 高雄13:25→仙台18:10｜IT773 仙台19:00→22:10'},
+days:[
+ {id:'d19',date:'9/19',dow:'六',tag:'holiday',title:'抵達日',note:'白銀週第1天・只排晚餐',open:true,cards:[
+  C({cat:'move',name:'IT772 高雄 → 仙台',time:'13:25–18:10',warn:'廉航時刻可能微調，行前一週上虎航官網再確認一次',note:'落地入境約 40–60 分'}),
+  C({cat:'move',name:'仙台機場鐵道 → 仙台站',time:'約18:50 發',note:'17–25 分・660 円/人，跟著「仙台空港アクセス線」指標走'}),
+  C({cat:'other',name:'飯店 Check-in（仙台站周邊）',note:'順便確認明後天集合動線',warn:'若租車：先問飯店停車是平面還是機械式、限高幾mm（機械式常限1,550mm，minivan約1,850mm進不去）'}),
+  C({cat:'food',name:'牛舌晚餐：たんや善治郎 本店',time:'11:00–23:00',addr:'仙台市青葉区中央1-8-38 AK大樓3F',note:'吧台座為主，5 人建議拆 2+3；想坐一桌改「利久」'}),
+ ]},
+ {id:'d20',date:'9/20',dow:'日',tag:'holiday',title:'仙台市區・るーぷる',note:'るーぷる一日券 630 円（假日約15分一班）',open:true,cards:[
+  C({cat:'spot',name:'瑞鳳殿（伊達政宗靈廟）',time:'9:00–16:50（最終入館16:30）',addr:'仙台市青葉区霊屋下23-2',note:'參道是石階坡道，門票有まるごとパス/一日券折扣'}),
+  C({cat:'spot',name:'仙台城跡・伊達政宗騎馬像',addr:'仙台市青葉区川内1',note:'俯瞰市區；無天守、大手門2036年才復原完成，別期待城堡'}),
+  C({cat:'spot',name:'大崎八幡宮（國寶）',time:'9:00–17:00',addr:'仙台市青葉区八幡4-6-1',note:'安土桃山樣式漆金社殿'}),
+  C({cat:'spot',name:'定禪寺通 欅木並木',note:'傍晚光線最好；媒體中心 Mediatheque 在旁'}),
+  C({cat:'spot',name:'壱弐参橫丁・文化橫丁',note:'昭和感老巷弄，人少好拍'}),
+  C({cat:'food',name:'國分町 晚餐（5人・先訂位）',warn:'白銀週人潮多，務必預約。候選：旬菜鮮魚 ら房（週三休）、三陸海鮮あかり',note:'居酒屋密集區，牛舌以外的海鮮補完'}),
+ ]},
+ {id:'d21',date:'9/21',dow:'一',tag:'holiday',title:'松島＋鹽釜（敬老之日）',note:'仙台まるごとパス 2,930 円・連續2日 Day1',open:true,cards:[
+  C({cat:'move',name:'仙石線 仙台 → 松島海岸',time:'約08:15 發・40分',note:'早班避人潮；假日班次多'}),
+  C({cat:'spot',name:'松島遊覽船（仁王丸コース）',time:'首班 09:00・約50分',addr:'松島海岸レストハウス售票',note:'1,500 円/人；搭第一班最不用排'}),
+  C({cat:'spot',name:'五大堂・透かし橋',note:'免費，遊覽船前後順看'}),
+  C({cat:'spot',name:'瑞巖寺（國寶本堂）',time:'8:30–17:00（9月）',note:'門票 700 円，杉並木參道'}),
+  C({cat:'spot',name:'圓通院',note:'庭園＋數珠手作體驗（約30–60分）'}),
+  C({cat:'food',name:'午餐：穴子丼',note:'松島名物；9月牡蠣小屋多半還沒開，別期待牡蠣吃到飽'}),
+  C({cat:'spot',name:'西行戻しの松公園（選）',note:'松島全景最佳機位，需計程車或爬坡'}),
+  C({cat:'food',name:'鹽釜壽司：寿司哲 / 塩釜港',time:'哲 11:00開店',addr:'塩竈市海岸通2-22（寿司哲）',warn:'5 人一定要先訂，或 11:00 開店即到',note:'鮪魚水揚名港；本鹽釜站步行可達'}),
+  C({cat:'move',name:'本鹽釜 → 仙台（仙石線）',time:'約30分'}),
+ ]},
+ {id:'d22',date:'9/22',dow:'二',tag:'holiday',title:'山寺 立石寺（國民の休日）',note:'まるごとパス Day2・仙山線直達',open:true,cards:[
+  C({cat:'move',name:'仙山線 仙台 → 山寺',time:'約08:30 發・60分',note:'快速班次先查，班距約30–60分'}),
+  C({cat:'spot',name:'立石寺（山寺）1,015階',time:'8:00–16:00（售票約至15:00）',addr:'山形市山寺4456-1',note:'門票 500 円；來回抓 3–4 小時，穿好走的鞋；五大堂展望是精華'}),
+  C({cat:'food',name:'力こんにゃく・板そば',note:'山門前店家，下山後補充'}),
+  C({cat:'move',name:'山寺 → 仙台',note:'回程班次少，上山前先拍好時刻表',warn:'錯過一班要等30–60分'}),
+ ]},
+ {id:'d23',date:'9/23',dow:'三',tag:'buffer',title:'緩衝日・水族館（秋分之日）',note:'返鄉車潮高峰，刻意不上路',open:true,cards:[
+  C({cat:'move',name:'JR仙石線 → 中野栄站',time:'約20分',note:'下車步行約15分，或站前接駁'}),
+  C({cat:'spot',name:'仙台うみの杜水族館',time:'9:00–17:30',addr:'仙台市宮城野区中野4-6',note:'海豚海獅秀場次入館先確認；約2–3小時'}),
+  C({cat:'shop',name:'三井OUTLET 仙台港（選）',note:'就在水族館旁，摩天輪地標'}),
+  C({cat:'other',name:'⚠️ 晚上：查藏王路況＋即時攝影機',warn:'蔵王エコーライン/ハイライン交通情報＋ライブカメラ；濃霧或管制→明天啟動備案',note:'搜「蔵王町観光物産協会 道路交通情報」；九月仍是颱風季，順手看後兩天天氣決定要不要對調'}),
+ ]},
+ {id:'d24',date:'9/24',dow:'四',tag:'car',title:'藏王御釜＋狐狸村',note:'有車Day1・早出早回（山上下午易起霧）',open:true,cards:[
+  C({cat:'move',name:'08:00 取車（8人座 minivan）',warn:'出示：台灣駕照正本＋日文譯本＋護照，缺一不可',note:'第三排收兩側＝5人＋行李'}),
+  C({cat:'move',name:'蔵王ハイライン（收費道路）',time:'7:30–17:00',note:'全長2.5km・普通車550円「只收現金」；11月上旬–4月下旬冬季封閉'}),
+  C({cat:'spot',name:'御釜（刈田山頂）',time:'目標 09:30 前抵達',addr:'導航設「蔵王刈田山頂駐車場」',warn:'山頂約10–13°C＋強風，帶擋風外套；下午起霧機率高',note:'停車場約300台免費，步行2–3分到展望台'}),
+  C({cat:'spot',name:'駒草平・滝見台（下山順拍）',note:'Echo Line 沿線展望點，各停15分'}),
+  C({cat:'food',name:'遠刈田溫泉 午餐',note:'豆腐料理或そば；街上有足湯'}),
+  C({cat:'spot',name:'宮城蔵王キツネ村（狐狸村）',time:'9:00–16:30（最終入場16:00）',addr:'白石市福岡八宮字川原子11-3',note:'1,500円/人・現金；別蹲下、別伸手摸放養狐狸'}),
+  C({cat:'spot',name:'白石城（選）',time:'9:00–17:00',note:'400円；狐狸村回程順路約20分'}),
+  C({cat:'move',name:'回仙台（東北道 約1hr）',note:'今晚早睡不用，明天10點才出發'}),
+ ]},
+ {id:'d25',date:'9/25',dow:'五',tag:'car',title:'銀山溫泉・撐到煤氣燈',note:'有車Day2・晚歸約21:00',open:true,cards:[
+  C({cat:'move',name:'09:30 仙台出發 → 銀山',time:'約2–2.5hr',note:'東北中央道→尾花沢；途中休息站補給'}),
+  C({cat:'move',name:'13:30 抵「銀山温泉共同駐車場」',addr:'尾花沢市銀山新畑（導航設此名）',warn:'免費但僅約20台、看板不明顯，錯過就沒有日歸停車場了',note:'距溫泉街約600m徒步10分。滿→退回「大正ろまん館」(100台，接駁巴士往復500円/人，末班18:30)'}),
+  C({cat:'food',name:'吃買在 16:30 前完成',warn:'溫泉街店家多17–18時打烊',note:'はいからさん咖哩麵包・野川とうふや立食生揚・伊豆の華そば'}),
+  C({cat:'spot',name:'白銀公園・白銀の滝 散策',note:'溫泉街最深處，來回約30–40分'}),
+  C({cat:'onsen',name:'足湯 和楽足湯（免費）',note:'帶小毛巾'}),
+  C({cat:'spot',name:'★ 17:25 日落 → 藍調煤氣燈',time:'17:30–18:00 最好拍',note:'河鹿橋一帶構圖最經典；這30分鐘就是今天的目的'}),
+  C({cat:'move',name:'18:15 離開 → 21:00 回仙台',note:'山路夜駕放慢；輪流開'}),
+ ]},
+ {id:'d26',date:'9/26',dow:'六',tag:'car',title:'秋保 → 還車 → 回家',note:'19:00 起飛・17:00 前到機場',open:true,cards:[
+  C({cat:'spot',name:'磊々峽・覗橋（愛心凹槽）',note:'秋保入口；里センター停車＋遊步道'}),
+  C({cat:'spot',name:'秋保大滝',addr:'仙台市太白区秋保町馬場字大滝',note:'大停車場約200台免費；滝見台徒步5分、滝壺步道5–10分坡陡穿好鞋'}),
+  C({cat:'food',name:'さいち 秋保萩餅',time:'9:00–19:00（週三休・今日週六有開）',warn:'名物常下午售罄，上午去',note:'紅豆/黃豆粉/芝麻口味'}),
+  C({cat:'move',name:'還車（先加滿油）',time:'目標 15:00 前',note:'保留收據；行李先整好'}),
+  C({cat:'move',name:'仙台機場報到',time:'16:30 前',note:'虎航櫃檯通常起飛前2.5–3hr開'}),
+  C({cat:'move',name:'IT773 仙台 → 高雄',time:'19:00–22:10'}),
+ ]},
+],
+pool:[
+  C({cat:'spot',name:'雨天備案：仙台市博物館 / メディアテーク',note:'市區室內，るーぷる可達'}),
+  C({cat:'spot',name:'御釜濃霧備案：與9/26對調',warn:'把秋保挪到9/24、御釜改9/26早上（さいち萩餅改別家）',note:'或當天改遠刈田溫泉＋狐狸村放慢'}),
+  C({cat:'food',name:'牛舌其他家：利久／味太助／喜助',note:'利久桌位多適合5人；味太助是元祖'}),
+  C({cat:'food',name:'村上屋餅店 三色餅',addr:'仙台市青葉区北目町2-38',note:'在地毛豆泥首選，售完即止早點去'}),
+  C({cat:'food',name:'ずんだ茶寮 zunda shake',addr:'仙台站3F ずんだ小径',note:'觀光版毛豆泥，等車時喝'}),
+  C({cat:'food',name:'阿部蒲鉾店 ひょうたん揚げ',addr:'一番町本店',note:'炸魚板棒，邊走邊吃'}),
+  C({cat:'spot',name:'仙台朝市',time:'8:00–17:00・週日休',addr:'仙台市青葉区中央3-8-5',note:'離飯店近，早餐海鮮丼；9/23或9/26早上可塞'}),
+  C({cat:'shop',name:'一番町・クリスロード商店街',note:'伴手禮補貨'}),
+  C({cat:'spot',name:'鹽竈神社',note:'若鹽釜時間多，202階表參道'}),
+  C({cat:'onsen',name:'秋保溫泉 日歸湯',note:'9/26 時間充裕時；多家旅館開放日歸'}),
+],
+tasks:[
+  T('訂 8 人座 minivan（Noah/Voxy/Serena・9/24 08:00–9/26 15:00）','本週'),
+  T('打電話問飯店停車：機械式？限高幾mm？費率？要預約？','本週'),
+  T('駕駛全員辦「駕照日文譯本」（線上7–12個工作天）','8月內'),
+  T('虎航官網再確認 IT772 / IT773 時刻','行前一週'),
+  T('訂 9/20 國分町居酒屋（5人）','9月初'),
+  T('訂 9/21 鹽釜壽司，或當天開店即到','9月初'),
+  T('準備現金：ハイライン550・銀山巴士500/人・狐狸村門票','行前'),
+  T('帶擋風外套（御釜山頂10–13°C）＋好走的鞋（山寺/滝壺）','行前'),
+  T('下載宮城・山形離線地圖＋本檔匯出備份給5人','行前'),
+  T('9/23 晚上：查藏王路況＋即時攝影機','9/23'),
+],
+notes:makeGenericNotes()};
+function makeGenericNotes(){return[
+  N('🛂 護照效期建議6個月以上；出發前確認簽證／入境規定',false),
+  N('💴 備一些現金＋可海外刷的卡；小店、巴士、山區收費站常不收卡',false),
+  N('📶 網路先搞定：eSIM／漫遊／分享器擇一，落地前設好',false),
+  N('🧾 旅平險＋不便險保了再走；保單截圖存離線',false),
+  N('🗺️ 下載離線地圖；行程改完記得「⋯→匯出」備份並傳給同行者',true),
+  N('💊 常備藥與個人藥品隨身帶',false),
+]}
+function makeBlank(){return {v:2,
+  trip:{title:'我的旅程',sub:'點這裡編輯名稱與副標（日期・人數・航班…）'},
+  days:[{id:uid(),date:'Day 1',dow:'',tag:'plain',title:'第一天',note:'',open:true,cards:[]}],
+  pool:[],
+  tasks:[T('確認護照效期',''),T('訂機票，把訂位代號記進副標或備註',''),T('訂住宿',''),T('保旅平險／不便險',''),T('把這份計畫「匯出」傳給同行者','出發前')],
+  notes:makeGenericNotes(),
+}}
+function T(text,due){return{id:uid(),text,due:due||'',done:false}}
+function N(text,warn){return{id:uid(),text,warn:!!warn}}
+function uid(){return 'x'+Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
 
-    const restaurantMarkers = [];
+/* ══════════════ 狀態・儲存 ══════════════ */
+const KEY='tripboard-v2', OLDKEY='sendai-planner-v1';
+let state=null, storeMode='mem', memStore=null, saveTimer=null, undoStack=[], migrated=false;
+let activeTab='d19'; // 當前啟動的分頁
+const $=s=>document.querySelector(s);
+function clone(o){return JSON.parse(JSON.stringify(o))}
 
-    restaurants.forEach((item, index) => {
-      const marker = L.marker([item.lat, item.lng], { icon: redIcon })
-        .addTo(map)
-        .bindPopup(`<b>${item.name}</b><br>${item.time}<br>🕒 ${item.hours}`);
-      restaurantMarkers.push(marker);
-    });
+async function detectStore(){
+  if(window.storage && typeof window.storage.get==='function'){storeMode='ws';return}
+  try{localStorage.setItem('__t','1');localStorage.removeItem('__t');storeMode='ls'}
+  catch(e){storeMode='mem'}
+}
+async function loadState(){
+  const read=async k=>{
+    try{
+      if(storeMode==='ws'){try{const r=await window.storage.get(k);if(r&&r.value)return JSON.parse(r.value)}catch(e){}}
+      else if(storeMode==='ls'){const r=localStorage.getItem(k);if(r)return JSON.parse(r)}
+      else if(memStore){return JSON.parse(memStore)}
+    }catch(e){console.warn('load fail',k,e)}
+    return null;
+  };
+  let s=await read(KEY);
+  if(!s){
+    s=await read(OLDKEY);
+    if(s){migrated=true;if(!s.trip)s.trip={title:'仙台之旅 9/19–9/26',sub:'5人｜IT772／IT773'}}
+  }
+  if(s)ensureShape(s);
+  return s;
+}
+function ensureShape(s){
+  if(!s.trip)s.trip={title:'我的旅程',sub:''};
+  s.days=s.days||[];s.pool=s.pool||[];s.tasks=s.tasks||[];s.notes=s.notes||[];
+  return s;
+}
+function scheduleSave(){clearTimeout(saveTimer);saveTimer=setTimeout(doSave,400)}
+async function doSave(){
+  const data=JSON.stringify(state);
+  try{
+    if(storeMode==='ws'){const r=await window.storage.set(KEY,data);if(!r)throw new Error('ws set failed')}
+    else if(storeMode==='ls'){localStorage.setItem(KEY,data)}
+    else{memStore=data}
+    setPill();
+  }catch(e){
+    if(storeMode==='ws'){storeMode='ls';return doSave()}
+    if(storeMode==='ls'){storeMode='mem';memStore=data}
+    setPill();
+  }
+}
+function setPill(){
+  const p=$('#savepill');
+  if(storeMode==='mem'){p.textContent='僅暫存';p.classList.add('warn')}
+  else{p.textContent='已儲存 ✓';p.classList.remove('warn')}
+}
+function snapshot(){undoStack.push(JSON.stringify(state));if(undoStack.length>30)undoStack.shift();$('#undobtn').disabled=false}
+function undo(){
+  if(!undoStack.length)return;
+  state=JSON.parse(undoStack.pop());
+  $('#undobtn').disabled=!undoStack.length;
+  renderAll();scheduleSave();toast('已復原');
+}
+function commit(){renderAll();scheduleSave()}
 
-    // 定位地圖函數
-    function focusLocation(lat, lng, index) {
-      map.flyTo([lat, lng], 17, { duration: 0.8 });
-      document.querySelectorAll('.restaurant-card').forEach(card => card.classList.remove('active'));
+/* 容器存取 */
+function contList(cid){return cid==='pool'?state.pool:(state.days.find(d=>d.id===cid)||{}).cards}
+function dayLabel(d){return d.date+(d.dow?'（'+d.dow+'）':'')+' '+(d.title||'未命名')}
+function contName(cid){if(cid==='pool')return '備案池';const d=state.days.find(d=>d.id===cid);return d?dayLabel(d):'?'}
+function findCard(id){
+  for(const d of state.days){const i=d.cards.findIndex(c=>c.id===id);if(i>-1)return{cont:d.id,idx:i,card:d.cards[i]}}
+  const i=state.pool.findIndex(c=>c.id===id);if(i>-1)return{cont:'pool',idx:i,card:state.pool[i]};
+  return null;
+}
+function moveCard(id,toCont,toIdx){
+  const f=findCard(id);if(!f)return;
+  snapshot();
+  const src=contList(f.cont);src.splice(f.idx,1);
+  const dst=contList(toCont);
+  if(toIdx==null||toIdx<0||toIdx>dst.length)toIdx=dst.length;
+  dst.splice(toIdx,0,f.card);
+  commit();
+}
+function mapURL(c){
+  if(c.map)return c.map;
+  const q=(c.addr||c.name||'').trim();
+  return 'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(q);
+}
 
-      if (index === 'hotel') {
-        hotelMarker.openPopup();
-      } else {
-        document.getElementById(`card-${index}`).classList.add('active');
-        restaurantMarkers[index].openPopup();
-      }
+/* ══════════════ Render ══════════════ */
+function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+function el(html){const t=document.createElement('template');t.innerHTML=html.trim();return t.content.firstChild}
+
+function cardEl(c){
+  const n=el(`<div class="card" data-id="${c.id}" data-cat="${esc(c.cat)}">
+    <div class="card-row1">
+      ${c.time?`<span class="timechip">${esc(c.time)}</span>`:''}
+      <span class="catdot">${CATS[c.cat]||'其他'}</span>
+    </div>
+    <div class="card-name">${esc(c.name)||'（未命名）'}</div>
+    ${(c.addr||c.map)?`<div class="card-addr"><span class="txt">📍 ${esc(c.addr)||'地圖'}</span><a class="maplink" target="_blank" rel="noopener" href="${esc(mapURL(c))}">地圖 ↗</a></div>`:''}
+    ${c.note?`<div class="card-note">${esc(c.note)}</div>`:''}
+    ${c.warn?`<div class="card-warn">⚠ ${esc(c.warn)}</div>`:''}
+    <button class="card-menu" data-act="card-menu" aria-label="更多">⋮</button>
+  </div>`);
+  return n;
+}
+function zoneFill(zone,cards){
+  zone.innerHTML='';
+  if(!cards||!cards.length){zone.appendChild(el('<div class="empty-drop">目前是空的 — 拖曳到此，或按上方「＋」新增</div>'));return}
+  cards.forEach(c=>zone.appendChild(cardEl(c)));
+}
+
+function renderDays(){
+  const wrap=$('#daysWrap');wrap.innerHTML='';
+  state.days.forEach((d,i)=>{
+    const prev=state.days[i-1],next=state.days[i+1];
+    const dm=(d.date||'').split('/');
+    const day=el(`<section class="tab-pane ${d.id===activeTab?'active':''}" id="tab-${d.id}">
+      <div class="section-head">
+        <h2>行程</h2><span class="hint">長按卡片拖曳・點一下編輯</span><span class="grow"></span>
+        <button class="addbtn" id="pickdatesbtn" onclick="openDatePicker()">📅 選日期</button>
+        <button class="addbtn" id="adddaybtn" onclick="openDayEditor(null)">＋ 新增一天</button>
+      </div>
+      <div class="day" data-day="${d.id}">
+        <div class="day-plate">
+          <div class="day-plate-top">
+            <div class="day-datenum"><small>${esc(dm[0]||'')}/</small>${esc(dm[1]||d.date)}</div>
+            <span class="day-dow">${esc(d.dow||'')}</span>
+            <div class="day-mid">
+              <div class="day-title">${esc(d.title)||'<span class="untitled">未命名</span>'}</div>
+              ${d.note?`<div class="day-note">${esc(d.note)}</div>`:''}
+            </div>
+            <div class="day-actions">
+              <button class="iconbtn" data-act="day-add" title="新增卡片">＋</button>
+              <button class="iconbtn" data-act="day-edit" title="編輯這天">✎</button>
+            </div>
+          </div>
+          <div class="day-band band-${esc(d.tag||'plain')}">
+            <span class="adj">${prev?'◀ '+esc(prev.date):''}</span>
+            <span class="bandtag">${TAGS[d.tag]||''} ・ ${d.cards.length} 站</span>
+            <span class="adj">${next?esc(next.date)+' ▶':''}</span>
+          </div>
+        </div>
+        <div class="dropzone" data-cont="${d.id}"></div>
+      </div>
+    </section>`);
+    zoneFill(day.querySelector('.dropzone'),d.cards);
+    wrap.appendChild(day);
+  });
+}
+
+function renderPool(){zoneFill($('#poolZone'),state.pool)}
+function renderTasks(){
+  const w=$('#tasksWrap');w.innerHTML='';
+  state.tasks.forEach(t=>{
+    w.appendChild(el(`<div class="task ${t.done?'done':''}" data-task="${t.id}">
+      <input type="checkbox" ${t.done?'checked':''} data-act="task-toggle" aria-label="完成">
+      <div class="t-main"><div class="t-text">${esc(t.text)}</div>${t.due?`<span class="t-due">${esc(t.due)}</span>`:''}</div>
+      <button class="mini-edit" data-act="task-edit" style="position:static">✎</button>
+    </div>`));
+  });
+  const done=state.tasks.filter(t=>t.done).length;
+  $('#taskhint').textContent=done+' / '+state.tasks.length+' 完成';
+}
+function renderNotes(){
+  const w=$('#notesWrap');w.innerHTML='';
+  state.notes.forEach(n=>{
+    w.appendChild(el(`<div class="note ${n.warn?'warn':''}" data-note="${n.id}">${esc(n.text)}
+      <button class="mini-edit" data-act="note-edit">✎</button></div>`));
+  });
+}
+
+/* 渲染 App 底部導覽列 (Bottom Nav) */
+function renderBottomNav(){
+  const nav=$('#bottomNav');nav.innerHTML='';
+  if(!state.days.some(d=>d.id===activeTab) && !['pool','tasks','notes'].includes(activeTab)){
+    if(state.days.length>0) activeTab = state.days[0].id;
+  }
+  
+  state.days.forEach((d,idx)=>{
+    const btn=el(`<button class="tab-btn ${activeTab===d.id?'active':''}" data-tab="${d.id}">
+      <b>Day ${idx+1}</b>
+      <span>${esc(d.date)}</span>
+    </button>`);
+    btn.addEventListener('click',()=>switchTab(d.id));
+    nav.appendChild(btn);
+  });
+
+  const extras=[
+    ['pool','📦 備案池',state.pool.length],
+    ['tasks','☑ 任務',state.tasks.filter(t=>!t.done).length],
+    ['notes','📝 備註',state.notes.length]
+  ];
+
+  extras.forEach(([id,label,cnt])=>{
+    const btn=el(`<button class="tab-btn ${activeTab===id?'active':''}" data-tab="${id}">
+      <b>${label}</b>
+      <span>${cnt} 項</span>
+    </button>`);
+    btn.addEventListener('click',()=>switchTab(id));
+    nav.appendChild(btn);
+  });
+}
+
+function switchTab(id){
+  activeTab=id;
+  document.querySelectorAll('.tab-pane').forEach(el=>el.classList.remove('active'));
+  const target=document.getElementById('tab-'+id);
+  if(target) target.classList.add('active');
+  renderBottomNav();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function renderHeader(){
+  $('#triptitle').textContent=state.trip.title||'計畫盤';
+  $('#tripsub').innerHTML=esc(state.trip.sub||'點我設定副標')+' <span class="pen">✎</span>';
+}
+function renderAll(){
+  renderHeader();
+  renderDays();
+  renderPool();
+  renderTasks();
+  renderNotes();
+  renderBottomNav();
+  renderDock();
+}
+
+/* ══════════════ 批次選取模式 ══════════════ */
+let sel=null;
+function renderDock(){
+  const dock=$('#dock');
+  if(sel){
+    document.body.classList.add('selecting');
+    dock.innerHTML=`<div class="dock-chip mini" data-selact="move">📅 移到…（${sel.size}）</div>
+      <div class="dock-chip mini" data-selact="pool">📦 備案池</div>
+      <div class="dock-chip mini" data-selact="del">🗑 刪除</div>
+      <div class="dock-chip mini ghosty" data-selact="cancel">✕ 完成</div>`;
+    document.querySelectorAll('.card').forEach(c=>c.classList.toggle('picked',sel.has(c.dataset.id)));
+  }else{
+    document.body.classList.remove('selecting');
+    dock.innerHTML=`<div class="dock-chip" data-dock="pool">📦 放進備案池</div><div class="dock-chip" data-dock="pick">📅 放到某一天…</div>`;
+  }
+}
+function enterSelect(firstId){sel=new Set(firstId?[firstId]:[]);renderDock();toast('批次選取中：點卡片加入／移除',null,3600)}
+function exitSelect(){sel=null;renderDock()}
+function selectedInOrder(){
+  const ids=[];
+  state.days.forEach(d=>d.cards.forEach(c=>{if(sel.has(c.id))ids.push(c.id)}));
+  state.pool.forEach(c=>{if(sel.has(c.id))ids.push(c.id)});
+  return ids;
+}
+function moveMany(ids,toCont){
+  if(!ids.length)return;
+  snapshot();
+  const idset=new Set(ids), moving=[];
+  const strip=list=>{for(let i=list.length-1;i>=0;i--){if(idset.has(list[i].id))moving.unshift(...list.splice(i,1))}};
+  state.days.forEach(d=>strip(d.cards));strip(state.pool);
+  contList(toCont).push(...moving);
+  commit();
+}
+function deleteMany(ids){
+  snapshot();
+  const idset=new Set(ids);
+  state.days.forEach(d=>{d.cards=d.cards.filter(c=>!idset.has(c.id))});
+  state.pool=state.pool.filter(c=>!idset.has(c.id));
+  commit();
+}
+function openMovePickerMulti(ids){
+  const box=el(`<div><h3>把 ${ids.length} 張卡片移到…</h3><div class="sheetlist" style="margin-top:10px"></div></div>`);
+  const list=box.querySelector('.sheetlist');
+  const targets=[...state.days.map(d=>[d.id,dayLabel(d),d.cards.length+' 張卡']),['pool','備案池（側線）',state.pool.length+' 張卡']];
+  targets.forEach(([cid,label,sub])=>{
+    const b=el(`<button>${esc(label)}<span class="small">${esc(sub)}</span></button>`);
+    b.addEventListener('click',()=>{close();exitSelect();moveMany(ids,cid);toast('已移動 '+ids.length+' 張到 '+label,{label:'復原',fn:undo})});
+    list.appendChild(b);
+  });
+  const close=openSheet(box);
+}
+
+/* ══════════════ 拖曳引擎 ══════════════ */
+let press=null, drag=null, scrollRAF=null, lastPt={x:0,y:0};
+const dropbar=el('<div class="dropbar"></div>');
+
+document.addEventListener('pointerdown',e=>{
+  if(e.button!==undefined&&e.button!==0)return;
+  if(sel)return;
+  if(e.target.closest('button,a,input,textarea,select,.backdrop,.bottom-nav'))return;
+  const card=e.target.closest('.card');
+  if(!card)return;
+  press={card,id:card.dataset.id,x:e.clientX,y:e.clientY,pid:e.pointerId,
+    timer:setTimeout(()=>{startDrag()},260)};
+},{passive:true});
+
+document.addEventListener('pointermove',e=>{
+  lastPt={x:e.clientX,y:e.clientY};
+  if(press&&!drag){
+    if(Math.hypot(e.clientX-press.x,e.clientY-press.y)>10){clearTimeout(press.timer);press=null}
+    return;
+  }
+  if(drag){moveGhost(e.clientX,e.clientY);hitTest(e.clientX,e.clientY)}
+},{passive:true});
+
+window.addEventListener('touchmove',e=>{if(drag)e.preventDefault()},{passive:false});
+
+document.addEventListener('pointerup',e=>{
+  if(press&&!drag){
+    clearTimeout(press.timer);
+    if(Math.hypot(e.clientX-press.x,e.clientY-press.y)<10)openCardEditor(press.id);
+    press=null;return;
+  }
+  if(drag)endDrag(true);
+});
+document.addEventListener('pointercancel',()=>{if(press){clearTimeout(press.timer);press=null}if(drag)endDrag(false)});
+window.addEventListener('blur',()=>{if(drag)endDrag(false)});
+
+function startDrag(){
+  if(!press)return;
+  const src=press.card, f=findCard(press.id);
+  if(!f){press=null;return}
+  const r=src.getBoundingClientRect();
+  const ghost=src.cloneNode(true);
+  ghost.classList.add('ghost');
+  ghost.style.width=r.width+'px';
+  ghost.style.transform=`translate(${r.left}px,${r.top}px) scale(1.03)`;
+  document.body.appendChild(ghost);
+  src.classList.add('drag-src');
+  document.body.classList.add('dragging');
+  if(navigator.vibrate)try{navigator.vibrate(12)}catch(e){}
+  drag={id:press.id,srcEl:src,srcRect:r,ghost,grabX:press.x-r.left,grabY:press.y-r.top,target:null,dock:null};
+  press=null;
+  autoScrollLoop();
+}
+function moveGhost(x,y){
+  drag.ghost.style.transform=`translate(${x-drag.grabX}px,${y-drag.grabY}px) scale(1.03)`;
+}
+function hitTest(x,y){
+  document.querySelectorAll('.dock-chip.hot').forEach(n=>n.classList.remove('hot'));
+  document.querySelectorAll('.dropzone.hot').forEach(n=>n.classList.remove('hot'));
+  const under=document.elementFromPoint(x,y);
+  drag.target=null;drag.dock=null;
+  if(!under){dropbar.remove();return}
+  const chip=under.closest('.dock-chip');
+  if(chip){chip.classList.add('hot');drag.dock=chip.dataset.dock;dropbar.remove();return}
+  const zone=under.closest('.dropzone');
+  if(!zone){dropbar.remove();return}
+  zone.classList.add('hot');
+  const cards=[...zone.querySelectorAll('.card')].filter(c=>!c.classList.contains('drag-src'));
+  let idx=cards.length;
+  for(let i=0;i<cards.length;i++){
+    const cr=cards[i].getBoundingClientRect();
+    if(y<cr.top+cr.height/2){idx=i;break}
+  }
+  drag.target={cont:zone.dataset.cont,idx};
+  if(idx>=cards.length)zone.appendChild(dropbar);
+  else zone.insertBefore(dropbar,cards[idx]);
+}
+function autoScrollLoop(){
+  if(!drag){scrollRAF=null;return}
+  const m=90,y=lastPt.y,h=window.innerHeight;
+  if(y<m+60)window.scrollBy(0,-Math.ceil((m+60-y)/6));
+  else if(y>h-m-70)window.scrollBy(0,Math.ceil((y-(h-m-70))/6));
+  scrollRAF=requestAnimationFrame(autoScrollLoop);
+}
+function endDrag(commitDrop){
+  const d=drag;drag=null;
+  if(scrollRAF)cancelAnimationFrame(scrollRAF);
+  dropbar.remove();
+  document.querySelectorAll('.dock-chip.hot,.dropzone.hot').forEach(n=>n.classList.remove('hot'));
+  document.body.classList.remove('dragging');
+  const finish=()=>{d.ghost.remove();d.srcEl.classList.remove('drag-src')};
+  if(commitDrop&&d.dock==='pool'){
+    finish();moveCard(d.id,'pool',null);toast('已放進備案池',{label:'復原',fn:undo});return;
+  }
+  if(commitDrop&&d.dock==='pick'){
+    finish();openMovePicker(d.id);return;
+  }
+  if(commitDrop&&d.target){
+    finish();moveCard(d.id,d.target.cont,d.target.idx);return;
+  }
+  d.ghost.style.transition='transform .18s ease';
+  d.ghost.style.transform=`translate(${d.srcRect.left}px,${d.srcRect.top}px) scale(1)`;
+  setTimeout(finish,190);
+}
+
+/* ══════════════ Modal 基座 ══════════════ */
+function openSheet(inner,{dismiss=true}={}){
+  const root=$('#modalRoot');
+  const bd=el('<div class="backdrop"></div>');
+  const sheet=el('<div class="sheet" role="dialog" aria-modal="true"><div class="grab"></div></div>');
+  sheet.appendChild(inner);
+  bd.appendChild(sheet);
+  if(dismiss)bd.addEventListener('pointerdown',e=>{if(e.target===bd)close()});
+  function close(){bd.remove()}
+  root.appendChild(bd);
+  return close;
+}
+function confirmBox(msg,onOk,okLabel='確定'){
+  const box=el(`<div><h3>確認</h3><p style="margin:8px 0 0;color:var(--sub)">${esc(msg)}</p>
+    <div class="btnrow"><button class="btn" data-x>取消</button><button class="btn danger" data-ok>${esc(okLabel)}</button></div></div>`);
+  const close=openSheet(box);
+  box.querySelector('[data-x]').addEventListener('click',close);
+  box.querySelector('[data-ok]').addEventListener('click',()=>{close();onOk()});
+}
+function toast(msg,action,ms=3800){
+  const root=$('#toastRoot');root.innerHTML='';
+  const t=el(`<div class="toast"><span>${esc(msg)}</span>${action?`<button>${esc(action.label)}</button>`:''}</div>`);
+  if(action)t.querySelector('button').addEventListener('click',()=>{t.remove();action.fn()});
+  root.appendChild(t);
+  setTimeout(()=>{if(t.isConnected)t.remove()},ms);
+}
+function segRow(options,current,onPick){
+  const seg=el('<div class="seg"></div>');
+  Object.entries(options).forEach(([v,label])=>{
+    const b=el(`<button type="button" data-v="${v}" class="${v===current?'on':''}">${label}</button>`);
+    b.addEventListener('click',()=>{seg.querySelectorAll('button').forEach(x=>x.classList.remove('on'));b.classList.add('on');onPick(v)});
+    seg.appendChild(b);
+  });
+  return seg;
+}
+
+/* ══════════════ 旅程設定 ══════════════ */
+function openTripEditor(){
+  const box=el(`<div><h3>旅程設定</h3><p style="margin:2px 0 0;font-size:12px;color:var(--sub)">名稱與副標只在這裡宣告一次，頁首、文字版、匯出都引用這裡。</p></div>`);
+  const iTitle=inp(state.trip.title,'例：北海道自駕 12/1–12/8');
+  const iSub=inp(state.trip.sub,'日期・人數・航班・訂位代號…想放什麼都行');
+  box.appendChild(field('旅程名稱',iTitle));
+  box.appendChild(field('副標（自由格式）',iSub));
+  const row=el(`<div class="btnrow"><button class="btn" data-x>取消</button><button class="btn primary" data-ok>儲存</button></div>`);
+  box.appendChild(row);
+  const close=openSheet(box);
+  row.querySelector('[data-x]').addEventListener('click',close);
+  row.querySelector('[data-ok]').addEventListener('click',()=>{snapshot();state.trip.title=iTitle.value.trim();state.trip.sub=iSub.value.trim();close();commit()});
+}
+
+/* ══════════════ 日期選擇器 ══════════════ */
+const WD=['日','一','二','三','四','五','六'];
+const DAYMS=86400000;
+function dkey(t){return t.getFullYear()+'-'+(t.getMonth()+1)+'-'+t.getDate()}
+function fmtMD(t){return (t.getMonth()+1)+'/'+t.getDate()}
+function fmtSeg(g){return fmtMD(g.s)+(g.e>g.s?'–'+fmtMD(g.e):'')}
+function parseMD(label){const m=String(label||'').trim().match(/^(\d{1,2})[\/.月](\d{1,2})/);return m?(+m[1])+'/'+(+m[2]):null}
+function normSegs(segs){
+  const a=segs.map(g=>({s:new Date(g.s),e:new Date(g.e)})).sort((x,y)=>x.s-y.s), out=[];
+  for(const g of a){const last=out[out.length-1];
+    if(last&&g.s-last.e<=DAYMS){if(g.e>last.e)last.e=g.e}
+    else out.push(g)}
+  return out;
+}
+function segUnionDates(segs){
+  const m=new Map();
+  for(const g of segs)for(let t=new Date(g.s);t<=g.e;t=new Date(t.getTime()+DAYMS))m.set(dkey(t),new Date(t));
+  return [...m.values()].sort((a,b)=>a-b);
+}
+function openDatePicker(){
+  const today=new Date();
+  let view={y:today.getFullYear(),m:today.getMonth()};
+  let segs=[],pending=null;
+  const box=el(`<div><h3>選日期・批次排天</h3>
+    <p style="margin:2px 0 0;font-size:12px;color:var(--sub)">點開始日、再點結束日＝一段；中間休息就再選下一段。點同一天兩下＝單日。</p>
+    <div class="cal-head"><button type="button" class="cal-nav" data-nav="-1">‹</button><b class="cal-title"></b><button type="button" class="cal-nav" data-nav="1">›</button></div>
+    <div class="cal-grid"></div>
+    <div class="cal-segs"></div>
+    <label class="cal-opt"><input type="checkbox" class="cal-replace"><span><b>取代模式</b>：沒選到的天會移除，它們的卡片自動進備案池。</span></label>
+    <div class="btnrow"><button class="btn" data-x>取消</button><button class="btn primary" data-ok>產生 0 天</button></div>
+  </div>`);
+  const grid=box.querySelector('.cal-grid'),title=box.querySelector('.cal-title'),segwrap=box.querySelector('.cal-segs'),okBtn=box.querySelector('[data-ok]');
+  function withPending(){return pending?normSegs([...segs,{s:pending,e:pending}]):segs}
+  function selMap(){const m=new Map();for(const g of segs)for(let t=new Date(g.s);t<=g.e;t=new Date(t.getTime()+DAYMS))m.set(dkey(t),g);return m}
+  function draw(){
+    title.textContent=view.y+' 年 '+(view.m+1)+' 月';
+    const smap=selMap();
+    let html=WD.map(w=>`<div class="cal-wd">${w}</div>`).join('');
+    const off=new Date(view.y,view.m,1).getDay(),n=new Date(view.y,view.m+1,0).getDate();
+    for(let i=0;i<off;i++)html+='<button type="button" class="cal-cell" disabled></button>';
+    for(let d=1;d<=n;d++){
+      const t=new Date(view.y,view.m,d),k=dkey(t),g=smap.get(k);
+      const edge=g&&(dkey(g.s)===k||dkey(g.e)===k);
+      const cls=['cal-cell',g?'sel':'',edge?'edge':'',(pending&&dkey(pending)===k)?'pend':'',(dkey(today)===k)?'today':''].join(' ');
+      html+=`<button type="button" class="${cls}" data-dt="${k}">${d}</button>`;
     }
-
-    // 投票邏輯資料結構
-    const votesData = {
-      0: [],
-      1: [],
-      2: [],
-      3: [],
-      4: [],
-      5: []
-    };
-
-    // 投票函數
-    function vote(index) {
-      const nameInput = document.getElementById('userName');
-      const voterName = nameInput.value.trim();
-
-      if (!voterName) {
-        alert('請先輸入您的名字！');
-        nameInput.focus();
-        return;
-      }
-
-      // 檢查該使用者是否已經投過這家餐廳
-      if (votesData[index].includes(voterName)) {
-        alert(`${voterName}，您已經投過這間餐廳囉！`);
-        return;
-      }
-
-      // 新增投票紀錄
-      votesData[index].push(voterName);
-
-      // 更新畫面 UI
-      renderVotes(index);
+    grid.innerHTML=html;
+    segwrap.innerHTML='';
+    segs.forEach((g,i)=>{
+      const chip=el(`<span class="cal-seg">${fmtSeg(g)}<button type="button" aria-label="移除此段">✕</button></span>`);
+      chip.querySelector('button').addEventListener('click',()=>{segs.splice(i,1);draw()});
+      segwrap.appendChild(chip);
+    });
+    if(pending)segwrap.appendChild(el(`<span class="cal-seg" style="border-style:dashed">${fmtMD(pending)} → 點結束日</span>`));
+    if(segs.length||pending){
+      const cl=el('<button type="button" class="cal-clear">清除全部</button>');
+      cl.addEventListener('click',()=>{segs=[];pending=null;draw()});
+      segwrap.appendChild(cl);
     }
+    const cnt=segUnionDates(withPending()).length;
+    okBtn.textContent='產生 '+cnt+' 天';
+    okBtn.disabled=!cnt;
+  }
+  grid.addEventListener('click',e=>{
+    const c=e.target.closest('.cal-cell[data-dt]');if(!c)return;
+    const [y,m,d]=c.dataset.dt.split('-').map(Number);
+    const t=new Date(y,m-1,d);
+    if(!pending)pending=t;
+    else{segs=normSegs([...segs,{s:pending<t?pending:t,e:pending<t?t:pending}]);pending=null}
+    draw();
+  });
+  box.querySelectorAll('.cal-nav').forEach(b=>b.addEventListener('click',()=>{
+    view.m+=Number(b.dataset.nav);
+    if(view.m<0){view.m=11;view.y--}
+    if(view.m>11){view.m=0;view.y++}
+    draw();
+  }));
+  const close=openSheet(box);
+  box.querySelector('[data-x]').addEventListener('click',close);
+  okBtn.addEventListener('click',()=>{
+    const dates=segUnionDates(withPending());
+    if(!dates.length)return;
+    const replace=box.querySelector('.cal-replace').checked;
+    close();
+    applyDates(dates,replace);
+  });
+  draw();
+}
+function applyDates(dates,replace){
+  snapshot();
+  const byMD=new Map();
+  state.days.forEach(day=>{const k=parseMD(day.date);if(k&&!byMD.has(k))byMD.set(k,day)});
+  const used=new Set();let created=0,kept=0;
+  const ordered=dates.map(t=>{
+    const k=(t.getMonth()+1)+'/'+t.getDate(), ex=byMD.get(k);
+    if(ex&&!used.has(ex.id)){used.add(ex.id);if(!ex.dow)ex.dow=WD[t.getDay()];kept++;return ex}
+    created++;
+    return {id:uid(),date:fmtMD(t),dow:WD[t.getDay()],tag:'plain',title:'',note:'',open:true,cards:[]};
+  });
+  const rest=state.days.filter(d=>!used.has(d.id));
+  let movedCards=0;
+  if(replace){rest.forEach(d=>{movedCards+=d.cards.length;state.pool.push(...d.cards)});state.days=ordered}
+  else state.days=[...ordered,...rest];
+  if(state.days.length>0) activeTab = state.days[0].id;
+  commit();
+  toast('已排好 '+ordered.length+' 天',{label:'復原',fn:undo});
+}
 
-    // 更新投票 UI
-    function renderVotes(index) {
-      const countEl = document.getElementById(`count-${index}`);
-      const votersEl = document.getElementById(`voters-${index}`);
+/* ══════════════ 卡片編輯 ══════════════ */
+function field(labelTxt,inputEl){const w=el('<div></div>');w.appendChild(el(`<label>${esc(labelTxt)}</label>`));w.appendChild(inputEl);return w}
+function inp(val,ph){const i=document.createElement('input');i.value=val||'';if(ph)i.placeholder=ph;return i}
+function ta(val,ph){const t=document.createElement('textarea');t.value=val||'';if(ph)t.placeholder=ph;return t}
 
-      const voters = votesData[index];
-      countEl.innerText = `得票數：${voters.length}`;
+function openCardEditor(id,newTo){
+  const f=id?findCard(id):null;
+  const c=f?clone(f.card):C({cat:'spot'});
+  const box=el(`<div><h3>${f?'編輯卡片':'新增卡片'}</h3></div>`);
+  const iName=inp(c.name,'例：御釜（刈田山頂）');
+  const iTime=inp(c.time,'例：9:00–16:30（最終入場16:00）');
+  const iAddr=inp(c.addr,'導航用地址或設施名');
+  const iMap=inp(c.map,'留空＝自動搜尋 Google 地圖');
+  const iNote=ta(c.note,'排隊訣竅、票價、停留時間…');
+  const iWarn=ta(c.warn,'橘色警示框內容');
+  let cat=c.cat;
+  box.appendChild(field('名稱',iName));
+  box.appendChild(field('分類',segRow(CATS,cat,v=>cat=v)));
+  box.appendChild(field('時間',iTime));
+  box.appendChild(field('地址',iAddr));
+  box.appendChild(field('備註',iNote));
+  const adv=el('<div></div>');
+  adv.appendChild(field('Google 地圖連結',iMap));
+  adv.appendChild(field('⚠ 警告備註',iWarn));
+  const hasAdv=!!(c.map||c.warn);
+  adv.style.display=hasAdv?'':'none';
+  const advBtn=el(`<button type="button" class="advtoggle ${hasAdv?'open':''}">更多欄位</button>`);
+  advBtn.addEventListener('click',()=>{const show=adv.style.display==='none';adv.style.display=show?'':'none';advBtn.classList.toggle('open',show)});
+  box.appendChild(advBtn);
+  box.appendChild(adv);
+  
+  const row=el(`<div class="btnrow"><button class="btn" data-x>取消</button><button class="btn primary" data-ok>儲存</button></div>`);
+  box.appendChild(row);
+  const close=openSheet(box);
+  row.querySelector('[data-x]').addEventListener('click',close);
+  row.querySelector('[data-ok]').addEventListener('click',()=>{
+    snapshot();
+    Object.assign(c,{name:iName.value.trim(),time:iTime.value.trim(),addr:iAddr.value.trim(),map:iMap.value.trim(),note:iNote.value.trim(),warn:iWarn.value.trim(),cat});
+    if(f){Object.assign(f.card,c)}
+    else{contList(newTo||activeTab||'pool').push(c)}
+    close();commit();
+  });
+}
 
-      votersEl.innerHTML = voters.map(name => `<span class="voter-tag">👤 ${name}</span>`).join('');
+function openCardMenu(id){
+  const f=findCard(id);if(!f)return;
+  const box=el(`<div><h3>${esc(f.card.name)||'卡片'}</h3>
+    <p style="margin:2px 0 12px;font-size:12px;color:var(--sub)">目前在：${esc(contName(f.cont))}</p>
+    <div class="sheetlist">
+      <button data-a="edit">✎ 編輯</button>
+      <button data-a="move">📅 移動到…</button>
+      <button data-a="dup">⧉ 複製一份</button>
+      <button data-a="msel">☑ 批次選取</button>
+      <button data-a="del" class="danger">🗑 刪除</button>
+    </div></div>`);
+  const close=openSheet(box);
+  box.addEventListener('click',e=>{
+    const a=e.target.closest('[data-a]');if(!a)return;
+    close();
+    if(a.dataset.a==='edit')openCardEditor(id);
+    if(a.dataset.a==='move')openMovePicker(id);
+    if(a.dataset.a==='msel')enterSelect(id);
+    if(a.dataset.a==='dup'){snapshot();const cp=clone(f.card);cp.id=uid();contList(f.cont).splice(f.idx+1,0,cp);commit();toast('已複製')}
+    if(a.dataset.a==='del')confirmBox('刪除「'+(f.card.name||'此卡片')+'」？',()=>{snapshot();contList(f.cont).splice(f.idx,1);commit();toast('已刪除',{label:'復原',fn:undo})},'刪除');
+  });
+}
+
+function openMovePicker(id){
+  const f=findCard(id);if(!f)return;
+  const box=el(`<div><h3>移動「${esc(f.card.name)||'卡片'}」到…</h3><div class="sheetlist" style="margin-top:10px"></div></div>`);
+  const list=box.querySelector('.sheetlist');
+  const targets=[...state.days.map(d=>[d.id,dayLabel(d),d.cards.length+' 張卡']),['pool','備案池（側線）',state.pool.length+' 張卡']];
+  targets.forEach(([cid,label,sub])=>{
+    const b=el(`<button ${cid===f.cont?'disabled':''}>${esc(label)}<span class="small">${esc(sub)}${cid===f.cont?'・目前位置':''}</span></button>`);
+    b.addEventListener('click',()=>{close();moveCard(id,cid,null);toast('已移到 '+label,{label:'復原',fn:undo})});
+    list.appendChild(b);
+  });
+  const close=openSheet(box);
+}
+
+/* ══════════════ 天數編輯 ══════════════ */
+function openDayEditor(id){
+  const d=id?state.days.find(x=>x.id===id):null;
+  const w=d?clone(d):{id:uid(),date:'Day '+(state.days.length+1),dow:'',tag:'plain',title:'',note:'',open:true,cards:[]};
+  const box=el(`<div><h3>${d?'編輯這一天':'新增一天'}</h3></div>`);
+  const iDate=inp(w.date,'日期：9/24、Day 3'),iDow=inp(w.dow,'角標：四、Sat'),iTitle=inp(w.title,'例：藏王御釜＋狐狸村'),iNote=inp(w.note,'小備註');
+  let tag=w.tag||'plain';
+  box.appendChild(field('主標籤',iDate));
+  box.appendChild(field('角標',iDow));
+  box.appendChild(field('標題',iTitle));
+  box.appendChild(field('類型色帶',segRow(TAGS,tag,v=>tag=v)));
+  box.appendChild(field('備註',iNote));
+  const row=el(`<div class="btnrow">${d?'<button class="btn danger" data-del>刪除這天</button>':''}<button class="btn" data-x>取消</button><button class="btn primary" data-ok>儲存</button></div>`);
+  box.appendChild(row);
+  const close=openSheet(box);
+  row.querySelector('[data-x]').addEventListener('click',close);
+  row.querySelector('[data-ok]').addEventListener('click',()=>{
+    snapshot();
+    Object.assign(w,{date:iDate.value.trim(),dow:iDow.value.trim(),title:iTitle.value.trim(),note:iNote.value.trim(),tag});
+    if(d)Object.assign(d,{date:w.date,dow:w.dow,title:w.title,note:w.note,tag:w.tag});
+    else {state.days.push(w); activeTab=w.id;}
+    close();commit();
+  });
+  const delBtn=row.querySelector('[data-del]');
+  if(delBtn)delBtn.addEventListener('click',()=>{
+    close();
+    confirmBox('刪除「'+d.date+' '+d.title+'」？卡片會移至備案池。',()=>{
+      snapshot();
+      state.pool.push(...d.cards);
+      state.days=state.days.filter(x=>x.id!==d.id);
+      if(state.days.length>0) activeTab = state.days[0].id;
+      commit();toast('已刪除，卡片已存入備案池',{label:'復原',fn:undo});
+    },'刪除這天');
+  });
+}
+
+/* ══════════════ 任務／備註編輯 ══════════════ */
+function openTaskEditor(id){
+  const t=id?state.tasks.find(x=>x.id===id):null;
+  const w=t?clone(t):T('','');
+  const box=el(`<div><h3>${t?'編輯任務':'新增任務'}</h3></div>`);
+  const iText=ta(w.text,'要做什麼'),iDue=inp(w.due,'期限');
+  box.appendChild(field('內容',iText));box.appendChild(field('期限',iDue));
+  const row=el(`<div class="btnrow">${t?'<button class="btn danger" data-del>刪除</button>':''}<button class="btn" data-x>取消</button><button class="btn primary" data-ok>儲存</button></div>`);
+  box.appendChild(row);
+  const close=openSheet(box);
+  row.querySelector('[data-x]').addEventListener('click',close);
+  row.querySelector('[data-ok]').addEventListener('click',()=>{snapshot();
+    if(t)Object.assign(t,{text:iText.value.trim(),due:iDue.value.trim()});
+    else state.tasks.push(Object.assign(w,{text:iText.value.trim(),due:iDue.value.trim()}));
+    close();commit();});
+  const db=row.querySelector('[data-del]');
+  if(db)db.addEventListener('click',()=>{close();confirmBox('刪除此任務？',()=>{snapshot();state.tasks=state.tasks.filter(x=>x.id!==id);commit();toast('已刪除',{label:'復原',fn:undo})},'刪除')});
+}
+
+function openNoteEditor(id){
+  const n=id?state.notes.find(x=>x.id===id):null;
+  const w=n?clone(n):N('',false);
+  const box=el(`<div><h3>${n?'編輯備註':'新增備註'}</h3></div>`);
+  const iText=ta(w.text,'備註內容');
+  let warn=!!w.warn;
+  box.appendChild(field('內容',iText));
+  box.appendChild(field('樣式',segRow({plainN:'一般',warnN:'⚠ 橘色警示'},warn?'warnN':'plainN',v=>warn=(v==='warnN'))));
+  const row=el(`<div class="btnrow">${n?'<button class="btn danger" data-del>刪除</button>':''}<button class="btn" data-x>取消</button><button class="btn primary" data-ok>儲存</button></div>`);
+  box.appendChild(row);
+  const close=openSheet(box);
+  row.querySelector('[data-x]').addEventListener('click',close);
+  row.querySelector('[data-ok]').addEventListener('click',()=>{snapshot();
+    if(n)Object.assign(n,{text:iText.value.trim(),warn});
+    else state.notes.push(Object.assign(w,{text:iText.value.trim(),warn}));
+    close();commit();});
+  const db=row.querySelector('[data-del]');
+  if(db)db.addEventListener('click',()=>{close();confirmBox('刪除此備註？',()=>{snapshot();state.notes=state.notes.filter(x=>x.id!==id);commit();toast('已刪除',{label:'復原',fn:undo})},'刪除')});
+}
+
+/* ══════════════ 匯出／匯入 ══════════════ */
+function buildText(){
+  let out=['🗾 '+(state.trip.title||'旅程')];
+  if(state.trip.sub)out.push(state.trip.sub);
+  out.push('');
+  state.days.forEach(d=>{
+    out.push('■ '+d.date+'（'+d.dow+'）'+d.title+(d.note?'｜'+d.note:''));
+    d.cards.forEach(c=>{
+      out.push('・'+(c.time?c.time+'  ':'')+c.name+(c.addr?'（'+c.addr+'）':''));
+      if(c.warn)out.push('  ⚠ '+c.warn);
+    });
+    out.push('');
+  });
+  if(state.pool.length){out.push('📦 備案池');state.pool.forEach(c=>out.push('・'+c.name));out.push('')}
+  const todo=state.tasks.filter(t=>!t.done);
+  if(todo.length){out.push('☑ 行前任務（未完成）');todo.forEach(t=>out.push('・'+t.text+(t.due?'｜'+t.due:'')))}
+  return out.join('\n');
+}
+
+async function copyText(txt,okMsg){
+  try{await navigator.clipboard.writeText(txt);toast(okMsg||'已複製到剪貼簿')}
+  catch(e){openIOSheet('複製失敗，請手動複製：',txt,null)}
+}
+
+function openIOSheet(title,value,onImport){
+  const box=el(`<div><h3>${esc(title)}</h3></div>`);
+  const t=ta(value,'');t.style.minHeight='220px';t.spellcheck=false;
+  box.appendChild(t);
+  const row=el(`<div class="btnrow"><button class="btn" data-x>關閉</button>${onImport?'<button class="btn primary" data-ok>匯入並覆蓋</button>':'<button class="btn primary" data-cp>全選複製</button>'}</div>`);
+  box.appendChild(row);
+  const close=openSheet(box);
+  row.querySelector('[data-x]').addEventListener('click',close);
+  const cp=row.querySelector('[data-cp]');
+  if(cp)cp.addEventListener('click',()=>{t.select();copyText(t.value)});
+  const ok=row.querySelector('[data-ok]');
+  if(ok)ok.addEventListener('click',()=>{
+    try{
+      const data=JSON.parse(t.value);
+      if(!data||!Array.isArray(data.days)||!Array.isArray(data.pool))throw 0;
+      ensureShape(data);
+      confirmBox('匯入將覆蓋目前內容。繼續？',()=>{snapshot();state=data;commit();close();toast('已匯入')},'覆蓋匯入');
+    }catch(e){toast('格式不對，請貼上 JSON')}
+  });
+}
+
+function openMainMenu(){
+  const box=el(`<div><h3>選單</h3><div class="sheetlist" style="margin-top:10px">
+    <button data-a="trip">⚙️ 旅程設定</button>
+    <button data-a="text">💬 複製純文字行程</button>
+    <button data-a="exp">⬆ 匯出 JSON</button>
+    <button data-a="imp">⬇ 匯入 JSON</button>
+    <button data-a="blank" class="danger">🆕 開新旅程（空白）</button>
+    <button data-a="example" class="danger">🗾 載入仙台範例</button>
+  </div></div>`);
+  const close=openSheet(box);
+  box.addEventListener('click',e=>{
+    const a=e.target.closest('[data-a]');if(!a)return;close();
+    const act=a.dataset.a;
+    if(act==='trip')openTripEditor();
+    if(act==='text')copyText(buildText(),'行程已複製');
+    if(act==='exp')openIOSheet('匯出 JSON',JSON.stringify(state,null,1),null);
+    if(act==='imp')openIOSheet('貼上 JSON 匯入','',true);
+    if(act==='blank')confirmBox('開新空白旅程？',()=>{snapshot();state=makeBlank();commit();toast('已新建旅程')},'確定');
+    if(act==='example')confirmBox('載入仙台範例？',()=>{snapshot();state=clone(SENDAI);commit();toast('已載入仙台範例')},'載入');
+  });
+}
+
+/* ══════════════ 事件監聽與初始化 ══════════════ */
+document.addEventListener('click',e=>{
+  if(sel){
+    const sc=e.target.closest('[data-selact]');
+    if(sc){
+      const a=sc.dataset.selact, ids=selectedInOrder();
+      if(a==='cancel')exitSelect();
+      else if(!ids.length)toast('先點幾張卡片');
+      else if(a==='pool'){exitSelect();moveMany(ids,'pool');toast('已移入備案池',{label:'復原',fn:undo})}
+      else if(a==='move')openMovePickerMulti(ids);
+      else if(a==='del')confirmBox('刪除選取的 '+ids.length+' 張卡片？',()=>{exitSelect();deleteMany(ids);toast('已刪除',{label:'復原',fn:undo})},'刪除');
+      return;
     }
-  </script>
+    const pc=e.target.closest('.card');
+    if(pc&&!e.target.closest('a,button')){
+      if(sel.has(pc.dataset.id))sel.delete(pc.dataset.id);else sel.add(pc.dataset.id);
+      renderDock();
+      return;
+    }
+  }
+  const act=e.target.closest('[data-act]');
+  if(act){
+    const a=act.dataset.act;
+    const card=act.closest('.card'), day=act.closest('.day'), task=act.closest('.task'), note=act.closest('.note');
+    if(a==='card-menu'&&card)openCardMenu(card.dataset.id);
+    if(a==='day-add'&&day)openCardEditor(null,day.dataset.day);
+    if(a==='day-edit'&&day)openDayEditor(day.dataset.day);
+    if(a==='task-toggle'&&task){const t=state.tasks.find(x=>x.id===task.dataset.task);if(t){snapshot();t.done=!t.done;commit()}}
+    if(a==='task-edit'&&task)openTaskEditor(task.dataset.task);
+    if(a==='note-edit'&&note)openNoteEditor(note.dataset.note);
+    return;
+  }
+  const addc=e.target.closest('[data-addcard]');
+  if(addc)openCardEditor(null,addc.dataset.addcard);
+});
+
+$('#undobtn').addEventListener('click',undo);
+$('#menubtn').addEventListener('click',openMainMenu);
+$('#brandbtn').addEventListener('click',openTripEditor);
+$('#addtaskbtn').addEventListener('click',()=>openTaskEditor(null));
+$('#addnotebtn').addEventListener('click',()=>openNoteEditor(null));
+
+(async function init(){
+  await detectStore();
+  const saved=await loadState();
+  state=saved||clone(SENDAI);
+  ensureShape(state);
+  if(state.days.length>0) activeTab=state.days[0].id;
+  setPill();
+  renderAll();
+})();
+</script>
 </body>
 </html>
