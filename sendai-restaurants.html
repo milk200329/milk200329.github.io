@@ -1,30 +1,779 @@
-<div class="item">
-  <!-- 檢視模式 -->
-  <span id="text-display">10:00 抵達沖繩美麗海水族館</span>
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Sendai Family Trip 2026</title>
   
-  <!-- 編輯模式（預設隱藏） -->
-  <input type="text" id="text-input" value="10:00 抵達沖繩美麗海水族館" style="display: none;" />
+  <!-- PWA Manifest & Meta -->
+  <meta name="theme-color" content="#f7f4ef" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <link rel="manifest" href="manifest.json" />
 
-  <!-- 按鈕區 -->
-  <button id="edit-btn" onclick="toggleEdit()">編輯</button>
-  <button id="save-btn" onclick="saveEdit()" style="display: none;">儲存</button>
-</div>
+  <!-- Google Fonts & Leaflet CSS -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
-<script>
-function toggleEdit() {
-  document.getElementById('text-display').style.display = 'none';
-  document.getElementById('text-input').style.display = 'inline-block';
-  document.getElementById('edit-btn').style.display = 'none';
-  document.getElementById('save-btn').style.display = 'inline-block';
-}
+  <!-- SortableJS for Drag & Drop -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
 
-function saveEdit() {
-  const newText = document.getElementById('text-input').value;
-  document.getElementById('text-display').innerText = newText;
-  
-  document.getElementById('text-display').style.display = 'inline-block';
-  document.getElementById('text-input').style.display = 'none';
-  document.getElementById('edit-btn').style.display = 'inline-block';
-  document.getElementById('save-btn').style.display = 'none';
-}
-</script>
+  <!-- Firebase SDKs (v9/v10 Compat for easy single-file usage) -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+
+  <style>
+    :root {
+      --bg-color: #f8f6f0;
+      --card-bg: #ffffff;
+      --primary: #8c7a6b;
+      --primary-light: #e6e0d8;
+      --text-main: #4a453e;
+      --text-sub: #8c857b;
+      --accent-hotel: #e8d5c4;
+      --accent-spot: #dbe3d5;
+      --accent-food: #f3dfd1;
+      --shadow: 0 4px 15px rgba(140, 122, 107, 0.08);
+      --radius: 16px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Noto Sans TC', sans-serif; -webkit-tap-highlight-color: transparent; }
+    body { background-color: var(--bg-color); color: var(--text-main); padding-bottom: 90px; }
+
+    /* Header */
+    header {
+      background: var(--card-bg);
+      padding: 24px 20px 16px;
+      border-bottom-left-radius: 24px;
+      border-bottom-right-radius: 24px;
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header-title { font-size: 20px; font-weight: 700; color: var(--primary); letter-spacing: 1px; }
+    .header-meta { font-size: 13px; color: var(--text-sub); margin-top: 6px; display: flex; gap: 12px; flex-wrap: wrap; }
+    .today-badge { background: var(--primary); color: #fff; padding: 2px 8px; border-radius: 12px; font-size: 11px; display: none; }
+
+    /* Tabs Container */
+    .tab-content { display: none; padding: 16px; animation: fadeIn 0.3s ease; }
+    .tab-content.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* Days Bar Navigation */
+    .days-nav {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding: 12px 16px;
+      background: var(--bg-color);
+      scrollbar-width: none;
+    }
+    .days-nav::-webkit-scrollbar { display: none; }
+    .day-btn {
+      flex: 0 0 auto;
+      padding: 8px 16px;
+      background: var(--card-bg);
+      border: 1px solid var(--primary-light);
+      border-radius: 20px;
+      font-size: 13px;
+      color: var(--text-sub);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .day-btn.active {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+      font-weight: 500;
+      box-shadow: 0 4px 10px rgba(140, 122, 107, 0.2);
+    }
+    .day-btn.is-today { border: 2px solid var(--primary); }
+
+    /* Itinerary Timeline */
+    .timeline { position: relative; padding-left: 20px; margin-top: 10px; }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 7px;
+      top: 15px;
+      bottom: 15px;
+      width: 2px;
+      background: var(--primary-light);
+    }
+    .hotel-banner {
+      background: var(--accent-hotel);
+      color: var(--text-main);
+      padding: 10px 16px;
+      border-radius: var(--radius);
+      margin-bottom: 16px;
+      font-size: 13px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .item-card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      margin-bottom: 14px;
+      box-shadow: var(--shadow);
+      position: relative;
+      cursor: grab;
+      transition: transform 0.2s;
+    }
+    .item-card::before {
+      content: '';
+      position: absolute;
+      left: -18px;
+      top: 20px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--primary);
+      border: 2px solid var(--bg-color);
+    }
+    .item-card.type-hotel { border-left: 4px solid #c8b6a6; }
+    .item-card.type-food { border-left: 4px solid #e2b091; }
+    .item-card.type-spot { border-left: 4px solid #99a799; }
+    
+    .item-header { display: flex; justify-content: space-between; align-items: flex-start; }
+    .item-time { font-size: 12px; font-weight: 700; color: var(--primary); margin-bottom: 4px; }
+    .item-title { font-size: 15px; font-weight: 700; color: var(--text-main); }
+    .item-desc { font-size: 13px; color: var(--text-sub); margin-top: 6px; white-space: pre-line; line-height: 1.5; }
+    .item-actions { display: flex; gap: 8px; margin-top: 10px; }
+    .btn-sm {
+      background: var(--bg-color);
+      border: none;
+      padding: 6px 12px;
+      border-radius: 12px;
+      font-size: 12px;
+      color: var(--text-main);
+      cursor: pointer;
+    }
+
+    /* Map Section */
+    #map { width: 100%; height: 350px; border-radius: var(--radius); margin-bottom: 16px; }
+    .map-filter { display: flex; gap: 8px; margin-bottom: 12px; }
+    .filter-btn { flex: 1; padding: 8px; background: var(--card-bg); border: 1px solid var(--primary-light); border-radius: 12px; font-size: 12px; text-align: center; cursor: pointer; }
+    .filter-btn.active { background: var(--primary-light); font-weight: 500; }
+
+    /* Lists (Luggage & Wishlist) */
+    .list-item {
+      background: var(--card-bg);
+      padding: 12px 16px;
+      border-radius: var(--radius);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: var(--shadow);
+    }
+    .list-item.done span { text-decoration: line-through; color: var(--text-sub); }
+    .add-input-group { display: flex; gap: 8px; margin-bottom: 16px; }
+    .input-style { flex: 1; padding: 10px 14px; border: 1px solid var(--primary-light); border-radius: 12px; outline: none; background: var(--card-bg); }
+    .btn-main { background: var(--primary); color: #fff; border: none; padding: 10px 16px; border-radius: 12px; cursor: pointer; }
+
+    /* Tools (Currency & Weather) */
+    .tool-card { background: var(--card-bg); padding: 16px; border-radius: var(--radius); box-shadow: var(--shadow); margin-bottom: 16px; }
+    .weather-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 10px; }
+    .weather-box { background: var(--bg-color); padding: 12px; border-radius: 12px; text-align: center; }
+
+    /* Bottom Navigation */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--card-bg);
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 0 20px;
+      box-shadow: 0 -4px 15px rgba(0,0,0,0.05);
+      border-top-left-radius: 20px;
+      border-top-right-radius: 20px;
+      z-index: 1000;
+    }
+    .nav-item { border: none; background: none; color: var(--text-sub); font-size: 11px; display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; }
+    .nav-item.active { color: var(--primary); font-weight: 700; }
+    .nav-icon { font-size: 18px; }
+
+    /* Modal for Editing */
+    .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 2000; justify-content: center; align-items: center; padding: 20px; }
+    .modal.active { display: flex; }
+    .modal-body { background: var(--card-bg); padding: 20px; border-radius: var(--radius); width: 100%; max-width: 400px; }
+    .modal-body textarea, .modal-body input { width: 100%; margin-bottom: 10px; padding: 10px; border: 1px solid var(--primary-light); border-radius: 8px; }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <div class="header-title">Sendai Trip 2026</div>
+      <span class="today-badge" id="todayBadge">TODAY</span>
+    </div>
+    <div class="header-meta">
+      <span>📅 9/19 - 9/26</span>
+      <span>👥 5人家族</span>
+      <span>🏨 幾阪飯店 / 京阪</span>
+    </div>
+  </header>
+
+  <!-- Navigation Content Tabs -->
+
+  <!-- TAB 1: ITINERARY -->
+  <div id="tab-itinerary" class="tab-content active">
+    <div class="days-nav" id="daysNav"></div>
+    <div class="hotel-banner" id="hotelBanner">🏨 住宿資訊載入中...</div>
+    <div class="timeline" id="timelineList"></div>
+  </div>
+
+  <!-- TAB 2: MAP -->
+  <div id="tab-map" class="tab-content">
+    <div class="map-filter">
+      <div class="filter-btn active" onclick="filterMap('all')">全部</div>
+      <div class="filter-btn" onclick="filterMap('hotel')">🏨 飯店</div>
+      <div class="filter-btn" onclick="filterMap('spot')">📍 景點</div>
+      <div class="filter-btn" onclick="filterMap('food')">🍱 餐廳</div>
+    </div>
+    <div id="map"></div>
+  </div>
+
+  <!-- TAB 3: PACKING LIST -->
+  <div id="tab-luggage" class="tab-content">
+    <h3 style="margin-bottom: 12px;">🧳 行李準備清單</h3>
+    <div class="add-input-group">
+      <input type="text" id="luggageInput" class="input-style" placeholder="新增行李項目..." />
+      <button class="btn-main" onclick="addLuggageItem()">新增</button>
+    </div>
+    <div id="luggageList"></div>
+  </div>
+
+  <!-- TAB 4: WISHLIST -->
+  <div id="tab-wishlist" class="tab-content">
+    <h3 style="margin-bottom: 12px;">🛍️ 願望 / 必買清單</h3>
+    <div class="add-input-group">
+      <input type="text" id="wishInput" class="input-style" placeholder="新增想買/想去的..." />
+      <button class="btn-main" onclick="addWishItem()">新增</button>
+    </div>
+    <div id="wishList"></div>
+  </div>
+
+  <!-- TAB 5: TOOLS (Currency & Weather) -->
+  <div id="tab-tools" class="tab-content">
+    <div class="tool-card">
+      <h3>💴 匯率即時換算 (JPY ➔ TWD)</h3>
+      <div style="display: flex; gap: 10px; margin-top: 10px; align-items: center;">
+        <input type="number" id="jpyAmount" class="input-style" placeholder="日幣 (JPY)" oninput="convertCurrency()" />
+        <span>=</span>
+        <input type="text" id="twdAmount" class="input-style" readonly placeholder="台幣 (TWD)" />
+      </div>
+      <div style="font-size: 11px; color: var(--text-sub); margin-top: 6px;" id="rateInfo">匯率載入中...</div>
+    </div>
+
+    <div class="tool-card">
+      <h3>🌤️ 仙台即時天氣狀況</h3>
+      <div class="weather-grid" id="weatherBox">
+        <div class="weather-box">載入中...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Navigation Bar -->
+  <nav class="bottom-nav">
+    <button class="nav-item active" onclick="switchTab('itinerary', this)">
+      <span class="nav-icon">📅</span>行程
+    </button>
+    <button class="nav-item" onclick="switchTab('map', this)">
+      <span class="nav-icon">🗺️</span>地圖
+    </button>
+    <button class="nav-item" onclick="switchTab('luggage', this)">
+      <span class="nav-icon">🧳</span>行李
+    </button>
+    <button class="nav-item" onclick="switchTab('wishlist', this)">
+      <span class="nav-icon">🛍️</span>必買
+    </button>
+    <button class="nav-item" onclick="switchTab('tools', this)">
+      <span class="nav-icon">💡</span>工具
+    </button>
+  </nav>
+
+  <!-- Modal for Edit Item -->
+  <div class="modal" id="editModal">
+    <div class="modal-body">
+      <h3>編輯行程內容</h3>
+      <br/>
+      <input type="text" id="editTime" placeholder="時間 (如: 18:10)" />
+      <input type="text" id="editTitle" placeholder="標題" />
+      <textarea id="editDesc" rows="4" placeholder="詳細備註..."></textarea>
+      <div style="display: flex; justify-content: flex-end; gap: 8px;">
+        <button class="btn-sm" onclick="closeModal()">取消</button>
+        <button class="btn-main" onclick="saveItemEdit()">儲存</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <script>
+    // -------------------------------------------------------------
+    // 1. FIREBASE CONFIGURATION (可替換成您的設定)
+    // -------------------------------------------------------------
+const firebaseConfig = {
+  apiKey: "AIzaSyDxMwkCU23PB6Q60r3TWEu3elG00r4ywM0",
+  authDomain: "sendai-6666.firebaseapp.com",
+  databaseURL: "https://sendai-6666-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "sendai-6666",
+  storageBucket: "sendai-6666.firebasestorage.app",
+  messagingSenderId: "317293713360",
+  appId: "1:317293713360:web:e3d5175a54ae43c801cbd5",
+  measurementId: "G-Y1EH4G7745"
+};
+
+    // 檢查是否已設定有效的 Firebase，若未替換則降級至 LocalStorage
+    let db = null;
+    if (firebaseConfig.apiKey !== "AIzaSyDxMwkCU23PB6Q60r3TWEu3elG00r4ywM0") {
+      firebase.initializeApp(firebaseConfig);
+      db = firebase.database();
+    }
+
+    // -------------------------------------------------------------
+    // 2. DATA INITIALIZATION
+    // -------------------------------------------------------------
+    const defaultItinerary = {
+      "9/19": {
+        dateStr: "9/19(六) 第一天",
+        hotel: "Hotel Grand Bach Sendai",
+        items: [
+          { id: "1", time: "18:10", title: "抵達仙台機場", desc: "準備入境辦理手續", type: "spot", lat: 38.1399, lng: 140.9169 },
+          { id: "2", time: "19:00", title: "搭仙台機場Access線", desc: "可能搭19:00/19:28\n行李只能放腳邊,有點擠,下車時要自己按開關打開門\n只能刷西瓜卡進站or機器買票選660元\n抵達3/4號月台,手扶梯到二樓,左手邊東口改札", type: "spot" },
+          { id: "3", time: "19:27", title: "抵達仙台車站 > 步行去飯店", desc: "", type: "spot", lat: 38.2601, lng: 140.8824 },
+          { id: "4", time: "19:45", title: "Hotel Grand Bach Sendai", desc: "步行10分 CHECK IN 放行李", type: "hotel", lat: 38.2585, lng: 140.8858 },
+          { id: "5", time: "20:10", title: "晚餐-たんや善治郎 南町通り店", desc: "步行15分 這間人潮較少", type: "food", lat: 38.2581, lng: 140.8784 }
+        ]
+      },
+      "9/20": {
+        dateStr: "9/20(日) 第二天",
+        hotel: "Hotel Grand Bach Sendai",
+        items: [
+          { id: "6", time: "07:15", title: "大廳寄行李+早餐", desc: "", type: "hotel" },
+          { id: "7", time: "08:20", title: "LOOPLE 盧葡兒仙台 觀光巴士", desc: "買一日券630(現金)\n早點到 第一班09.人潮應該就很多", type: "spot" },
+          { id: "8", time: "09:13", title: "瑞鳳殿 1H", desc: "班次選擇：10:13/10:28/10:43", type: "spot", lat: 38.2514, lng: 140.8660 },
+          { id: "9", time: "10:28", title: "仙台城跡 30M", desc: "11:08/11:23一定要搭到這班,不然得搭計程車回來", type: "spot", lat: 38.2527, lng: 140.8560 },
+          { id: "10", time: "12:07", title: "回到仙台車站", desc: "先走路過去晃晃 6分", type: "spot" },
+          { id: "11", time: "12:45", title: "中餐-仔虎燒肉站前店", desc: "", type: "food", lat: 38.2608, lng: 140.8810 },
+          { id: "12", time: "14:15", title: "逛街行程", desc: "仙台市區商店街自由逛街", type: "spot" },
+          { id: "13", time: "18:00", title: "晚餐-札幌螃蟹本家 仙台店", desc: "", type: "food", lat: 38.2631, lng: 140.8708 }
+        ]
+      },
+      "9/21": {
+        dateStr: "9/21(一) 第三天",
+        hotel: "ホテル京阪 (Hotel Keihan)",
+        items: [
+          { id: "14", time: "上午", title: "換飯店寄行李 ホテル京阪", desc: "移動並寄存行李", type: "hotel", lat: 38.2625, lng: 140.8805 },
+          { id: "15", time: "全天", title: "松島海岸一日遊 (乘車50M)", desc: "牡蠣 (40M吃到飽or單點)\nクロワッサン屋サクサク 可頌 10-17 有分店\n松島蒲鉾本舗 烤魚板 / 烤仙貝", type: "spot", lat: 38.3683, lng: 141.0640 },
+          { id: "16", time: "11:00", title: "MATSUSHIMA SANDWICH STORE", desc: "松島三明治 營業時間 11-16", type: "food", lat: 38.3690, lng: 141.0620 },
+          { id: "17", time: "下午", title: "Cafe le Roman 松島 咖啡廳", desc: "營業時間 11-17 景觀咖啡廳", type: "food", lat: 38.3650, lng: 141.0600 }
+        ]
+      },
+      "9/22": {
+        dateStr: "9/22(二) 第四天",
+        hotel: "ホテル京阪",
+        items: [
+          { id: "18", time: "07:30", title: "早餐超商 & 出發", desc: "車程約 1H20M", type: "spot" },
+          { id: "19", time: "09:50", title: "藏王御釜 1H", desc: "賞火山口壯麗景緻", type: "spot", lat: 38.1322, lng: 140.4503 },
+          { id: "20", time: "10:50", title: "出發去山形 (車程1H)", desc: "", type: "spot" },
+          { id: "21", time: "12:00", title: "米澤牛 登起波 山形店", desc: "享用頂級米澤牛午餐", type: "food", lat: 38.2530, lng: 140.3340 },
+          { id: "22", time: "14:00", title: "山寺 (車程30M)", desc: "預估爬山階梯約 1.5H", type: "spot", lat: 38.3125, lng: 140.4375 },
+          { id: "23", time: "16:30", title: "返回仙台 (1H10M)", desc: "建議回去飯店睡覺休息一下", type: "spot" }
+        ]
+      },
+      "9/23": {
+        dateStr: "9/23(三) 第五天",
+        hotel: "ホテル京阪",
+        items: [
+          { id: "24", time: "08:30", title: "仙台海洋森林水族館", desc: "10:30 餵企鵝活動", type: "spot", lat: 38.2736, lng: 140.9839 },
+          { id: "25", time: "12:30", title: "中餐時間", desc: "去隔壁三井 Outlet 百貨吃 or 回市區吃", type: "food", lat: 38.2760, lng: 140.9870 },
+          { id: "26", time: "下午", title: "下午自由彈性行程", desc: "市區逛街或景點備案", type: "spot" }
+        ]
+      },
+      "9/24": {
+        dateStr: "9/24(四) 第六天",
+        hotel: "ホテル京阪",
+        items: [
+          { id: "27", time: "07:00", title: "開車前往石卷", desc: "", type: "spot" },
+          { id: "28", time: "09:00", title: "石卷港口出航", desc: "搭船前往貓島 (田代島)", type: "spot", lat: 38.4230, lng: 141.3060 },
+          { id: "29", time: "09:44", title: "抵達 貓島 (田代島)", desc: "島上貓咪尋訪與漫步", type: "spot", lat: 38.3039, lng: 141.2858 },
+          { id: "30", time: "11:06", title: "貓島搭船回航", desc: "11:51 抵達石卷", type: "spot" },
+          { id: "31", time: "13:00", title: "回到仙台中餐", desc: "", type: "food" }
+        ]
+      },
+      "9/25": {
+        dateStr: "9/25(五) 第七天",
+        hotel: "ホテル京阪",
+        items: [
+          { id: "32", time: "09:30", title: "金蛇水神社", desc: "祈求商賣繁盛、金運提升", type: "spot", lat: 38.1064, lng: 140.8596 },
+          { id: "33", time: "下午", title: "購物採買行程", desc: "補齊採購物品", type: "spot" },
+          { id: "34", time: "晚上", title: "歸還租賃車輛", desc: "完成還車作業", type: "spot" }
+        ]
+      },
+      "9/26": {
+        dateStr: "9/26(六) 第八天",
+        hotel: "無 (準備返家)",
+        items: [
+          { id: "35", time: "上午", title: "退房 & 行李寄車站", desc: "仙台車站寄物櫃/寄物處", type: "spot" },
+          { id: "36", time: "白天", title: "最後巡禮與採買", desc: "", type: "spot" },
+          { id: "37", time: "16:30", title: "前往仙台機場", desc: "辦理登機與託運", type: "spot" },
+          { id: "38", time: "19:00", title: "飛機起飛返家", desc: "仙台 ➔ 溫暖的家", type: "spot", lat: 38.1399, lng: 140.9169 }
+        ]
+      }
+    };
+
+    let currentDay = "9/19";
+    let itineraryData = JSON.parse(localStorage.getItem('sendai_itinerary')) || defaultItinerary;
+    let editingItemId = null;
+    let mapInstance = null;
+    let mapMarkers = [];
+
+    // -------------------------------------------------------------
+    // 3. CORE & ITINERARY RENDER
+    // -------------------------------------------------------------
+    function initApp() {
+      checkToday();
+      renderDayTabs();
+      renderTimeline();
+      initRealtimeSync();
+      initLuggage();
+      initWishlist();
+      fetchCurrency();
+      fetchWeather();
+    }
+
+    function checkToday() {
+      const today = new Date();
+      const month = today.getMonth() + 1;
+      const date = today.getDate();
+      const todayStr = `${month}/${date}`;
+      if (itineraryData[todayStr]) {
+        currentDay = todayStr;
+        document.getElementById('todayBadge').style.display = 'inline-block';
+      }
+    }
+
+    function renderDayTabs() {
+      const nav = document.getElementById('daysNav');
+      nav.innerHTML = '';
+      Object.keys(itineraryData).forEach(dayKey => {
+        const btn = document.createElement('button');
+        btn.className = `day-btn ${dayKey === currentDay ? 'active' : ''}`;
+        btn.innerText = dayKey;
+        btn.onclick = () => {
+          currentDay = dayKey;
+          renderDayTabs();
+          renderTimeline();
+          if (mapInstance) updateMapMarkers();
+        };
+        nav.appendChild(btn);
+      });
+    }
+
+    function renderTimeline() {
+      const dayData = itineraryData[currentDay];
+      document.getElementById('hotelBanner').innerHTML = `🏨 住宿：${dayData.hotel}`;
+      const list = document.getElementById('timelineList');
+      list.innerHTML = '';
+
+      dayData.items.forEach((item, index) => {
+        const card = document.createElement('div');
+        card.className = `item-card type-${item.type || 'spot'}`;
+        card.dataset.id = item.id;
+        card.innerHTML = `
+          <div class="item-header">
+            <div>
+              <div class="item-time">${item.time}</div>
+              <div class="item-title">${item.title}</div>
+            </div>
+          </div>
+          ${item.desc ? `<div class="item-desc">${item.desc}</div>` : ''}
+          <div class="item-actions">
+            <button class="btn-sm" onclick="openEditModal('${item.id}')">✏️ 編輯</button>
+            ${item.lat ? `<button class="btn-sm" onclick="openGoogleNav(${item.lat}, ${item.lng}, '${item.title}')">🗺️ 導航</button>` : ''}
+          </div>
+        `;
+        list.appendChild(card);
+      });
+
+      // Drag & Drop
+      new Sortable(list, {
+        animation: 150,
+        onEnd: function () {
+          const newItemsOrder = [];
+          list.querySelectorAll('.item-card').forEach(el => {
+            const id = el.dataset.id;
+            const found = dayData.items.find(i => i.id === id);
+            if (found) newItemsOrder.push(found);
+          });
+          itineraryData[currentDay].items = newItemsOrder;
+          saveData();
+        }
+      });
+    }
+
+    // -------------------------------------------------------------
+    // 4. EDIT & REALTIME SYNC
+    // -------------------------------------------------------------
+    function openEditModal(itemId) {
+      editingItemId = itemId;
+      const item = itineraryData[currentDay].items.find(i => i.id === itemId);
+      if (!item) return;
+      document.getElementById('editTime').value = item.time || '';
+      document.getElementById('editTitle').value = item.title || '';
+      document.getElementById('editDesc').value = item.desc || '';
+      document.getElementById('editModal').classList.add('active');
+    }
+
+    function closeModal() {
+      document.getElementById('editModal').classList.remove('active');
+    }
+
+    function saveItemEdit() {
+      const item = itineraryData[currentDay].items.find(i => i.id === editingItemId);
+      if (item) {
+        item.time = document.getElementById('editTime').value;
+        item.title = document.getElementById('editTitle').value;
+        item.desc = document.getElementById('editDesc').value;
+        saveData();
+        renderTimeline();
+      }
+      closeModal();
+    }
+
+    function saveData() {
+      localStorage.setItem('sendai_itinerary', JSON.stringify(itineraryData));
+      if (db) {
+        db.ref('itinerary').set(itineraryData);
+      }
+    }
+
+    function initRealtimeSync() {
+      if (!db) return;
+      db.ref('itinerary').on('value', snapshot => {
+        const val = snapshot.val();
+        if (val) {
+          itineraryData = val;
+          renderTimeline();
+        }
+      });
+    }
+
+    // -------------------------------------------------------------
+    // 5. MAP & LEAFLET
+    // -------------------------------------------------------------
+    function initMap() {
+      if (mapInstance) return;
+      mapInstance = L.map('map').setView([38.2601, 140.8824], 11);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap'
+      }).addTo(mapInstance);
+      updateMapMarkers();
+    }
+
+    function updateMapMarkers(filterCategory = 'all') {
+      mapMarkers.forEach(m => mapInstance.removeLayer(m));
+      mapMarkers = [];
+
+      const dayData = itineraryData[currentDay];
+      const latlngs = [];
+
+      dayData.items.forEach(item => {
+        if (item.lat && item.lng) {
+          if (filterCategory !== 'all' && item.type !== filterCategory) return;
+
+          const marker = L.marker([item.lat, item.lng]).addTo(mapInstance);
+          marker.bindPopup(`
+            <b>${item.title}</b><br/>${item.time}<br/>
+            <a href="https://www.google.com/maps/search/?api=1&query=${item.lat},${item.lng}" target="_blank">Google 導航</a>
+          `);
+          mapMarkers.push(marker);
+          latlngs.push([item.lat, item.lng]);
+        }
+      });
+
+      if (latlngs.length > 0) {
+        if (latlngs.length > 1) {
+          const polyline = L.polyline(latlngs, { color: '#8c7a6b', weight: 3, dashArray: '5, 10' }).addTo(mapInstance);
+          mapMarkers.push(polyline);
+        }
+        mapInstance.fitBounds(L.latLngBounds(latlngs).pad(0.2));
+      }
+    }
+
+    function filterMap(cat) {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      event.target.classList.add('active');
+      updateMapMarkers(cat);
+    }
+
+    function openGoogleNav(lat, lng, title) {
+      window.open(`https://www.google.com/maps/search/?api=1&query=${lat},${lng}`, '_blank');
+    }
+
+    // -------------------------------------------------------------
+    // 6. LUGGAGE & WISHLIST
+    // -------------------------------------------------------------
+    let luggageData = JSON.parse(localStorage.getItem('sendai_luggage')) || [
+      { text: "護照 / 身分證", done: false },
+      { text: "日幣現金 / 西瓜卡 (Suica)", done: false },
+      { text: "網卡 / Wi-Fi 分享器", done: false },
+      { text: "駕照正本 + 日文譯本 (自駕必備)", done: false },
+      { text: "個人常用藥物 / 暈車藥", done: false },
+      { text: "充電器 / 行動電源", done: false }
+    ];
+
+    function initLuggage() {
+      renderLuggage();
+    }
+
+    function renderLuggage() {
+      const container = document.getElementById('luggageList');
+      container.innerHTML = '';
+      luggageData.forEach((item, index) => {
+        const div = document.createElement('div');
+        div.className = `list-item ${item.done ? 'done' : ''}`;
+        div.innerHTML = `
+          <span onclick="toggleLuggage(${index})">${item.done ? '✅' : '⬜'} ${item.text}</span>
+          <button class="btn-sm" onclick="deleteLuggage(${index})">🗑️</button>
+        `;
+        container.appendChild(div);
+      });
+      localStorage.setItem('sendai_luggage', JSON.stringify(luggageData));
+    }
+
+    function addLuggageItem() {
+      const input = document.getElementById('luggageInput');
+      if (input.value.trim()) {
+        luggageData.push({ text: input.value.trim(), done: false });
+        input.value = '';
+        renderLuggage();
+      }
+    }
+
+    function toggleLuggage(index) {
+      luggageData[index].done = !luggageData[index].done;
+      renderLuggage();
+    }
+
+    function deleteLuggage(index) {
+      luggageData.splice(index, 1);
+      renderLuggage();
+    }
+
+    // Wishlist logic
+    let wishData = JSON.parse(localStorage.getItem('sendai_wish')) || [
+      { text: "毛豆麻糬 (ずんだ餅)", done: false },
+      { text: "牛舌零食 / 煎餅", done: false },
+      { text: "SAKUSAKU 可頌", done: false }
+    ];
+
+    function initWishlist() { renderWish(); }
+
+    function renderWish() {
+      const container = document.getElementById('wishList');
+      container.innerHTML = '';
+      wishData.forEach((item, index) => {
+        const div = document.createElement('div');
+        div.className = `list-item ${item.done ? 'done' : ''}`;
+        div.innerHTML = `
+          <span onclick="toggleWish(${index})">${item.done ? '✨' : '⚪'} ${item.text}</span>
+          <button class="btn-sm" onclick="deleteWish(${index})">🗑️</button>
+        `;
+        container.appendChild(div);
+      });
+      localStorage.setItem('sendai_wish', JSON.stringify(wishData));
+    }
+
+    function addWishItem() {
+      const input = document.getElementById('wishInput');
+      if (input.value.trim()) {
+        wishData.push({ text: input.value.trim(), done: false });
+        input.value = '';
+        renderWish();
+      }
+    }
+    function toggleWish(i) { wishData[i].done = !wishData[i].done; renderWish(); }
+    function deleteWish(i) { wishData.splice(i, 1); renderWish(); }
+
+    // -------------------------------------------------------------
+    // 7. TOOLS (CURRENCY & WEATHER)
+    // -------------------------------------------------------------
+    let currentRate = 0.215; // default fallback
+
+    async function fetchCurrency() {
+      try {
+        const res = await fetch('https://api.exchangerate-api.com/v4/latest/JPY');
+        const data = await res.json();
+        if (data && data.rates && data.rates.TWD) {
+          currentRate = data.rates.TWD;
+          document.getElementById('rateInfo').innerText = `即時匯率：1 JPY ≈ ${currentRate.toFixed(4)} TWD`;
+        }
+      } catch (e) {
+        document.getElementById('rateInfo').innerText = `使用預設預估匯率：1 JPY ≈ ${currentRate} TWD`;
+      }
+    }
+
+    function convertCurrency() {
+      const jpy = parseFloat(document.getElementById('jpyAmount').value);
+      if (!isNaN(jpy)) {
+        document.getElementById('twdAmount').value = `NT$ ${Math.round(jpy * currentRate)}`;
+      } else {
+        document.getElementById('twdAmount').value = '';
+      }
+    }
+
+    async function fetchWeather() {
+      try {
+        // Sendai lat/lng: 38.2682, 140.8694
+        const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=38.2682&longitude=140.8694&current_weather=true&daily=temperature_2m_max,temperature_2m_min&timezone=Asia%2FTokyo');
+        const data = await res.json();
+        const cur = data.current_weather;
+        document.getElementById('weatherBox').innerHTML = `
+          <div class="weather-box">
+            <div style="font-size: 12px; color: var(--text-sub);">目前氣溫</div>
+            <div style="font-size: 20px; font-weight: 700;">${cur.temperature}°C</div>
+          </div>
+          <div class="weather-box">
+            <div style="font-size: 12px; color: var(--text-sub);">風速 / 狀況</div>
+            <div style="font-size: 14px; font-weight: 500; margin-top: 4px;">🌬️ ${cur.windspeed} km/h</div>
+          </div>
+        `;
+      } catch (e) {
+        document.getElementById('weatherBox').innerHTML = `<div class="weather-box">無法取得天氣資料</div>`;
+      }
+    }
+
+    // Tab Switching
+    function switchTab(tabKey, btnEl) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+      
+      document.getElementById(`tab-${tabKey}`).classList.add('active');
+      btnEl.classList.add('active');
+
+      if (tabKey === 'map') {
+        setTimeout(() => {
+          initMap();
+          mapInstance.invalidateSize();
+        }, 100);
+      }
+    }
+
+    // Initialize App
+    window.onload = initApp;
+  </script>
+</body>
+</html>
