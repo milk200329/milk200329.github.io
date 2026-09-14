@@ -30,7 +30,7 @@
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html{scroll-behavior:smooth}
 body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font);font-size:15px;line-height:1.55;
-  padding-bottom:calc(120px + env(safe-area-inset-bottom));}
+  padding-bottom:calc(108px + env(safe-area-inset-bottom));}
 body.dragging{user-select:none;-webkit-user-select:none;overscroll-behavior:none}
 button{font-family:inherit;font-size:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
 button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:2px solid var(--amber);outline-offset:2px;border-radius:6px}
@@ -40,7 +40,7 @@ textarea{resize:vertical;min-height:64px}
 label{display:block;font-size:12.5px;font-weight:700;color:var(--sub);margin:12px 0 5px;letter-spacing:.04em}
 
 /* ── App bar ─────────────────────── */
-.appbar{position:sticky;top:0;z-index:40;background:rgba(242,243,239,.95);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+.appbar{position:sticky;top:0;z-index:40;background:rgba(242,243,239,.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
   border-bottom:1px solid var(--line);padding:10px 14px calc(0px + 8px);padding-top:calc(10px + env(safe-area-inset-top))}
 .appbar-row{display:flex;align-items:center;gap:10px}
 .brand{flex:1;min-width:0;cursor:pointer;border-radius:8px}
@@ -55,33 +55,35 @@ label{display:block;font-size:12.5px;font-weight:700;color:var(--sub);margin:12p
 .iconbtn{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:18px;background:var(--plate);border:1px solid var(--line);box-shadow:0 1px 2px rgba(31,45,71,.06)}
 .iconbtn:active{transform:scale(.94)}
 .iconbtn[disabled]{opacity:.35}
+.navchips{display:flex;gap:8px;overflow-x:auto;margin-top:9px;scrollbar-width:none}
+.navchips::-webkit-scrollbar{display:none}
+.chip{flex:0 0 auto;font-size:13px;font-weight:700;padding:7px 13px;border-radius:99px;background:var(--plate);border:1px solid var(--line);color:var(--sub)}
+.chip b{color:var(--ink)}
+.chip .cnt{font-size:11px;font-weight:800;color:#fff;background:var(--ink);border-radius:99px;padding:1px 6px;margin-left:5px;font-variant-numeric:tabular-nums}
 
-/* ── 底部 App 導覽列 (新增) ─────────────────────── */
-.bottom-nav{
-  position:fixed;bottom:0;left:0;right:0;z-index:90;
-  background:rgba(255,255,255,.96);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
-  border-top:1px solid var(--line);
-  padding:6px 8px calc(6px + env(safe-area-inset-bottom));
-  display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;
-}
-.bottom-nav::-webkit-scrollbar{display:none}
-.tab-btn{
-  flex:0 0 auto;display:flex;flex-direction:column;align-items:center;justify-content:center;
-  padding:6px 12px;border-radius:10px;color:var(--sub);font-size:11px;font-weight:700;
-  transition:all .15s ease;
-}
-.tab-btn b{font-size:13px;font-weight:800}
-.tab-btn.active{background:var(--ink);color:#fff}
-.tab-btn.active b{color:#fff}
-
-/* ── Tab 切換頁面 ─────────────────────── */
-.tab-pane{display:none}
-.tab-pane.active{display:block}
+/* ── Bottom day tabs（app 風格底部日期分頁） ── */
+.daytabs{position:fixed;left:0;right:0;bottom:0;z-index:60;display:flex;gap:6px;overflow-x:auto;
+  padding:8px 10px calc(8px + env(safe-area-inset-bottom));
+  background:rgba(242,243,239,.94);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border-top:1px solid var(--line);box-shadow:0 -2px 10px rgba(31,45,71,.06);scrollbar-width:none}
+.daytabs::-webkit-scrollbar{display:none}
+.daytab{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  min-width:50px;padding:6px 9px;border-radius:12px;background:var(--plate);border:1px solid var(--line);
+  font-variant-numeric:tabular-nums;transition:background .15s,border-color .15s}
+.daytab:active{transform:scale(.95)}
+.daytab .dt-date{font-size:12.5px;font-weight:800;color:var(--ink);line-height:1.15;white-space:nowrap}
+.daytab .dt-dow{font-size:10px;font-weight:700;color:var(--sub);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:56px}
+.daytab.active{background:var(--ink);border-color:var(--ink)}
+.daytab.active .dt-date,.daytab.active .dt-dow{color:#fff}
+.daytab[data-tag=car].active{background:var(--amber);border-color:var(--amber)}
+.daytab[data-tag=buffer].active{background:#98a1ad;border-color:#98a1ad}
+.daytab[data-tag=holiday].active{background:var(--silver-b);border-color:var(--silver-a)}
+.daytab[data-tag=holiday].active .dt-date,.daytab[data-tag=holiday].active .dt-dow{color:#3d4a5c}
 
 /* ── Sections ─────────────────────── */
 main{max-width:680px;margin:0 auto;padding:14px 12px 0}
-.section-head{display:flex;align-items:baseline;gap:10px;margin:10px 2px 10px}
-.section-head h2{margin:0;font-size:16px;font-weight:800;letter-spacing:.08em}
+.section-head{display:flex;align-items:baseline;gap:10px;margin:26px 2px 10px}
+.section-head h2{margin:0;font-size:15px;font-weight:800;letter-spacing:.14em}
 .section-head .hint{font-size:11.5px;color:var(--sub)}
 .section-head .grow{flex:1}
 .addbtn{font-size:12.5px;font-weight:700;color:var(--amber-ink);background:var(--amber-soft);border:1px solid #ecd6ae;border-radius:99px;padding:5px 12px}
@@ -97,7 +99,7 @@ main{max-width:680px;margin:0 auto;padding:14px 12px 0}
 .day-note{font-size:11.5px;color:var(--sub);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .day-dow{font-size:12px;font-weight:800;border:1.5px solid var(--ink);border-radius:8px;padding:2px 7px;flex:0 0 auto}
 .day-actions{display:flex;gap:4px;flex:0 0 auto}
-.day-actions .iconbtn{width:34px;height:34px;font-size:15px;border-radius:99px}
+.day-actions .iconbtn{width:34px;height:34px;font-size:15px;border-radius:9px}
 .day-band{position:relative;height:24px;display:flex;align-items:center;justify-content:space-between;padding:0 10px;
   font-size:10.5px;font-weight:800;letter-spacing:.1em;color:#fff;font-variant-numeric:tabular-nums}
 .day-band .bandtag{background:rgba(255,255,255,.24);border-radius:99px;padding:1px 9px}
@@ -107,6 +109,9 @@ main{max-width:680px;margin:0 auto;padding:14px 12px 0}
 .band-car{background:linear-gradient(100deg,#c47c14,var(--amber))}
 .band-buffer{background:linear-gradient(100deg,#7d8794,#98a1ad)}
 .band-plain{background:var(--ink)}
+.day.collapsed .dropzone{display:none}
+.day-toggle{transition:transform .18s}
+.day.collapsed .day-toggle{transform:rotate(-90deg)}
 
 /* ── Card list / dropzone ─────────── */
 .dropzone{padding:10px 2px 2px;min-height:14px}
@@ -137,7 +142,7 @@ main{max-width:680px;margin:0 auto;padding:14px 12px 0}
 .card-addr{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--sub);margin-top:3px}
 .card-addr .txt{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .card-note{font-size:12.5px;color:var(--sub);margin-top:4px}
-.card-warn{font-size:12px;font-weight:600;color:var(--amber-ink);background:var(--amber-soft);border:1px solid #ecd6ae;border-radius:99px;padding:5px 9px;margin-top:7px}
+.card-warn{font-size:12px;font-weight:600;color:var(--amber-ink);background:var(--amber-soft);border:1px solid #ecd6ae;border-radius:9px;padding:5px 9px;margin-top:7px}
 .card-menu{position:absolute;top:6px;right:5px;width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;color:var(--sub);font-size:17px;font-weight:800}
 .maplink{flex:0 0 auto;font-size:11.5px;font-weight:700;color:var(--c-move);text-decoration:none;border:1px solid #c6d2ea;background:#eef2fa;border-radius:99px;padding:2px 9px}
 .card.drag-src{opacity:.35}
@@ -160,8 +165,8 @@ main{max-width:680px;margin:0 auto;padding:14px 12px 0}
 .mini-edit{position:absolute;top:5px;right:4px;width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--sub);font-size:14px}
 
 /* ── Drag dock ────────────────────── */
-.dock{position:fixed;left:0;right:0;bottom:60px;z-index:95;display:none;gap:10px;padding:12px 14px;
-  background:rgba(31,45,71,.92);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.dock{position:fixed;left:0;right:0;bottom:0;z-index:80;display:none;gap:10px;padding:12px 14px calc(14px + env(safe-area-inset-bottom));
+  background:rgba(31,45,71,.88);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
 body.dragging .dock{display:flex}
 .dock-chip{flex:1;text-align:center;font-size:14px;font-weight:800;color:#fff;border:1.5px dashed rgba(255,255,255,.5);border-radius:14px;padding:15px 8px}
 .dock-chip.hot{background:var(--amber);border-color:var(--amber);color:#fff}
@@ -198,7 +203,7 @@ body.dragging .dock{display:flex}
 .sheetlist .small{font-size:12px;color:var(--sub);font-weight:500;display:block;margin-top:1px}
 
 /* ── Toast ────────────────────────── */
-.toast{position:fixed;left:50%;bottom:calc(70px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:120;
+.toast{position:fixed;left:50%;bottom:calc(80px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:120;
   background:var(--ink);color:#fff;font-size:13.5px;font-weight:600;border-radius:99px;padding:11px 18px;box-shadow:0 8px 24px rgba(31,45,71,.35);
   display:flex;align-items:center;gap:14px;white-space:nowrap;animation:up .2s}
 .toast button{color:#ffc873;font-weight:800;font-size:13.5px}
@@ -234,7 +239,7 @@ body.selecting .dock{display:flex}
 .cal-opt{display:flex;align-items:flex-start;gap:9px;margin-top:14px;font-size:13px;color:var(--sub)}
 .cal-opt input{width:19px;height:19px;flex:0 0 auto;margin-top:1px;accent-color:var(--amber)}
 
-.footer{max-width:680px;margin:24px auto 0;padding:0 14px;font-size:11px;color:var(--sub);text-align:center;letter-spacing:.04em}
+.footer{max-width:680px;margin:34px auto 0;padding:0 14px;font-size:11px;color:var(--sub);text-align:center;letter-spacing:.04em}
 
 @keyframes fade{from{opacity:0}}
 @keyframes up{from{transform:translateY(24px);opacity:.4}}
@@ -256,49 +261,26 @@ body.selecting .dock{display:flex}
     <button class="iconbtn" id="undobtn" title="復原上一步" disabled>↩</button>
     <button class="iconbtn" id="menubtn" title="選單">⋯</button>
   </div>
+  <nav class="navchips" id="navchips"></nav>
 </header>
 
 <main>
-  <!-- 天數區域 (依照 Tab 分頁顯示) -->
+  <div class="section-head" id="sec-days"><h2>行程</h2><span class="hint">長按卡片拖曳・點一下編輯</span><span class="grow"></span><button class="addbtn" id="pickdatesbtn">📅 選日期</button><button class="addbtn" id="adddaybtn">＋ 新增一天</button></div>
   <div id="daysWrap"></div>
 
-  <!-- 備案池 (Tab) -->
-  <div id="tab-pool" class="tab-pane">
-    <div class="section-head" id="sec-pool">
-      <h2>備案池（側線）</h2>
-      <span class="hint">待命點子停這裡</span>
-      <span class="grow"></span>
-      <button class="addbtn" data-addcard="pool">＋ 新增</button>
-    </div>
-    <div class="pool-wrap"><div class="dropzone" data-cont="pool" id="poolZone"></div></div>
-  </div>
+  <div class="section-head" id="sec-pool"><h2>備案池（側線）</h2><span class="hint">待命點子停這裡，隨時拖回行程</span><span class="grow"></span><button class="addbtn" data-addcard="pool">＋ 新增</button></div>
+  <div class="pool-wrap"><div class="dropzone" data-cont="pool" id="poolZone"></div></div>
 
-  <!-- 行前任務 (Tab) -->
-  <div id="tab-tasks" class="tab-pane">
-    <div class="section-head" id="sec-tasks">
-      <h2>行前任務</h2>
-      <span class="hint" id="taskhint"></span>
-      <span class="grow"></span>
-      <button class="addbtn" id="addtaskbtn">＋ 新增</button>
-    </div>
-    <div id="tasksWrap"></div>
-  </div>
+  <div class="section-head" id="sec-tasks"><h2>行前任務</h2><span class="hint" id="taskhint"></span><span class="grow"></span><button class="addbtn" id="addtaskbtn">＋ 新增</button></div>
+  <div id="tasksWrap"></div>
 
-  <!-- 重要備註 (Tab) -->
-  <div id="tab-notes" class="tab-pane">
-    <div class="section-head" id="sec-notes">
-      <h2>重要備註</h2>
-      <span class="grow"></span>
-      <button class="addbtn" id="addnotebtn">＋ 新增</button>
-    </div>
-    <div id="notesWrap"></div>
-  </div>
+  <div class="section-head" id="sec-notes"><h2>重要備註</h2><span class="grow"></span><button class="addbtn" id="addnotebtn">＋ 新增</button></div>
+  <div id="notesWrap"></div>
 </main>
 
-<!-- 底部固定選單 App Style (天數 / 備案池 / 任務 / 備註) -->
-<nav class="bottom-nav" id="bottomNav"></nav>
+<div class="footer" id="pagefooter">計畫盤 ─ 離線可用・資料存在本機。換裝置或分享前記得「⋯ → 匯出」。</div>
 
-<div class="footer">計畫盤 ─ 離線可用・資料存在本機。換裝置或分享前記得「⋯ → 匯出」。</div>
+<nav class="daytabs" id="daytabs" aria-label="依日期跳轉"></nav>
 
 <div class="dock" id="dock">
   <div class="dock-chip" data-dock="pool">📦 放進備案池</div>
@@ -306,10 +288,9 @@ body.selecting .dock{display:flex}
 </div>
 <div id="modalRoot"></div>
 <div id="toastRoot"></div>
-
 <script>
 'use strict';
-/* ══════════════ 預設資料 ══════════════ */
+/* ══════════════ 預設資料（我們討論的完整版）══════════════ */
 const CATS={spot:'景點',food:'食',move:'交通',shop:'購物',onsen:'溫泉',other:'其他'};
 const TAGS={holiday:'白銀週連休',car:'有車日',buffer:'緩衝日',plain:'一般'};
 function C(o){return Object.assign({id:uid(),name:'',time:'',addr:'',map:'',cat:'spot',note:'',warn:''},o)}
@@ -425,10 +406,10 @@ function T(text,due){return{id:uid(),text,due:due||'',done:false}}
 function N(text,warn){return{id:uid(),text,warn:!!warn}}
 function uid(){return 'x'+Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
 
-/* ══════════════ 狀態・儲存 ══════════════ */
-const KEY='tripboard-v2', OLDKEY='sendai-planner-v1';
+/* ══════════════ 狀態・儲存（支援多人共編） ══════════════ */
+const KEY='tripboard-v2', OLDKEY='sendai-planner-v1', SHARED_KEY='tripboard-shared-v1';
 let state=null, storeMode='mem', memStore=null, saveTimer=null, undoStack=[], migrated=false;
-let activeTab='d19'; // 當前啟動的分頁
+let myRev=0, syncing=false, pollTimer=null, applyingRemote=false;
 const $=s=>document.querySelector(s);
 function clone(o){return JSON.parse(JSON.stringify(o))}
 
@@ -437,18 +418,34 @@ async function detectStore(){
   try{localStorage.setItem('__t','1');localStorage.removeItem('__t');storeMode='ls'}
   catch(e){storeMode='mem'}
 }
+async function readPersonal(k){
+  try{
+    if(storeMode==='ws'){const r=await window.storage.get(k);if(r&&r.value)return JSON.parse(r.value)}
+    else if(storeMode==='ls'){const r=localStorage.getItem(k);if(r)return JSON.parse(r)}
+    else if(memStore){return JSON.parse(memStore)}
+  }catch(e){console.warn('load fail',k,e)}
+  return null;
+}
 async function loadState(){
-  const read=async k=>{
+  if(storeMode==='ws'){
     try{
-      if(storeMode==='ws'){try{const r=await window.storage.get(k);if(r&&r.value)return JSON.parse(r.value)}catch(e){}}
-      else if(storeMode==='ls'){const r=localStorage.getItem(k);if(r)return JSON.parse(r)}
-      else if(memStore){return JSON.parse(memStore)}
-    }catch(e){console.warn('load fail',k,e)}
+      const r=await window.storage.get(SHARED_KEY,true);
+      if(r&&r.value){
+        const rec=JSON.parse(r.value);
+        if(rec&&rec.state){myRev=rec.rev||0;ensureShape(rec.state);return rec.state}
+      }
+    }catch(e){/* 尚無共享資料，往下走本機遷移邏輯 */}
+    let legacy=await readPersonal(KEY);
+    if(!legacy){
+      legacy=await readPersonal(OLDKEY);
+      if(legacy){migrated=true;if(!legacy.trip)legacy.trip={title:'仙台之旅 9/19–9/26',sub:'5人｜IT772／IT773'}}
+    }
+    if(legacy){ensureShape(legacy);return legacy}
     return null;
-  };
-  let s=await read(KEY);
+  }
+  let s=await readPersonal(KEY);
   if(!s){
-    s=await read(OLDKEY);
+    s=await readPersonal(OLDKEY);
     if(s){migrated=true;if(!s.trip)s.trip={title:'仙台之旅 9/19–9/26',sub:'5人｜IT772／IT773'}}
   }
   if(s)ensureShape(s);
@@ -461,22 +458,67 @@ function ensureShape(s){
 }
 function scheduleSave(){clearTimeout(saveTimer);saveTimer=setTimeout(doSave,400)}
 async function doSave(){
-  const data=JSON.stringify(state);
+  if(applyingRemote)return;
   try{
-    if(storeMode==='ws'){const r=await window.storage.set(KEY,data);if(!r)throw new Error('ws set failed')}
-    else if(storeMode==='ls'){localStorage.setItem(KEY,data)}
-    else{memStore=data}
-    setPill();
+    if(storeMode==='ws'){
+      syncing=true;setPill();
+      const rev=Date.now();
+      const r=await window.storage.set(SHARED_KEY,JSON.stringify({rev,state}),true);
+      if(!r)throw new Error('ws set failed');
+      myRev=rev;
+    }else if(storeMode==='ls'){
+      localStorage.setItem(KEY,JSON.stringify(state));
+    }else{
+      memStore=JSON.stringify(state);
+    }
   }catch(e){
-    if(storeMode==='ws'){storeMode='ls';return doSave()}
-    if(storeMode==='ls'){storeMode='mem';memStore=data}
-    setPill();
+    if(storeMode==='ws'){storeMode='ls';if(pollTimer){clearInterval(pollTimer);pollTimer=null}return doSave()}
+    if(storeMode==='ls'){storeMode='mem';memStore=JSON.stringify(state)}
+  }finally{
+    syncing=false;setPill();
   }
 }
 function setPill(){
   const p=$('#savepill');
-  if(storeMode==='mem'){p.textContent='僅暫存';p.classList.add('warn')}
-  else{p.textContent='已儲存 ✓';p.classList.remove('warn')}
+  if(storeMode==='ws'){
+    p.textContent=syncing?'同步中…':'已同步 ✓ 多人共編';
+    p.classList.remove('warn');
+  }else if(storeMode==='ls'){
+    p.textContent='已儲存（本機）';p.classList.remove('warn');
+  }else{
+    p.textContent='僅暫存・請匯出';p.classList.add('warn');
+  }
+  updateFooterText();
+}
+function updateFooterText(){
+  const f=$('#pagefooter');if(!f)return;
+  if(storeMode==='ws')f.textContent='計畫盤 ─ 多人共編中：知道連結的人共用同一份行程，約每 6 秒自動同步彼此的變更。';
+  else if(storeMode==='ls')f.textContent='計畫盤 ─ 此環境不支援多人同步，僅存在這台裝置。換裝置或分享前記得「⋯ → 匯出」。';
+  else f.textContent='計畫盤 ─ 僅暫存於記憶體，重新整理就會消失，請先「⋯ → 匯出」備份。';
+}
+function startSync(){
+  if(storeMode!=='ws')return;
+  pollTimer=setInterval(()=>{if(!document.hidden)pollRemote()},6000);
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden)pollRemote()});
+}
+async function pollRemote(){
+  if(storeMode!=='ws'||syncing)return;
+  if(document.querySelector('.backdrop'))return;
+  if(document.body.classList.contains('dragging')||sel)return;
+  try{
+    const r=await window.storage.get(SHARED_KEY,true);
+    if(!r||!r.value)return;
+    const rec=JSON.parse(r.value);
+    if(rec&&typeof rec.rev==='number'&&rec.rev>myRev&&rec.state){
+      applyingRemote=true;
+      myRev=rec.rev;
+      state=rec.state;
+      ensureShape(state);
+      renderAll();
+      applyingRemote=false;
+      toast('已同步其他成員剛才的更新');
+    }
+  }catch(e){/* 單次輪詢失敗就略過，下次再試 */}
 }
 function snapshot(){undoStack.push(JSON.stringify(state));if(undoStack.length>30)undoStack.shift();$('#undobtn').disabled=false}
 function undo(){
@@ -487,9 +529,9 @@ function undo(){
 }
 function commit(){renderAll();scheduleSave()}
 
-/* 容器存取 */
+/* 容器存取：'pool' 或 day id */
 function contList(cid){return cid==='pool'?state.pool:(state.days.find(d=>d.id===cid)||{}).cards}
-function dayLabel(d){return d.date+(d.dow?'（'+d.dow+'）':'')+' '+(d.title||'未命名')}
+function dayLabel(d){return d.date+(d.dow?'（'+d.dow+'）':'')+'　'+(d.title||'未命名')}
 function contName(cid){if(cid==='pool')return '備案池';const d=state.days.find(d=>d.id===cid);return d?dayLabel(d):'?'}
 function findCard(id){
   for(const d of state.days){const i=d.cards.findIndex(c=>c.id===id);if(i>-1)return{cont:d.id,idx:i,card:d.cards[i]}}
@@ -534,46 +576,38 @@ function zoneFill(zone,cards){
   if(!cards||!cards.length){zone.appendChild(el('<div class="empty-drop">目前是空的 — 拖曳到此，或按上方「＋」新增</div>'));return}
   cards.forEach(c=>zone.appendChild(cardEl(c)));
 }
-
 function renderDays(){
   const wrap=$('#daysWrap');wrap.innerHTML='';
   state.days.forEach((d,i)=>{
     const prev=state.days[i-1],next=state.days[i+1];
     const dm=(d.date||'').split('/');
-    const day=el(`<section class="tab-pane ${d.id===activeTab?'active':''}" id="tab-${d.id}">
-      <div class="section-head">
-        <h2>行程</h2><span class="hint">長按卡片拖曳・點一下編輯</span><span class="grow"></span>
-        <button class="addbtn" id="pickdatesbtn" onclick="openDatePicker()">📅 選日期</button>
-        <button class="addbtn" id="adddaybtn" onclick="openDayEditor(null)">＋ 新增一天</button>
-      </div>
-      <div class="day" data-day="${d.id}">
-        <div class="day-plate">
-          <div class="day-plate-top">
-            <div class="day-datenum"><small>${esc(dm[0]||'')}/</small>${esc(dm[1]||d.date)}</div>
-            <span class="day-dow">${esc(d.dow||'')}</span>
-            <div class="day-mid">
-              <div class="day-title">${esc(d.title)||'<span class="untitled">未命名</span>'}</div>
-              ${d.note?`<div class="day-note">${esc(d.note)}</div>`:''}
-            </div>
-            <div class="day-actions">
-              <button class="iconbtn" data-act="day-add" title="新增卡片">＋</button>
-              <button class="iconbtn" data-act="day-edit" title="編輯這天">✎</button>
-            </div>
+    const day=el(`<section class="day ${d.open?'':'collapsed'}" data-day="${d.id}">
+      <div class="day-plate">
+        <div class="day-plate-top">
+          <div class="day-datenum"><small>${esc(dm[0]||'')}/</small>${esc(dm[1]||d.date)}</div>
+          <span class="day-dow">${esc(d.dow||'')}</span>
+          <div class="day-mid">
+            <div class="day-title">${esc(d.title)||'<span class="untitled">未命名（點 ✎）</span>'}</div>
+            ${d.note?`<div class="day-note">${esc(d.note)}</div>`:''}
           </div>
-          <div class="day-band band-${esc(d.tag||'plain')}">
-            <span class="adj">${prev?'◀ '+esc(prev.date):''}</span>
-            <span class="bandtag">${TAGS[d.tag]||''} ・ ${d.cards.length} 站</span>
-            <span class="adj">${next?esc(next.date)+' ▶':''}</span>
+          <div class="day-actions">
+            <button class="iconbtn" data-act="day-add" title="新增卡片">＋</button>
+            <button class="iconbtn" data-act="day-edit" title="編輯這天">✎</button>
+            <button class="iconbtn day-toggle" data-act="day-toggle" title="收合">▾</button>
           </div>
         </div>
-        <div class="dropzone" data-cont="${d.id}"></div>
+        <div class="day-band band-${esc(d.tag||'plain')}">
+          <span class="adj">${prev?'◀ '+esc(prev.date):''}</span>
+          <span class="bandtag">${TAGS[d.tag]||''} ・ ${d.cards.length} 站</span>
+          <span class="adj">${next?esc(next.date)+' ▶':''}</span>
+        </div>
       </div>
+      <div class="dropzone" data-cont="${d.id}"></div>
     </section>`);
     zoneFill(day.querySelector('.dropzone'),d.cards);
     wrap.appendChild(day);
   });
 }
-
 function renderPool(){zoneFill($('#poolZone'),state.pool)}
 function renderTasks(){
   const w=$('#tasksWrap');w.innerHTML='';
@@ -594,64 +628,59 @@ function renderNotes(){
       <button class="mini-edit" data-act="note-edit">✎</button></div>`));
   });
 }
-
-/* 渲染 App 底部導覽列 (Bottom Nav) */
-function renderBottomNav(){
-  const nav=$('#bottomNav');nav.innerHTML='';
-  if(!state.days.some(d=>d.id===activeTab) && !['pool','tasks','notes'].includes(activeTab)){
-    if(state.days.length>0) activeTab = state.days[0].id;
-  }
-  
-  state.days.forEach((d,idx)=>{
-    const btn=el(`<button class="tab-btn ${activeTab===d.id?'active':''}" data-tab="${d.id}">
-      <b>Day ${idx+1}</b>
-      <span>${esc(d.date)}</span>
-    </button>`);
-    btn.addEventListener('click',()=>switchTab(d.id));
-    nav.appendChild(btn);
-  });
-
-  const extras=[
-    ['pool','📦 備案池',state.pool.length],
-    ['tasks','☑ 任務',state.tasks.filter(t=>!t.done).length],
-    ['notes','📝 備註',state.notes.length]
-  ];
-
-  extras.forEach(([id,label,cnt])=>{
-    const btn=el(`<button class="tab-btn ${activeTab===id?'active':''}" data-tab="${id}">
-      <b>${label}</b>
-      <span>${cnt} 項</span>
-    </button>`);
-    btn.addEventListener('click',()=>switchTab(id));
-    nav.appendChild(btn);
+function renderNav(){
+  const nc=$('#navchips');nc.innerHTML='';
+  const items=[['sec-days','行程',state.days.reduce((a,d)=>a+d.cards.length,0)],
+    ['sec-pool','備案池',state.pool.length],
+    ['sec-tasks','任務',state.tasks.filter(t=>!t.done).length],
+    ['sec-notes','備註',state.notes.length]];
+  items.forEach(([id,label,cnt])=>{
+    const b=el(`<button class="chip"><b>${label}</b><span class="cnt">${cnt}</span></button>`);
+    b.addEventListener('click',()=>document.getElementById(id).scrollIntoView({block:'start'}));
+    nc.appendChild(b);
   });
 }
-
-function switchTab(id){
-  activeTab=id;
-  document.querySelectorAll('.tab-pane').forEach(el=>el.classList.remove('active'));
-  const target=document.getElementById('tab-'+id);
-  if(target) target.classList.add('active');
-  renderBottomNav();
-  window.scrollTo({top:0,behavior:'smooth'});
-}
-
 function renderHeader(){
   $('#triptitle').textContent=state.trip.title||'計畫盤';
   $('#tripsub').innerHTML=esc(state.trip.sub||'點我設定副標')+' <span class="pen">✎</span>';
 }
-function renderAll(){
-  renderHeader();
-  renderDays();
-  renderPool();
-  renderTasks();
-  renderNotes();
-  renderBottomNav();
-  renderDock();
+let dayObserver=null;
+function renderDayTabs(){
+  const wrap=$('#daytabs');wrap.innerHTML='';
+  state.days.forEach(d=>{
+    const dm=(d.date||'').split('/');
+    const dateLabel=dm[1]?(dm[0]+'/'+dm[1]):(d.date||'');
+    const b=el(`<button type="button" class="daytab" data-tag="${esc(d.tag||'plain')}" data-daytab="${d.id}">
+      <span class="dt-date">${esc(dateLabel)||'—'}</span>
+      <span class="dt-dow">${esc(d.dow?'週'+d.dow:'')||esc(d.title||'')}</span>
+    </button>`);
+    b.addEventListener('click',()=>{
+      const dd=state.days.find(x=>x.id===d.id);
+      if(dd&&!dd.open){dd.open=true;commit()}
+      const sec=document.querySelector(`.day[data-day="${d.id}"]`);
+      if(sec)sec.scrollIntoView({block:'start',behavior:'smooth'});
+    });
+    wrap.appendChild(b);
+  });
+  setupDayObserver();
 }
+function setupDayObserver(){
+  if(dayObserver)dayObserver.disconnect();
+  if(!('IntersectionObserver' in window))return;
+  dayObserver=new IntersectionObserver(entries=>{
+    entries.forEach(en=>{if(en.isIntersecting)highlightDayTab(en.target.dataset.day)});
+  },{root:null,rootMargin:'-35% 0px -55% 0px',threshold:0});
+  document.querySelectorAll('.day').forEach(sec=>dayObserver.observe(sec));
+}
+function highlightDayTab(id){
+  document.querySelectorAll('.daytab').forEach(b=>b.classList.toggle('active',b.dataset.daytab===id));
+  const active=document.querySelector('.daytab.active');
+  if(active)active.scrollIntoView({inline:'center',block:'nearest',behavior:'smooth'});
+}
+function renderAll(){renderHeader();renderDays();renderPool();renderTasks();renderNotes();renderNav();renderDayTabs();renderDock()}
 
 /* ══════════════ 批次選取模式 ══════════════ */
-let sel=null;
+let sel=null; /* null＝一般模式；Set(cardId)＝選取中 */
 function renderDock(){
   const dock=$('#dock');
   if(sel){
@@ -666,7 +695,7 @@ function renderDock(){
     dock.innerHTML=`<div class="dock-chip" data-dock="pool">📦 放進備案池</div><div class="dock-chip" data-dock="pick">📅 放到某一天…</div>`;
   }
 }
-function enterSelect(firstId){sel=new Set(firstId?[firstId]:[]);renderDock();toast('批次選取中：點卡片加入／移除',null,3600)}
+function enterSelect(firstId){sel=new Set(firstId?[firstId]:[]);renderDock();toast('批次選取中：點卡片加入／移除，動作在下方',null,3600)}
 function exitSelect(){sel=null;renderDock()}
 function selectedInOrder(){
   const ids=[];
@@ -702,14 +731,14 @@ function openMovePickerMulti(ids){
   const close=openSheet(box);
 }
 
-/* ══════════════ 拖曳引擎 ══════════════ */
+/* ══════════════ 拖曳引擎（長按啟動・無效放開必彈回）══════════════ */
 let press=null, drag=null, scrollRAF=null, lastPt={x:0,y:0};
 const dropbar=el('<div class="dropbar"></div>');
 
 document.addEventListener('pointerdown',e=>{
   if(e.button!==undefined&&e.button!==0)return;
-  if(sel)return;
-  if(e.target.closest('button,a,input,textarea,select,.backdrop,.bottom-nav'))return;
+  if(sel)return; /* 選取模式：點按由 click 處理，不啟動拖曳 */
+  if(e.target.closest('button,a,input,textarea,select,.backdrop'))return;
   const card=e.target.closest('.card');
   if(!card)return;
   press={card,id:card.dataset.id,x:e.clientX,y:e.clientY,pid:e.pointerId,
@@ -725,6 +754,7 @@ document.addEventListener('pointermove',e=>{
   if(drag){moveGhost(e.clientX,e.clientY);hitTest(e.clientX,e.clientY)}
 },{passive:true});
 
+/* 拖曳時擋住頁面捲動（iOS 需要 non-passive touchmove） */
 window.addEventListener('touchmove',e=>{if(drag)e.preventDefault()},{passive:false});
 
 document.addEventListener('pointerup',e=>{
@@ -797,11 +827,12 @@ function endDrag(commitDrop){
     finish();moveCard(d.id,'pool',null);toast('已放進備案池',{label:'復原',fn:undo});return;
   }
   if(commitDrop&&d.dock==='pick'){
-    finish();openMovePicker(d.id);return;
+    finish();openMovePicker(d.id);return;  /* 未選定前資料不動 */
   }
   if(commitDrop&&d.target){
     finish();moveCard(d.id,d.target.cont,d.target.idx);return;
   }
+  /* 無效落點 → 飛回原位，資料完全不動（防消失） */
   d.ghost.style.transition='transform .18s ease';
   d.ghost.style.transform=`translate(${d.srcRect.left}px,${d.srcRect.top}px) scale(1)`;
   setTimeout(finish,190);
@@ -843,7 +874,7 @@ function segRow(options,current,onPick){
   return seg;
 }
 
-/* ══════════════ 旅程設定 ══════════════ */
+/* ══════════════ 旅程設定（統一宣告）══════════════ */
 function openTripEditor(){
   const box=el(`<div><h3>旅程設定</h3><p style="margin:2px 0 0;font-size:12px;color:var(--sub)">名稱與副標只在這裡宣告一次，頁首、文字版、匯出都引用這裡。</p></div>`);
   const iTitle=inp(state.trip.title,'例：北海道自駕 12/1–12/8');
@@ -857,7 +888,7 @@ function openTripEditor(){
   row.querySelector('[data-ok]').addEventListener('click',()=>{snapshot();state.trip.title=iTitle.value.trim();state.trip.sub=iSub.value.trim();close();commit()});
 }
 
-/* ══════════════ 日期選擇器 ══════════════ */
+/* ══════════════ 日期批次產生（像訂房網那樣選）══════════════ */
 const WD=['日','一','二','三','四','五','六'];
 const DAYMS=86400000;
 function dkey(t){return t.getFullYear()+'-'+(t.getMonth()+1)+'-'+t.getDate()}
@@ -885,7 +916,7 @@ function openDatePicker(){
     <div class="cal-head"><button type="button" class="cal-nav" data-nav="-1">‹</button><b class="cal-title"></b><button type="button" class="cal-nav" data-nav="1">›</button></div>
     <div class="cal-grid"></div>
     <div class="cal-segs"></div>
-    <label class="cal-opt"><input type="checkbox" class="cal-replace"><span><b>取代模式</b>：沒選到的天會移除，它們的卡片自動進備案池。</span></label>
+    <label class="cal-opt"><input type="checkbox" class="cal-replace"><span><b>取代模式</b>：沒選到的天會移除，它們的卡片自動進備案池（不會消失）。不勾＝只補缺少的天，選到的照日期排序。</span></label>
     <div class="btnrow"><button class="btn" data-x>取消</button><button class="btn primary" data-ok>產生 0 天</button></div>
   </div>`);
   const grid=box.querySelector('.cal-grid'),title=box.querySelector('.cal-title'),segwrap=box.querySelector('.cal-segs'),okBtn=box.querySelector('[data-ok]');
@@ -960,12 +991,11 @@ function applyDates(dates,replace){
   let movedCards=0;
   if(replace){rest.forEach(d=>{movedCards+=d.cards.length;state.pool.push(...d.cards)});state.days=ordered}
   else state.days=[...ordered,...rest];
-  if(state.days.length>0) activeTab = state.days[0].id;
   commit();
-  toast('已排好 '+ordered.length+' 天',{label:'復原',fn:undo});
+  toast('已排好 '+ordered.length+' 天（新增 '+created+'、保留 '+kept+'）'+(replace&&movedCards?('，'+movedCards+' 張卡移入備案池'):''),{label:'復原',fn:undo},5200);
 }
 
-/* ══════════════ 卡片編輯 ══════════════ */
+/* ══════════════ 卡片編輯・選單 ══════════════ */
 function field(labelTxt,inputEl){const w=el('<div></div>');w.appendChild(el(`<label>${esc(labelTxt)}</label>`));w.appendChild(inputEl);return w}
 function inp(val,ph){const i=document.createElement('input');i.value=val||'';if(ph)i.placeholder=ph;return i}
 function ta(val,ph){const t=document.createElement('textarea');t.value=val||'';if(ph)t.placeholder=ph;return t}
@@ -977,38 +1007,56 @@ function openCardEditor(id,newTo){
   const iName=inp(c.name,'例：御釜（刈田山頂）');
   const iTime=inp(c.time,'例：9:00–16:30（最終入場16:00）');
   const iAddr=inp(c.addr,'導航用地址或設施名');
-  const iMap=inp(c.map,'留空＝自動搜尋 Google 地圖');
+  const iMap=inp(c.map,'留空＝自動用名稱/地址搜尋 Google 地圖');
   const iNote=ta(c.note,'排隊訣竅、票價、停留時間…');
-  const iWarn=ta(c.warn,'橘色警示框內容');
+  const iWarn=ta(c.warn,'放這裡會用橘色警示框顯示');
   let cat=c.cat;
   box.appendChild(field('名稱',iName));
   box.appendChild(field('分類',segRow(CATS,cat,v=>cat=v)));
-  box.appendChild(field('時間',iTime));
+  box.appendChild(field('時刻表／時間',iTime));
   box.appendChild(field('地址',iAddr));
   box.appendChild(field('備註',iNote));
   const adv=el('<div></div>');
-  adv.appendChild(field('Google 地圖連結',iMap));
-  adv.appendChild(field('⚠ 警告備註',iWarn));
+  adv.appendChild(field('Google 地圖連結（留空＝自動用名稱/地址搜尋）',iMap));
+  adv.appendChild(field('⚠ 警告備註（會用橘色警示框顯示）',iWarn));
   const hasAdv=!!(c.map||c.warn);
   adv.style.display=hasAdv?'':'none';
-  const advBtn=el(`<button type="button" class="advtoggle ${hasAdv?'open':''}">更多欄位</button>`);
+  const advBtn=el(`<button type="button" class="advtoggle ${hasAdv?'open':''}">更多欄位（地圖連結・⚠警告）</button>`);
   advBtn.addEventListener('click',()=>{const show=adv.style.display==='none';adv.style.display=show?'':'none';advBtn.classList.toggle('open',show)});
   box.appendChild(advBtn);
   box.appendChild(adv);
-  
+  let batchTa=null,batchGo=null;
+  if(!f){
+    const bp=el('<div style="display:none"></div>');
+    batchTa=ta('','一行一張，用｜分隔：名稱｜時間｜備註（後兩者可省略）\n例：瑞鳳殿｜9:00–16:50｜參道是石階');
+    batchTa.style.minHeight='110px';
+    bp.appendChild(field('批次內容（分類套用上面選的）',batchTa));
+    batchGo=el('<button type="button" class="btn" style="margin-top:10px;width:100%">⚡ 以上每行建立一張卡</button>');
+    bp.appendChild(batchGo);
+    const bBtn=el('<button type="button" class="advtoggle">⚡ 批次貼上多張（一行一張）</button>');
+    bBtn.addEventListener('click',()=>{const show=bp.style.display==='none';bp.style.display=show?'':'none';bBtn.classList.toggle('open',show)});
+    box.appendChild(bBtn);box.appendChild(bp);
+  }
   const row=el(`<div class="btnrow"><button class="btn" data-x>取消</button><button class="btn primary" data-ok>儲存</button></div>`);
   box.appendChild(row);
   const close=openSheet(box);
   row.querySelector('[data-x]').addEventListener('click',close);
+  if(batchGo)batchGo.addEventListener('click',()=>{
+    const lines=batchTa.value.split(/\r?\n/).map(s=>s.trim()).filter(Boolean);
+    if(!lines.length){toast('先貼上內容，一行一張');return}
+    snapshot();
+    const dst=contList(newTo||'pool');
+    lines.forEach(L=>{const p=L.split(/[|｜]/).map(s=>s.trim());dst.push(C({cat,name:p[0]||'（未命名）',time:p[1]||'',note:p[2]||''}))});
+    close();commit();toast('已建立 '+lines.length+' 張卡片',{label:'復原',fn:undo});
+  });
   row.querySelector('[data-ok]').addEventListener('click',()=>{
     snapshot();
     Object.assign(c,{name:iName.value.trim(),time:iTime.value.trim(),addr:iAddr.value.trim(),map:iMap.value.trim(),note:iNote.value.trim(),warn:iWarn.value.trim(),cat});
     if(f){Object.assign(f.card,c)}
-    else{contList(newTo||activeTab||'pool').push(c)}
+    else{contList(newTo||'pool').push(c)}
     close();commit();
   });
 }
-
 function openCardMenu(id){
   const f=findCard(id);if(!f)return;
   const box=el(`<div><h3>${esc(f.card.name)||'卡片'}</h3>
@@ -1017,7 +1065,7 @@ function openCardMenu(id){
       <button data-a="edit">✎ 編輯</button>
       <button data-a="move">📅 移動到…</button>
       <button data-a="dup">⧉ 複製一份</button>
-      <button data-a="msel">☑ 批次選取</button>
+      <button data-a="msel">☑ 批次選取（從這張開始）</button>
       <button data-a="del" class="danger">🗑 刪除</button>
     </div></div>`);
   const close=openSheet(box);
@@ -1031,7 +1079,6 @@ function openCardMenu(id){
     if(a.dataset.a==='del')confirmBox('刪除「'+(f.card.name||'此卡片')+'」？',()=>{snapshot();contList(f.cont).splice(f.idx,1);commit();toast('已刪除',{label:'復原',fn:undo})},'刪除');
   });
 }
-
 function openMovePicker(id){
   const f=findCard(id);if(!f)return;
   const box=el(`<div><h3>移動「${esc(f.card.name)||'卡片'}」到…</h3><div class="sheetlist" style="margin-top:10px"></div></div>`);
@@ -1045,18 +1092,18 @@ function openMovePicker(id){
   const close=openSheet(box);
 }
 
-/* ══════════════ 天數編輯 ══════════════ */
+/* ══════════════ 天（駅名標）編輯 ══════════════ */
 function openDayEditor(id){
   const d=id?state.days.find(x=>x.id===id):null;
   const w=d?clone(d):{id:uid(),date:'Day '+(state.days.length+1),dow:'',tag:'plain',title:'',note:'',open:true,cards:[]};
   const box=el(`<div><h3>${d?'編輯這一天':'新增一天'}</h3></div>`);
-  const iDate=inp(w.date,'日期：9/24、Day 3'),iDow=inp(w.dow,'角標：四、Sat'),iTitle=inp(w.title,'例：藏王御釜＋狐狸村'),iNote=inp(w.note,'小備註');
+  const iDate=inp(w.date,'自由格式：9/24、Day 3、週末…'),iDow=inp(w.dow,'角標：四、Sat、雨備…'),iTitle=inp(w.title,'例：藏王御釜＋狐狸村'),iNote=inp(w.note,'例：有車日・早出早回');
   let tag=w.tag||'plain';
-  box.appendChild(field('主標籤',iDate));
-  box.appendChild(field('角標',iDow));
+  box.appendChild(field('主標籤（日期或 Day 幾，隨你）',iDate));
+  box.appendChild(field('角標（選填）',iDow));
   box.appendChild(field('標題',iTitle));
-  box.appendChild(field('類型色帶',segRow(TAGS,tag,v=>tag=v)));
-  box.appendChild(field('備註',iNote));
+  box.appendChild(field('這天的類型（色帶）',segRow(TAGS,tag,v=>tag=v)));
+  box.appendChild(field('小備註',iNote));
   const row=el(`<div class="btnrow">${d?'<button class="btn danger" data-del>刪除這天</button>':''}<button class="btn" data-x>取消</button><button class="btn primary" data-ok>儲存</button></div>`);
   box.appendChild(row);
   const close=openSheet(box);
@@ -1065,28 +1112,27 @@ function openDayEditor(id){
     snapshot();
     Object.assign(w,{date:iDate.value.trim(),dow:iDow.value.trim(),title:iTitle.value.trim(),note:iNote.value.trim(),tag});
     if(d)Object.assign(d,{date:w.date,dow:w.dow,title:w.title,note:w.note,tag:w.tag});
-    else {state.days.push(w); activeTab=w.id;}
+    else state.days.push(w);
     close();commit();
   });
   const delBtn=row.querySelector('[data-del]');
   if(delBtn)delBtn.addEventListener('click',()=>{
     close();
-    confirmBox('刪除「'+d.date+' '+d.title+'」？卡片會移至備案池。',()=>{
+    confirmBox('刪除「'+d.date+' '+d.title+'」？這天的 '+d.cards.length+' 張卡片會移到備案池（不會消失）。',()=>{
       snapshot();
       state.pool.push(...d.cards);
       state.days=state.days.filter(x=>x.id!==d.id);
-      if(state.days.length>0) activeTab = state.days[0].id;
-      commit();toast('已刪除，卡片已存入備案池',{label:'復原',fn:undo});
+      commit();toast('已刪除該天，卡片已移到備案池',{label:'復原',fn:undo});
     },'刪除這天');
   });
 }
 
-/* ══════════════ 任務／備註編輯 ══════════════ */
+/* ══════════════ 任務・備註編輯 ══════════════ */
 function openTaskEditor(id){
   const t=id?state.tasks.find(x=>x.id===id):null;
   const w=t?clone(t):T('','');
   const box=el(`<div><h3>${t?'編輯任務':'新增任務'}</h3></div>`);
-  const iText=ta(w.text,'要做什麼'),iDue=inp(w.due,'期限');
+  const iText=ta(w.text,'要做什麼'),iDue=inp(w.due,'期限（例：本週、9月初）');
   box.appendChild(field('內容',iText));box.appendChild(field('期限',iDue));
   const row=el(`<div class="btnrow">${t?'<button class="btn danger" data-del>刪除</button>':''}<button class="btn" data-x>取消</button><button class="btn primary" data-ok>儲存</button></div>`);
   box.appendChild(row);
@@ -1099,7 +1145,6 @@ function openTaskEditor(id){
   const db=row.querySelector('[data-del]');
   if(db)db.addEventListener('click',()=>{close();confirmBox('刪除此任務？',()=>{snapshot();state.tasks=state.tasks.filter(x=>x.id!==id);commit();toast('已刪除',{label:'復原',fn:undo})},'刪除')});
 }
-
 function openNoteEditor(id){
   const n=id?state.notes.find(x=>x.id===id):null;
   const w=n?clone(n):N('',false);
@@ -1120,7 +1165,7 @@ function openNoteEditor(id){
   if(db)db.addEventListener('click',()=>{close();confirmBox('刪除此備註？',()=>{snapshot();state.notes=state.notes.filter(x=>x.id!==id);commit();toast('已刪除',{label:'復原',fn:undo})},'刪除')});
 }
 
-/* ══════════════ 匯出／匯入 ══════════════ */
+/* ══════════════ 匯出／匯入／文字版／重設 ══════════════ */
 function buildText(){
   let out=['🗾 '+(state.trip.title||'旅程')];
   if(state.trip.sub)out.push(state.trip.sub);
@@ -1138,12 +1183,10 @@ function buildText(){
   if(todo.length){out.push('☑ 行前任務（未完成）');todo.forEach(t=>out.push('・'+t.text+(t.due?'｜'+t.due:'')))}
   return out.join('\n');
 }
-
 async function copyText(txt,okMsg){
   try{await navigator.clipboard.writeText(txt);toast(okMsg||'已複製到剪貼簿')}
-  catch(e){openIOSheet('複製失敗，請手動複製：',txt,null)}
+  catch(e){openIOSheet('複製失敗，請手動全選複製：',txt,null)}
 }
-
 function openIOSheet(title,value,onImport){
   const box=el(`<div><h3>${esc(title)}</h3></div>`);
   const t=ta(value,'');t.style.minHeight='220px';t.spellcheck=false;
@@ -1160,34 +1203,56 @@ function openIOSheet(title,value,onImport){
       const data=JSON.parse(t.value);
       if(!data||!Array.isArray(data.days)||!Array.isArray(data.pool))throw 0;
       ensureShape(data);
-      confirmBox('匯入將覆蓋目前內容。繼續？',()=>{snapshot();state=data;commit();close();toast('已匯入')},'覆蓋匯入');
-    }catch(e){toast('格式不對，請貼上 JSON')}
+      confirmBox('匯入將覆蓋目前內容（可用 ↩ 復原）。繼續？',()=>{snapshot();state=data;commit();close();toast('已匯入')},'覆蓋匯入');
+    }catch(e){toast('格式不對，請貼上先前匯出的 JSON')}
   });
 }
-
 function openMainMenu(){
   const box=el(`<div><h3>選單</h3><div class="sheetlist" style="margin-top:10px">
-    <button data-a="trip">⚙️ 旅程設定</button>
-    <button data-a="text">💬 複製純文字行程</button>
-    <button data-a="exp">⬆ 匯出 JSON</button>
-    <button data-a="imp">⬇ 匯入 JSON</button>
-    <button data-a="blank" class="danger">🆕 開新旅程（空白）</button>
-    <button data-a="example" class="danger">🗾 載入仙台範例</button>
+    <button data-a="trip">⚙️ 旅程設定<span class="small">名稱・副標，宣告一次全站引用</span></button>
+    <button data-a="text">💬 複製純文字行程<span class="small">貼到群組給同行者</span></button>
+    <button data-a="exp">⬆ 匯出 JSON<span class="small">備份／換裝置／分享可編輯版</span></button>
+    <button data-a="imp">⬇ 匯入 JSON<span class="small">貼上別人匯出的內容（會覆蓋）</span></button>
+    <button data-a="expand">⌄ 全部展開</button>
+    <button data-a="collapse">⌃ 全部收合</button>
+    <button data-a="help">❓ 使用說明</button>
+    <button data-a="blank" class="danger">🆕 開新旅程（空白公版）<span class="small">覆蓋目前內容，可 ↩ 復原</span></button>
+    <button data-a="example" class="danger">🗾 載入仙台範例<span class="small">覆蓋目前內容，可 ↩ 復原</span></button>
   </div></div>`);
   const close=openSheet(box);
   box.addEventListener('click',e=>{
     const a=e.target.closest('[data-a]');if(!a)return;close();
     const act=a.dataset.a;
     if(act==='trip')openTripEditor();
-    if(act==='text')copyText(buildText(),'行程已複製');
-    if(act==='exp')openIOSheet('匯出 JSON',JSON.stringify(state,null,1),null);
-    if(act==='imp')openIOSheet('貼上 JSON 匯入','',true);
-    if(act==='blank')confirmBox('開新空白旅程？',()=>{snapshot();state=makeBlank();commit();toast('已新建旅程')},'確定');
-    if(act==='example')confirmBox('載入仙台範例？',()=>{snapshot();state=clone(SENDAI);commit();toast('已載入仙台範例')},'載入');
+    if(act==='text')copyText(buildText(),'行程文字版已複製，可貼到群組');
+    if(act==='exp')openIOSheet('匯出 JSON（全選複製保存）',JSON.stringify(state,null,1),null);
+    if(act==='imp')openIOSheet('貼上 JSON 後按「匯入並覆蓋」','',true);
+    if(act==='expand'){state.days.forEach(d=>d.open=true);commit()}
+    if(act==='collapse'){state.days.forEach(d=>d.open=false);commit()}
+    if(act==='help')openHelp();
+    if(act==='blank')confirmBox('開一份空白公版？目前內容會被覆蓋（可用 ↩ 復原，建議先匯出備份）。',()=>{snapshot();state=makeBlank();commit();toast('新旅程開好了，點頁首命名')},'開新旅程');
+    if(act==='example')confirmBox('載入我們討論的仙台範例？目前內容會被覆蓋（可用 ↩ 復原）。',()=>{snapshot();state=clone(SENDAI);commit();toast('已載入仙台範例')},'載入');
   });
 }
+function openHelp(){
+  const box=el(`<div><h3>使用說明</h3><div style="font-size:13.5px;line-height:1.8;color:var(--ink);margin-top:8px">
+  <b>點一下卡片</b> → 編輯（名稱／時刻表／地址／備註；地圖連結和⚠警告收在「更多欄位」）。<br>
+  <b>長按 0.3 秒再拖</b> → 移動；同一天排序、跨天都行。拖曳中畫面下方會出現碼頭：丟進「備案池」或「放到某一天…」。<br>
+  <b>放錯地方不會消失</b>：放到空白處卡片會自動飛回原位；刪除有「復原」；刪掉一整天時，卡片自動移到備案池。<br>
+  <b>⋮ 選單</b> → 不想拖的話，用「移動到…」直接指定去處。<br>
+  <b>📅 選日期</b> → 像訂房網：點開始、點結束產生連續天，可多段（9/19–23＋9/25–29），自動帶星期；「取代模式」會把沒選到的天移除、卡片進備案池。<br>
+  <b>☑ 批次選取</b> → 卡片 ⋮ 選「批次選取」，點選多張後用下方動作列一次搬移／刪除。<br>
+  <b>⚡ 批次貼上</b> → 新增卡片時展開「批次貼上多張」，一行一張：名稱｜時間｜備註。<br>
+  <b>頁首</b> → 點旅程名稱可改名稱與副標；日期、Day 幾都是自由文字，不綁行事曆。<br>
+  <b>⋯ 選單</b> → 開空白公版做新旅程，或載回仙台範例。<b>↩</b> 可復原最近 30 步。<br>
+  <b>儲存</b>：自動存在這台裝置。右上顯示「僅暫存」時代表此環境不能落地儲存，離開前請「匯出 JSON」。傳給朋友：複製純文字（看）或 JSON（可編輯）。<br>
+  <b>多人共編</b>：右上顯示「已同步・多人共編」時，代表這份行程是共用的——任何拿到這個連結的人都能同時查看與編輯，約每 6 秒自動同步彼此的變更；同時開著編輯視窗時暫不會被別人的更新蓋過。請只把連結傳給信任的同行者。</div>
+  <div class="btnrow"><button class="btn primary" data-x>知道了</button></div></div>`);
+  const close=openSheet(box);
+  box.querySelector('[data-x]').addEventListener('click',close);
+}
 
-/* ══════════════ 事件監聽與初始化 ══════════════ */
+/* ══════════════ 事件委派・初始化 ══════════════ */
 document.addEventListener('click',e=>{
   if(sel){
     const sc=e.target.closest('[data-selact]');
@@ -1195,9 +1260,9 @@ document.addEventListener('click',e=>{
       const a=sc.dataset.selact, ids=selectedInOrder();
       if(a==='cancel')exitSelect();
       else if(!ids.length)toast('先點幾張卡片');
-      else if(a==='pool'){exitSelect();moveMany(ids,'pool');toast('已移入備案池',{label:'復原',fn:undo})}
+      else if(a==='pool'){exitSelect();moveMany(ids,'pool');toast('已移 '+ids.length+' 張到備案池',{label:'復原',fn:undo})}
       else if(a==='move')openMovePickerMulti(ids);
-      else if(a==='del')confirmBox('刪除選取的 '+ids.length+' 張卡片？',()=>{exitSelect();deleteMany(ids);toast('已刪除',{label:'復原',fn:undo})},'刪除');
+      else if(a==='del')confirmBox('刪除選取的 '+ids.length+' 張卡片？',()=>{exitSelect();deleteMany(ids);toast('已刪除 '+ids.length+' 張',{label:'復原',fn:undo})},'刪除');
       return;
     }
     const pc=e.target.closest('.card');
@@ -1214,6 +1279,7 @@ document.addEventListener('click',e=>{
     if(a==='card-menu'&&card)openCardMenu(card.dataset.id);
     if(a==='day-add'&&day)openCardEditor(null,day.dataset.day);
     if(a==='day-edit'&&day)openDayEditor(day.dataset.day);
+    if(a==='day-toggle'&&day){const d=state.days.find(x=>x.id===day.dataset.day);if(d){d.open=!d.open;commit()}}
     if(a==='task-toggle'&&task){const t=state.tasks.find(x=>x.id===task.dataset.task);if(t){snapshot();t.done=!t.done;commit()}}
     if(a==='task-edit'&&task)openTaskEditor(task.dataset.task);
     if(a==='note-edit'&&note)openNoteEditor(note.dataset.note);
@@ -1222,10 +1288,12 @@ document.addEventListener('click',e=>{
   const addc=e.target.closest('[data-addcard]');
   if(addc)openCardEditor(null,addc.dataset.addcard);
 });
-
 $('#undobtn').addEventListener('click',undo);
 $('#menubtn').addEventListener('click',openMainMenu);
 $('#brandbtn').addEventListener('click',openTripEditor);
+$('#brandbtn').addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openTripEditor()}});
+$('#adddaybtn').addEventListener('click',()=>openDayEditor(null));
+$('#pickdatesbtn').addEventListener('click',openDatePicker);
 $('#addtaskbtn').addEventListener('click',()=>openTaskEditor(null));
 $('#addnotebtn').addEventListener('click',()=>openNoteEditor(null));
 
@@ -1234,9 +1302,17 @@ $('#addnotebtn').addEventListener('click',()=>openNoteEditor(null));
   const saved=await loadState();
   state=saved||clone(SENDAI);
   ensureShape(state);
-  if(state.days.length>0) activeTab=state.days[0].id;
   setPill();
   renderAll();
+  if(storeMode==='ws'){
+    if(!saved||myRev===0)await doSave();
+    startSync();
+    if(!saved)setTimeout(()=>toast('已開啟多人共編：把這個連結傳給同行者，大家都能即時編輯同一份行程',null,5600),600);
+    else setTimeout(()=>toast('多人共編中・約每 6 秒自動同步彼此的變更',null,4200),600);
+  }else{
+    if(migrated){scheduleSave();setTimeout(()=>toast('已帶入舊版資料；⋯選單可載入更新後的仙台範例',null,5200),500)}
+    else if(!saved)setTimeout(()=>toast('長按卡片＝拖曳・點一下＝編輯',null,4200),600);
+  }
 })();
 </script>
 </body>
