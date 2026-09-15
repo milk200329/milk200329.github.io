@@ -1,598 +1,1028 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="zh-Hant">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>仙台 8 天 7 夜雙人雲端行程</title>
-  
-  <!-- PWA Manifest & Theme -->
-  <meta name="theme-color" content="#1a4d6e">
-  <link rel="manifest" href="data:application/manifest+json;utf8,{
-    %22name%22:%22仙台遊%208Days%22,
-    %22short_name%22:%22仙台遊%22,
-    %22start_url%22:%22.%22,
-    %22display%22:%22standalone%22,
-    %22background_color%22:%22#f9f6f0%22,
-    %22theme_color%22:%22#1a4d6e%22
-  }">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1">
+<title>仙台 8天7夜｜2026.09.19–09.26</title>
+<meta name="description" content="仙台家族旅行行程共編網頁">
+<meta name="theme-color" content="#EFE4C8">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Klee+One:wght@400;600&family=Yuji+Syuku&family=Noto+Sans+TC:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
+<style>
+:root{
+  --paper:#F3E9D2;
+  --paper2:#EBDDB8;
+  --paper-card:#FBF5E6;
+  --line:#D8C79E;
+  --ink:#3B2A1E;
+  --ink-soft:#6B5843;
+  --muted:#8A7A62;
+  --red:#C1533A;
+  --gold:#B4863A;
+  --green:#6B8E5A;
+  --blue:#4A7C93;
+  --sync:#6B8E5A;
+  --radius:18px;
+  --d0:#C1533A; --d1:#4A7C93; --d2:#6B8E5A; --d3:#B4863A;
+  --d4:#8574A1; --d5:#D98A96; --d6:#5C8B7A; --d7:#A97C50;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  background:
+    radial-gradient(circle at 20% 10%, rgba(180,134,58,.08), transparent 40%),
+    radial-gradient(circle at 90% 80%, rgba(107,142,90,.08), transparent 45%),
+    var(--paper);
+  color:var(--ink);
+  font-family:'Noto Sans TC','Hiragino Sans',sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+.app{max-width:600px;margin:0 auto;min-height:100vh;position:relative;padding-bottom:60px;}
+.hand{font-family:'Klee One','Yuji Syuku',serif;}
+.mono{font-family:'JetBrains Mono',monospace;}
+a{color:inherit;}
+button{font-family:inherit;}
 
-  <!-- Leaflet CSS -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <!-- SortableJS (拖拉排序) -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
-  
-  <!-- Google Fonts 日系可愛字型 -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700&display=swap">
+/* ---- sketchy card look ---- */
+.sketch-card{
+  background:var(--paper-card);
+  border-radius:var(--radius);
+  border:2px solid var(--ink);
+  box-shadow:4px 5px 0 rgba(59,42,30,.15);
+  position:relative;
+}
+.washi{
+  position:absolute;top:-10px;left:24px;width:70px;height:22px;
+  background:repeating-linear-gradient(135deg,#D98A96,#D98A96 6px,#E3A3AC 6px,#E3A3AC 12px);
+  opacity:.75;transform:rotate(-4deg);border-radius:2px;
+  box-shadow:0 2px 3px rgba(0,0,0,.15);
+}
 
-  <style>
-    :root {
-      --bg-color: #fcf9f2;
-      --card-bg: #ffffff;
-      --main-blue: #1b4b6b;
-      --light-blue: #e4f0f6;
-      --accent-coral: #e07a5f;
-      --text-dark: #333333;
-      --text-muted: #666666;
-      --border-radius: 18px;
-    }
+/* ---- hero ---- */
+.hero{padding:26px 18px 14px;text-align:center;}
+.hero-eyebrow{font-size:12px;letter-spacing:.2em;color:var(--muted);text-transform:uppercase;}
+.hero h1{
+  font-family:'Yuji Syuku',serif;font-weight:400;
+  font-size:36px;line-height:1.3;margin:8px 0 4px;color:var(--ink);
+}
+.hero .sub{margin:0 0 12px;color:var(--ink-soft);font-size:13.5px;line-height:1.7;}
+.hero .meta-row{display:flex;justify-content:center;flex-wrap:wrap;gap:8px;margin-bottom:6px;}
+.hero .meta-row span{
+  font-size:12px;background:#fff;border:1.5px solid var(--line);
+  padding:5px 11px;border-radius:999px;color:var(--ink-soft);
+}
+.sync-badge{
+  display:inline-flex;align-items:center;gap:6px;font-size:11.5px;color:var(--muted);
+  margin-top:6px;
+}
+.sync-dot{width:7px;height:7px;border-radius:50%;background:var(--sync);animation:pulse 2s ease-in-out infinite;}
+.sync-dot.off{background:#C1533A;animation:none;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.35;}}
 
-    * {
-      box-sizing: border-box;
-      font-family: 'Zen Maru Gothic', sans-serif;
-      margin: 0; padding: 0;
-    }
+/* ---- countdown ---- */
+.countdown{margin:14px 16px 4px;padding:16px 18px;}
+.countdown .cd-label{font-size:11px;letter-spacing:.14em;color:var(--muted);text-transform:uppercase;margin-bottom:6px;}
+.countdown .cd-value{font-family:'Yuji Syuku',serif;font-size:20px;color:var(--ink);line-height:1.5;}
+.countdown .cd-value b{color:var(--red);font-family:'JetBrains Mono',monospace;font-size:24px;padding:0 2px;}
+.countdown .cd-note{font-size:11.5px;color:var(--muted);margin-top:6px;}
 
-    body {
-      background-color: var(--bg-color);
-      color: var(--text-dark);
-      padding-bottom: 70px;
-    }
+/* ---- map section ---- */
+.map-section{margin:20px 16px 4px;overflow:hidden;}
+.map-head{display:flex;align-items:center;justify-content:space-between;padding:14px 16px 8px;}
+.map-head h2{margin:0;font-family:'Klee One',serif;font-size:17px;display:flex;align-items:center;gap:6px;}
+.layer-toggles{display:flex;gap:6px;padding:0 16px 12px;flex-wrap:wrap;}
+.layer-toggles button{
+  border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:5px 11px;
+  font-size:11.5px;cursor:pointer;color:var(--ink-soft);display:flex;align-items:center;gap:5px;
+}
+.layer-toggles button.active{background:var(--ink);color:#fff;border-color:var(--ink);}
+#map{width:100%;height:260px;border-top:2px solid var(--ink);filter:sepia(8%) saturate(92%);}
+.map-foot{padding:10px 16px 16px;}
+.map-nav-btn{
+  display:block;text-align:center;width:100%;padding:11px;border-radius:12px;
+  background:var(--ink);color:#fff;text-decoration:none;font-size:13.5px;font-weight:600;
+  border:none;cursor:pointer;
+}
+.map-note{font-size:10.5px;color:var(--muted);margin-top:8px;line-height:1.6;}
 
-    /* 頂部波浪 Header */
-    .header-banner {
-      background: linear-gradient(180deg, #1b4b6b 0%, #297398 70%, #5296b5 100%);
-      color: white;
-      padding: 20px 15px 35px 15px;
-      text-align: center;
-      position: relative;
-      border-bottom-left-radius: 25px;
-      border-bottom-right-radius: 25px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
+/* ---- day tabs ---- */
+.tabs-wrap{
+  position:sticky;top:0;z-index:50;background:var(--paper);
+  overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;
+  border-bottom:2px solid var(--ink);padding-top:6px;
+}
+.tabs-wrap::-webkit-scrollbar{display:none;}
+.tabs-inner{display:flex;width:max-content;padding:6px 14px 10px;gap:4px;}
+.tab{
+  appearance:none;border:2px solid transparent;background:none;cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+  padding:6px 12px;border-radius:12px;position:relative;
+  color:var(--muted);transition:transform .15s ease;
+}
+.tab .d-num{font-family:'Klee One',serif;font-size:13px;font-weight:600;}
+.tab .d-date{font-size:9.5px;}
+.tab.active{background:var(--accent);color:#fff;border-color:var(--ink);transform:rotate(-2deg);}
+.tab .today-dot{width:6px;height:6px;border-radius:50%;background:var(--red);position:absolute;top:4px;right:6px;}
 
-    .header-title { font-size: 1.6rem; font-weight: 700; }
-    .header-subtitle { font-size: 0.9rem; opacity: 0.9; margin-top: 4px; }
-    
-    .wave-bg {
-      position: absolute;
-      bottom: -1px; left: 0; width: 100%;
-      height: 18px;
-      background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 1200 120" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><path d="M0,0 C150,90 350,-40 500,65 C650,170 900,-20 1200,40 L1200,120 L0,120 Z" fill="%23fcf9f2"></path></svg>') repeat-x;
-      background-size: 600px 18px;
-    }
+/* ---- day sections ---- */
+.day{scroll-margin-top:64px;padding:22px 14px 4px;}
+.day-card{overflow:hidden;}
+.hotel-band{
+  padding:8px 16px;font-size:11.5px;color:#fff;display:flex;align-items:center;gap:6px;
+  background:repeating-linear-gradient(45deg,var(--accent),var(--accent) 10px,color-mix(in srgb,var(--accent) 80%,#000) 10px,color-mix(in srgb,var(--accent) 80%,#000) 20px);
+}
+.day-head{background:var(--accent);padding:16px 18px 14px;color:#fff;position:relative;border-bottom:2px solid var(--ink);}
+.day-head .num{font-family:'Klee One',serif;font-size:14px;opacity:.92;}
+.day-head .date{font-family:'JetBrains Mono',monospace;font-size:12px;opacity:.9;margin-top:2px;}
+.day-head h3{font-family:'Yuji Syuku',serif;font-weight:400;font-size:21px;margin:6px 0 0;}
+.today-badge{
+  display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:.05em;
+  background:#fff;color:var(--red);padding:2px 9px;border-radius:999px;margin-left:8px;vertical-align:middle;
+  animation:pulse 2s ease-in-out infinite;
+}
+.add-item-btn{
+  margin:12px 16px 0;padding:9px;width:calc(100% - 32px);border:1.5px dashed var(--line);
+  background:transparent;border-radius:10px;color:var(--muted);font-size:12.5px;cursor:pointer;
+}
+.add-item-btn:hover{background:var(--paper2);}
 
-    /* 天數滑動導覽列 */
-    .day-nav {
-      display: flex;
-      gap: 10px;
-      overflow-x: auto;
-      padding: 15px;
-      scroll-behavior: smooth;
-    }
-    .day-nav::-webkit-scrollbar { display: none; }
-    
-    .day-btn {
-      flex: 0 0 auto;
-      background: white;
-      border: 2px solid #e0e0e0;
-      border-radius: 25px;
-      padding: 8px 16px;
-      text-align: center;
-      cursor: pointer;
-      transition: all 0.2s;
-      min-width: 80px;
-    }
-    .day-btn.active {
-      background: var(--main-blue);
-      color: white;
-      border-color: var(--main-blue);
-      box-shadow: 0 4px 8px rgba(27,75,107,0.3);
-    }
+/* ---- timeline ---- */
+.timeline{list-style:none;margin:14px 6px 10px;padding:0 8px 10px;position:relative;}
+.timeline:before{content:'';position:absolute;left:60px;top:6px;bottom:10px;width:2px;
+  background-image:linear-gradient(var(--line) 60%, transparent 40%);background-size:2px 8px;background-repeat:repeat-y;}
+.stop{position:relative;padding:0 0 16px 0;display:flex;gap:10px;touch-action:pan-y;}
+.stop.dragging{opacity:.4;}
+.stop.now{background:rgba(193,83,58,.08);border-radius:10px;margin:0 -8px 16px;padding:6px 8px 16px;}
+.stop-time{flex:0 0 48px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);text-align:right;padding-top:3px;line-height:1.4;}
+.stop-dot-wrap{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;padding-top:5px;position:relative;z-index:1;}
+.stop-dot{width:10px;height:10px;border-radius:50%;background:var(--accent);border:2px solid var(--paper-card);box-shadow:0 0 0 1.5px var(--ink);}
+.stop-body{flex:1;min-width:0;}
+.stop-head{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:3px;}
+.tag{font-size:10px;font-weight:700;padding:2px 7px;border-radius:999px;color:#fff;white-space:nowrap;}
+.tag-住宿{background:var(--gold);} .tag-用餐{background:var(--red);}
+.tag-移動{background:#8A8370;} .tag-景點{background:var(--blue);} .tag-購物{background:var(--green);}
+.now-chip{font-size:10px;font-weight:700;background:var(--red);color:#fff;padding:2px 8px;border-radius:999px;}
+.stop-body h4{margin:0;font-size:14px;line-height:1.4;color:var(--ink);font-weight:700;}
+.stop-note{margin:3px 0 6px;font-size:11.5px;color:var(--ink-soft);line-height:1.6;}
+.stop-actions{display:flex;flex-wrap:wrap;gap:6px;margin-top:2px;}
+.stop-actions a, .stop-actions button{
+  font-size:10.5px;border:1.3px solid var(--line);background:#fff;border-radius:8px;
+  padding:5px 8px;text-decoration:none;color:var(--ink-soft);cursor:pointer;display:inline-flex;align-items:center;gap:3px;
+}
+.stop-actions .copied{background:var(--green);color:#fff;border-color:var(--green);}
+.drag-handle{flex:0 0 20px;padding-top:4px;color:var(--line);cursor:grab;touch-action:none;font-size:16px;user-select:none;}
+.drag-handle:active{cursor:grabbing;}
 
-    .container { padding: 0 15px; max-width: 800px; margin: 0 auto; }
+/* ---- sections generic ---- */
+.section{margin:22px 16px 4px;padding:16px 18px;}
+.section h2{font-family:'Klee One',serif;font-size:17px;margin:0 0 12px;display:flex;align-items:center;gap:7px;}
+.check-item{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-top:1px dashed var(--line);}
+.check-item:first-of-type{border-top:none;}
+.check-item input[type="checkbox"]{
+  appearance:none;flex:0 0 auto;width:19px;height:19px;margin:1px 0 0;
+  border:2px solid var(--gold);border-radius:6px;background:#fff;cursor:pointer;position:relative;
+}
+.check-item input[type="checkbox"]:checked{background:var(--gold);}
+.check-item input[type="checkbox"]:checked:after{
+  content:'';position:absolute;left:4px;top:1px;width:5px;height:9px;border:solid #fff;border-width:0 2.5px 2.5px 0;transform:rotate(45deg);
+}
+.check-item .check-text{flex:1;font-size:13.5px;line-height:1.5;color:var(--ink);}
+.check-item input:checked ~ .check-text{color:var(--muted);text-decoration:line-through;text-decoration-color:var(--gold);}
+.check-item .del-btn{border:none;background:none;color:var(--muted);cursor:pointer;font-size:15px;padding:0 4px;}
+.add-row{display:flex;gap:8px;margin-top:10px;}
+.add-row input{flex:1;border:1.5px solid var(--line);border-radius:10px;padding:9px 11px;font-size:13px;background:#fff;}
+.add-row button{border:1.5px solid var(--ink);background:var(--ink);color:#fff;border-radius:10px;padding:0 14px;font-size:13px;cursor:pointer;}
+.wish-tabs{display:flex;gap:6px;margin-bottom:10px;}
+.wish-tabs button{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:5px 12px;font-size:12px;cursor:pointer;color:var(--muted);}
+.wish-tabs button.active{background:var(--ink);color:#fff;border-color:var(--ink);}
 
-    /* 地圖與小工具面板 */
-    #map { height: 260px; width: 100%; border-radius: var(--border-radius); box-shadow: 0 4px 10px rgba(0,0,0,0.05); margin-bottom: 15px; z-index: 1; }
-    
-    .tool-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-bottom: 15px;
-    }
-    .tool-card {
-      background: white;
-      padding: 12px;
-      border-radius: 14px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.03);
-      font-size: 0.85rem;
-    }
+/* ---- fx / weather ---- */
+.fx-row{display:flex;align-items:center;gap:8px;margin-bottom:10px;}
+.fx-row input{flex:1;min-width:0;border:1.5px solid var(--line);border-radius:10px;padding:10px 11px;font-size:14px;background:#fff;}
+.fx-row span{font-size:12px;color:var(--muted);}
+.fx-rate-row{display:flex;align-items:center;gap:8px;font-size:11.5px;color:var(--muted);margin-bottom:12px;}
+.fx-rate-row input{width:80px;border:1.3px solid var(--line);border-radius:8px;padding:5px 7px;font-size:12px;}
+.fx-result{font-family:'JetBrains Mono',monospace;font-size:26px;color:var(--red);font-weight:700;}
+.weather-grid{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;}
+.wx-card{flex:0 0 auto;width:74px;text-align:center;background:#fff;border:1.3px solid var(--line);border-radius:12px;padding:8px 4px;}
+.wx-card .wx-d{font-size:10.5px;color:var(--muted);}
+.wx-card .wx-i{font-size:22px;margin:4px 0;}
+.wx-card .wx-t{font-size:11.5px;font-weight:700;}
 
-    /* 按鈕區 */
-    .action-btn-bar {
-      display: flex; gap: 10px; margin-bottom: 15px;
-    }
-    .btn {
-      flex: 1;
-      padding: 10px;
-      border: none;
-      border-radius: 12px;
-      background: var(--main-blue);
-      color: white;
-      font-weight: bold;
-      cursor: pointer;
-      text-align: center;
-    }
-    .btn-secondary { background: var(--accent-coral); }
+/* ---- modal ---- */
+.modal-overlay{position:fixed;inset:0;background:rgba(59,42,30,.45);z-index:200;display:none;align-items:flex-end;justify-content:center;}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--paper-card);width:100%;max-width:600px;border-radius:20px 20px 0 0;border:2px solid var(--ink);border-bottom:none;padding:18px 18px calc(18px + env(safe-area-inset-bottom));max-height:88vh;overflow-y:auto;}
+.modal h3{margin:0 0 14px;font-family:'Klee One',serif;font-size:17px;}
+.modal label{display:block;font-size:11.5px;color:var(--muted);margin:10px 0 4px;}
+.modal input,.modal select,.modal textarea{width:100%;border:1.5px solid var(--line);border-radius:10px;padding:9px 10px;font-size:13.5px;background:#fff;font-family:inherit;}
+.modal textarea{resize:vertical;min-height:52px;}
+.modal-actions{display:flex;gap:8px;margin-top:16px;}
+.modal-actions button{flex:1;padding:11px;border-radius:12px;font-size:13.5px;cursor:pointer;border:1.5px solid var(--ink);}
+.btn-save{background:var(--ink);color:#fff;}
+.btn-cancel{background:#fff;color:var(--ink);}
+.btn-delete{background:var(--red);color:#fff;border-color:var(--red);margin-top:8px;width:100%;padding:10px;border-radius:12px;font-size:12.5px;cursor:pointer;}
 
-    /* 時間軸行程清單 */
-    .timeline { position: relative; padding-left: 20px; }
-    .timeline::before {
-      content: '';
-      position: absolute;
-      left: 7px; top: 10px; bottom: 10px;
-      width: 3px;
-      background: #dcd6cd;
-      border-radius: 2px;
-    }
+/* ---- floating buttons ---- */
+.float-btn{position:fixed;right:16px;width:46px;height:46px;border-radius:50%;background:var(--ink);color:#fff;
+  border:2px solid var(--paper-card);box-shadow:0 4px 10px rgba(0,0,0,.25);display:flex;align-items:center;justify-content:center;
+  font-size:19px;cursor:pointer;z-index:100;opacity:0;pointer-events:none;transition:opacity .2s;}
+.float-btn.show{opacity:1;pointer-events:auto;}
+#fxJump{bottom:78px;}
+#backTop{bottom:20px;}
 
-    .spot-card {
-      background: white;
-      border-radius: var(--border-radius);
-      padding: 14px;
-      margin-bottom: 12px;
-      box-shadow: 0 3px 8px rgba(0,0,0,0.04);
-      position: relative;
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-    }
-    .spot-card::before {
-      content: '';
-      position: absolute;
-      left: -18px; top: 18px;
-      width: 11px; height: 11px;
-      border-radius: 50%;
-      background: var(--main-blue);
-      border: 2px solid white;
-    }
-    .spot-card.hotel { border-left: 5px solid #4a90e2; }
-    .spot-card.food { border-left: 5px solid #e07a5f; }
-    .spot-card.spot { border-left: 5px solid #2a9d8f; }
+.footer{text-align:center;padding:28px 16px 10px;font-size:11px;color:var(--muted);}
+.footer .paw{opacity:.6;}
 
-    .drag-handle { cursor: grab; color: #aaa; padding: 5px 0; font-size: 1.2rem; }
-    .spot-content { flex: 1; }
-    .spot-time { font-weight: bold; color: var(--main-blue); font-size: 0.95rem; }
-    .spot-title { font-size: 1.05rem; font-weight: 700; margin: 2px 0; }
-    .spot-desc { font-size: 0.85rem; color: var(--text-muted); background: #f7f5f0; padding: 6px; border-radius: 6px; margin-top: 4px; }
-
-    .spot-actions { display: flex; flex-direction: column; gap: 5px; }
-    .btn-sm { padding: 4px 8px; font-size: 0.75rem; border-radius: 6px; border: none; cursor: pointer; }
-    .btn-edit { background: #e2e8f0; color: #333; }
-    .btn-nav { background: #48bb78; color: white; text-decoration: none; text-align: center; }
-
-    /* 清單 Tab */
-    .tab-section {
-      background: white;
-      padding: 15px;
-      border-radius: var(--border-radius);
-      box-shadow: 0 3px 8px rgba(0,0,0,0.04);
-      margin-top: 20px;
-    }
-    .list-item { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px dashed #eee; }
-    .list-item.done { text-decoration: line-through; opacity: 0.5; }
-
-    /* Firebase 提示條 */
-    .sync-badge {
-      display: inline-block;
-      font-size: 0.75rem;
-      background: rgba(255,255,255,0.2);
-      padding: 2px 8px;
-      border-radius: 10px;
-      margin-top: 5px;
-    }
-  </style>
+@media print{
+  .tabs-wrap,.float-btn,.add-item-btn,.stop-actions,.map-section,.drag-handle,.modal-overlay,.edit-btn{display:none!important;}
+  body{background:#fff;}
+  .sketch-card{box-shadow:none;}
+}
+</style>
 </head>
 <body>
+<div class="app" id="app">
 
-  <!-- 頂部卡片區 -->
-  <div class="header-banner">
-    <div class="header-title"> Sendai Trip 仙台 8 天遊</div>
-    <div class="header-subtitle">9/19 ~ 9/26 • 成員 5 人 • 飯店換 2 間</div>
-    <div class="sync-badge" id="syncStatus">🟢 雲端同步中 (Firebase Ready)</div>
-    <div class="wave-bg"></div>
+  <div class="hero">
+    <div class="hero-eyebrow mono">MIYAGI · JAPAN</div>
+    <h1>仙台 8天7夜</h1>
+    <p class="sub">2026.09.19（六）– 09.26（六）· 松島・藏王・山寺・石卷貓島</p>
+    <div class="meta-row">
+      <span>👨‍👩‍👧‍👦 5人</span>
+      <span>🏨 2間住宿</span>
+      <span>✈️ 仙台空港進出</span>
+    </div>
+    <div class="sync-badge"><span class="sync-dot" id="syncDot"></span><span id="syncText">連線中…</span></div>
   </div>
 
-  <!-- 天數滑動列 -->
-  <div class="day-nav" id="dayNav"></div>
+  <div class="sketch-card countdown" id="countdown">
+    <div class="cd-label mono">COUNTDOWN</div>
+    <div class="cd-value" id="cdValue">計算中…</div>
+    <div class="cd-note" id="cdNote"></div>
+  </div>
 
-  <div class="container">
-
-    <!-- 即時匯率 & 天氣工具 -->
-    <div class="tool-grid">
-      <div class="tool-card">
-        <strong> 仙台天氣</strong>
-        <div id="weatherInfo">載入中...</div>
-      </div>
-      <div class="tool-card">
-        <strong> 匯率換算 (日幣>台幣)</strong>
-        <input type="number" id="jpyInput" value="1000" style="width:100%; margin-top:4px; padding:4px;" oninput="calcExchange()">
-        <div id="twdResult" style="margin-top:4px; font-weight:bold; color:var(--accent-coral);">= NT$ --</div>
-      </div>
+  <div class="sketch-card map-section">
+    <div class="washi"></div>
+    <div class="map-head"><h2>🗺️ 行程地圖</h2></div>
+    <div class="layer-toggles">
+      <button type="button" class="active" data-layer="hotel">🏨 住宿</button>
+      <button type="button" class="active" data-layer="spot">📍 景點</button>
+      <button type="button" class="active" data-layer="food">🍽️ 餐廳</button>
+      <button type="button" class="active" data-layer="shop">🛍️ 購物</button>
     </div>
-
-    <!-- 一鍵開啟導航按鈕 -->
-    <div class="action-btn-bar">
-      <button class="btn" onclick="openDayGoogleMap()"> 導航當天所有路線</button>
-      <button class="btn btn-secondary" onclick="addSpotPrompt()">+ 新增行程</button>
-    </div>
-
-    <!-- 地圖圖層 -->
     <div id="map"></div>
-
-    <!-- 每日行程列表 (Drag & Drop) -->
-    <div class="timeline" id="spotList"></div>
-
-    <!-- 行李與購物清單 -->
-    <div class="tab-section">
-      <h3> 準備與購物清單 (可線上共同儲存)</h3>
-      <div style="display:flex; gap:5px; margin:10px 0;">
-        <input type="text" id="newItemText" placeholder="新增物品..." style="flex:1; padding:6px; border-radius:6px; border:1px solid #ccc;">
-        <button class="btn-sm btn-edit" onclick="addChecklistItem()">新增</button>
-      </div>
-      <div id="checklist"></div>
+    <div class="map-foot">
+      <button class="map-nav-btn" id="dayNavBtn" type="button">📍 開啟當天 Google 導航路線</button>
+      <div class="map-note">地圖標記為概略位置供路線參考；點各項目「地圖」鈕會以正確店名開啟 Google 地圖搜尋／導航。</div>
     </div>
-
   </div>
 
-  <!-- Firebase SDK (v9/v10 Compat) -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
-  <!-- Leaflet JS -->
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <div class="tabs-wrap">
+    <div class="tabs-inner" id="tabsInner"></div>
+  </div>
 
-  <script>
-    // ==========================================
-    // 1. Firebase 設定區 (請將下方替換為您的 Config)
-    // ==========================================
-    const firebaseConfig = {
-      apiKey: "YOUR_API_KEY",
-      authDomain: "YOUR_PROJECT.firebaseapp.com",
-      databaseURL: "https://YOUR_PROJECT-default-rtdb.firebaseio.com",
-      projectId: "YOUR_PROJECT",
-      storageBucket: "YOUR_PROJECT.appspot.com",
-      messagingSenderId: "YOUR_SENDER_ID",
-      appId: "YOUR_APP_ID"
-    };
+  <div id="daysContainer"></div>
 
-    let db;
-    let isFirebaseReady = false;
-    try {
-      firebase.initializeApp(firebaseConfig);
-      db = firebase.database();
-      isFirebaseReady = true;
-    } catch (e) {
-      console.warn("Firebase 未替換 Key，將切換為 localMemory 模式。");
-      document.getElementById('syncStatus').innerText = "🟡 本地測試模式 (請替換 Firebase Key)";
-    }
+  <div class="sketch-card section">
+    <div class="washi"></div>
+    <h2>🧳 行李清單</h2>
+    <div id="packingList"></div>
+    <div class="add-row">
+      <input type="text" id="packingInput" placeholder="新增項目…">
+      <button type="button" id="packingAddBtn">加入</button>
+    </div>
+  </div>
 
-    // ==========================================
-    // 2. 初始仙台行程資料 (9/19 ~ 9/26)
-    // ==========================================
-    const initialDays = [
-      { day: 1, date: "9/19(六)", title: "抵達仙台", spots: [
-        { time: "18:10", title: "抵達仙台機場", desc: "入境準備", type: "spot", lat: 38.1397, lng: 140.9169 },
-        { time: "19:00", title: "搭乘仙台機場Access線", desc: "選660日幣/刷西瓜卡，下車手動按門", type: "spot", lat: 38.1397, lng: 140.9169 },
-        { time: "19:27", title: "抵達仙台車站", desc: "東口改札口出站", type: "spot", lat: 38.2601, lng: 140.8824 },
-        { time: "19:45", title: "Hotel Grand Bach Sendai", desc: "Check-in 放行李 (步行10分)", type: "hotel", lat: 38.2575, lng: 140.8853 },
-        { time: "20:10", title: "晚餐-たんや善治郎 南町通り店", desc: "牛舌人潮較少店", type: "food", lat: 38.2585, lng: 140.8778 }
+  <div class="sketch-card section">
+    <div class="washi"></div>
+    <h2>🎁 願望清單 / 必買清單</h2>
+    <div class="wish-tabs">
+      <button type="button" class="active" data-wtab="all">全部</button>
+      <button type="button" data-wtab="wish">願望</button>
+      <button type="button" data-wtab="buy">必買</button>
+    </div>
+    <div id="wishList"></div>
+    <div class="add-row">
+      <input type="text" id="wishInput" placeholder="新增想去/想買的東西…">
+      <select id="wishType" style="border:1.5px solid var(--line);border-radius:10px;padding:0 8px;background:#fff;font-size:13px;">
+        <option value="wish">願望</option>
+        <option value="buy">必買</option>
+      </select>
+      <button type="button" id="wishAddBtn">加入</button>
+    </div>
+  </div>
+
+  <div class="sketch-card section">
+    <div class="washi"></div>
+    <h2>💴 匯率速算</h2>
+    <div class="fx-row">
+      <input type="number" id="fxJpy" placeholder="日幣 JPY" inputmode="decimal">
+      <span>×</span>
+      <span class="mono" id="fxRateLabel">0.21</span>
+      <span>=</span>
+    </div>
+    <div class="fx-result mono" id="fxResult">— TWD</div>
+    <div class="fx-rate-row">
+      <span>自訂匯率：</span>
+      <input type="number" step="0.001" id="fxRate" placeholder="0.21">
+      <span id="fxRateNote"></span>
+    </div>
+  </div>
+
+  <div class="sketch-card section">
+    <div class="washi"></div>
+    <h2>⛅ 仙台天氣</h2>
+    <div class="weather-grid" id="weatherGrid">
+      <div class="wx-card"><div class="wx-t">載入中…</div></div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div class="paw hand">🐾 一起編輯，即時同步 · 仙台旅行 2026</div>
+  </div>
+</div>
+
+<!-- ---- edit/add item modal ---- -->
+<div class="modal-overlay" id="itemModalOverlay">
+  <div class="modal">
+    <h3 id="itemModalTitle">編輯行程</h3>
+    <label>時間</label>
+    <input type="text" id="fItemTime" placeholder="例如 09:30 或 --">
+    <label>類別</label>
+    <select id="fItemCat">
+      <option value="移動">移動</option>
+      <option value="住宿">住宿</option>
+      <option value="用餐">用餐</option>
+      <option value="景點">景點</option>
+      <option value="購物">購物</option>
+    </select>
+    <label>名稱</label>
+    <input type="text" id="fItemName" placeholder="地點/行程名稱">
+    <label>地圖搜尋關鍵字（用於 Google 地圖）</label>
+    <input type="text" id="fItemMap" placeholder="例如 瑞鳳殿">
+    <label>備註</label>
+    <textarea id="fItemNote" placeholder="交通方式、注意事項、費用…"></textarea>
+    <div class="modal-actions">
+      <button type="button" class="btn-cancel" id="itemCancelBtn">取消</button>
+      <button type="button" class="btn-save" id="itemSaveBtn">儲存</button>
+    </div>
+    <button type="button" class="btn-delete" id="itemDeleteBtn">🗑️ 刪除此項目</button>
+  </div>
+</div>
+
+<button class="float-btn" id="fxJump" type="button">💴</button>
+<button class="float-btn" id="backTop" type="button">↑</button>
+
+<!-- ---- libs ---- -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.1/firebase-database-compat.js"></script>
+
+<script>
+/* =========================================================================
+   仙台行程 App — Firebase Realtime Database 即時共編版
+   請把下方 firebaseConfig 換成你自己的設定（Firebase 主控台 > 專案設定 > 通用 > 你的應用程式）
+   ========================================================================= */
+const firebaseConfig = {
+  apiKey: "AIzaSyDxMwkCU23PB6Q60r3TWEu3elG00r4ywM0",
+  authDomain: "sendai-6666.firebaseapp.com",
+  databaseURL: "https://sendai-6666-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "sendai-6666",
+  storageBucket: "sendai-6666.firebasestorage.app",
+  messagingSenderId: "317293713360",
+  appId: "1:317293713360:web:e3d5175a54ae43c801cbd5",
+  measurementId: "G-Y1EH4G7745"
+};
+const TRIP_PATH = "sendai2026"; // 若想同一個 Firebase 專案放多個行程，改這個字串即可區隔
+
+/* ---------------- 初始行程資料（僅在 Firebase 該路徑是空的時候，第一次會自動寫入） ---------------- */
+const SEED = {
+  meta:{
+    title:"仙台 8天5夜".replace("5夜","7夜"),
+    start:"2026-09-19", end:"2026-09-26", members:5,
+    departAt:"2026-09-19T18:10:00", tripEndAt:"2026-09-26T21:00:00",
+    defaultFxRate: 0.21
+  },
+  days:[
+    {id:"day1", date:"2026-09-19", weekday:"六", accentIdx:0, title:"抵達仙台", hotel:"Hotel Grand Bach Sendai",
+      items:[
+        {time:"18:10", cat:"移動", name:"抵達仙台機場", map:"仙台空港", note:""},
+        {time:"19:00", cat:"移動", name:"搭仙台機場アクセス線", map:"仙台空港駅", note:"可能搭19:00或19:28班次；行李只能放腳邊、空間較擠；下車時要自己按開關開門；只能刷西瓜卡(Suica)進站，或機器購票 ¥660"},
+        {time:"19:27", cat:"移動", name:"抵達仙台車站 → 步行往飯店", map:"仙台駅", note:"抵達3/4號月台，搭手扶梯到二樓，左手邊為東口改札"},
+        {time:"19:45", cat:"住宿", name:"Hotel Grand Bach Sendai Check-in", map:"Hotel Grand Bach Sendai", note:"步行約10分抵達，check-in放行李"},
+        {time:"20:10", cat:"用餐", name:"たんや善治郎 南町通り店", map:"たんや善治郎 南町通り店", note:"步行約15分，這間人潮較少"}
       ]},
-      { day: 2, date: "9/20(日)", title: "仙台市區與觀光巴士", spots: [
-        { time: "07:15", title: "大廳寄行李+早餐", desc: "準備出發", type: "hotel", lat: 38.2575, lng: 140.8853 },
-        { time: "08:20", title: "LOOPLE 觀光巴士", desc: "買一日券630日幣(現金)", type: "spot", lat: 38.2601, lng: 140.8824 },
-        { time: "09:13", title: "瑞鳳殿", desc: "停留1小時", type: "spot", lat: 38.2504, lng: 140.8661 },
-        { time: "10:28", title: "仙台城跡", desc: "停留30分，務必搭到11:08/11:23班次", type: "spot", lat: 38.2529, lng: 140.8562 },
-        { time: "12:45", title: "中餐-仔虎燒肉站前店", desc: "預約頂級燒肉", type: "food", lat: 38.2605, lng: 140.8800 },
-        { time: "14:15", title: "市區逛街", desc: "商店街買物", type: "spot", lat: 38.2600, lng: 140.8750 },
-        { time: "18:00", title: "札幌螃蟹本家 仙台店", desc: "螃蟹大餐", type: "food", lat: 38.2630, lng: 140.8700 }
+    {id:"day2", date:"2026-09-20", weekday:"日", accentIdx:1, title:"瑞鳳殿・仙台城跡", hotel:"Hotel Grand Bach Sendai",
+      items:[
+        {time:"07:15", cat:"移動", name:"大廳寄放行李＋飯店早餐", map:"Hotel Grand Bach Sendai", note:""},
+        {time:"08:20", cat:"移動", name:"LOOPLE 盧葡兒仙台 觀光巴士", map:"仙台駅西口バスプール", note:"買一日券 ¥630（限現金）；建議提早到，第一班09點左右人潮就會較多"},
+        {time:"09:13", cat:"景點", name:"瑞鳳殿", map:"瑞鳳殿", note:"停留約1小時，預計10:13/10:28/10:43離開"},
+        {time:"10:28", cat:"景點", name:"仙台城跡（青葉城）", map:"仙台城跡", note:"停留約30分，務必搭上11:08或11:23那班車，不然得搭計程車回仙台駅"},
+        {time:"12:07", cat:"移動", name:"回到仙台車站，先走走逛逛", map:"仙台駅", note:"步行約6分鐘"},
+        {time:"12:45", cat:"用餐", name:"仔虎燒肉 站前店", map:"牛たん炭焼 利久 仙台駅前店", note:""},
+        {time:"14:15", cat:"購物", name:"逛街", map:"仙台駅", note:""},
+        {time:"18:00", cat:"用餐", name:"札幌螃蟹本家 仙台店", map:"札幌かに本家 仙台店", note:""}
       ]},
-      { day: 3, date: "9/21(一)", title: "松島海岸一日遊", spots: [
-        { time: "09:00", title: "換飯店至 ホテル京阪", desc: "寄放行李", type: "hotel", lat: 38.2618, lng: 140.8812 },
-        { time: "10:30", title: "松島海岸漫步", desc: "烤魚板、烤仙貝、吃牡蠣", type: "spot", lat: 38.3690, lng: 141.0636 },
-        { time: "11:00", title: "MATSUSHIMA SANDWICH STORE", desc: "吃三明治或 Café le Roman 咖啡", type: "food", lat: 38.3680, lng: 141.0620 }
+    {id:"day3", date:"2026-09-21", weekday:"一", accentIdx:2, title:"松島一日遊", hotel:"ホテル京阪 仙台",
+      items:[
+        {time:"--", cat:"住宿", name:"換飯店寄放行李（ホテル京阪 仙台）", map:"ホテル京阪 仙台", note:""},
+        {time:"--", cat:"移動", name:"前往松島", map:"松島海岸駅", note:"車程約50分鐘"},
+        {time:"11:00", cat:"用餐", name:"牡蠣午餐", map:"松島 かき小屋", note:"40分鐘吃到飽 或 單點皆可"},
+        {time:"--", cat:"用餐", name:"クロワッサン屋サクサク", map:"クロワッサン屋サクサク 松島", note:"營業10:00-17:00，松島有分店"},
+        {time:"--", cat:"用餐", name:"MATSUSHIMA SANDWICH STORE 松島三明治", map:"MATSUSHIMA SANDWICH STORE", note:"營業11:00-16:00"},
+        {time:"--", cat:"用餐", name:"Cafe le Roman 松島咖啡廳", map:"Cafe le Roman 松島", note:"營業11:00-17:00"},
+        {time:"--", cat:"購物", name:"松島蒲鉾本舗（現烤魚板）", map:"松島蒲鉾本舗", note:""},
+        {time:"--", cat:"購物", name:"烤仙貝", map:"松島", note:""}
       ]},
-      { day: 4, date: "9/22(二)", title: "藏王御釜與山寺", spots: [
-        { time: "07:30", title: "自駕出發", desc: "超商買早餐", type: "spot", lat: 38.2601, lng: 140.8824 },
-        { time: "09:50", title: "藏王御釜", desc: "停留1小時", type: "spot", lat: 38.1311, lng: 140.4485 },
-        { time: "12:00", title: "米澤牛 登起波 山形店", desc: "享受米澤牛", type: "food", lat: 38.2404, lng: 140.3278 },
-        { time: "13:30", title: "山寺(立石寺)", desc: "爬山約1.5小時", type: "spot", lat: 38.3123, lng: 140.4375 }
+    {id:"day4", date:"2026-09-22", weekday:"二", accentIdx:3, title:"藏王御釜・山形・山寺", hotel:"ホテル京阪 仙台",
+      items:[
+        {time:"--", cat:"用餐", name:"超商早餐", map:"セブンイレブン 仙台", note:""},
+        {time:"07:30", cat:"移動", name:"出發前往藏王御釜", map:"蔵王お釜", note:"車程約1小時20分"},
+        {time:"09:50", cat:"景點", name:"藏王御釜", map:"蔵王お釜", note:"停留約1小時"},
+        {time:"10:50", cat:"移動", name:"出發前往山形", map:"山形駅", note:"車程約1小時"},
+        {time:"12:00", cat:"用餐", name:"米澤牛 登起波 山形店", map:"米沢牛 登起波 山形店", note:""},
+        {time:"--", cat:"景點", name:"山寺（立石寺）", map:"山寺 立石寺", note:"車程約30分；登山參拜約1.5小時"},
+        {time:"--", cat:"移動", name:"返回仙台", map:"仙台駅", note:"車程約1小時10分；建議回飯店先休息"}
       ]},
-      { day: 5, date: "9/23(三)", title: "海洋森林水族館", spots: [
-        { time: "08:30", title: "仙台海洋森林水族館", desc: "10:30 看企鵝餵食", type: "spot", lat: 38.2719, lng: 140.9859 },
-        { time: "12:00", title: "三井 Outlet", desc: "逛街與中餐", type: "spot", lat: 38.2740, lng: 140.9900 }
+    {id:"day5", date:"2026-09-23", weekday:"三", accentIdx:4, title:"仙台海洋森林水族館", hotel:"ホテル京阪 仙台",
+      items:[
+        {time:"08:30", cat:"景點", name:"仙台海洋森林水族館", map:"仙台うみの杜水族館", note:""},
+        {time:"10:30", cat:"景點", name:"企鵝餵食秀", map:"仙台うみの杜水族館", note:""},
+        {time:"--", cat:"用餐", name:"中餐", map:"三井アウトレットパーク仙台港", note:"可到隔壁三井Outlet用餐，或回市區吃"},
+        {time:"--", cat:"移動", name:"下午自由時間", map:"仙台駅", note:"行程待定，可依當天狀況調整"}
       ]},
-      { day: 6, date: "9/24(四)", title: "石卷田代島(貓島)", spots: [
-        { time: "07:00", title: "開車出發至石卷港", desc: "搭 09:00 船次", type: "spot", lat: 38.4230, lng: 141.3060 },
-        { time: "09:44", title: "田代島(貓島)抵達", desc: "尋找貓咪與拍照", type: "spot", lat: 38.3007, lng: 141.2829 },
-        { time: "11:06", title: "搭船回航", desc: "11:51 抵達石卷，午後回仙台", type: "spot", lat: 38.4230, lng: 141.3060 }
+    {id:"day6", date:"2026-09-24", weekday:"四", accentIdx:5, title:"石卷・田代島貓島", hotel:"ホテル京阪 仙台",
+      items:[
+        {time:"07:00", cat:"移動", name:"開車前往石卷", map:"石巻港", note:""},
+        {time:"09:00", cat:"移動", name:"石卷出航", map:"石巻港 田代島航路のりば", note:"搭船前往田代島（貓島）"},
+        {time:"09:44", cat:"景點", name:"抵達田代島（貓島）", map:"田代島", note:""},
+        {time:"11:06", cat:"移動", name:"回航", map:"田代島", note:""},
+        {time:"11:51", cat:"移動", name:"抵達石卷", map:"石巻港", note:""},
+        {time:"13:00", cat:"用餐", name:"返回仙台，中餐", map:"仙台駅", note:""}
       ]},
-      { day: 7, date: "9/25(五)", title: "金蛇水神社與購物", spots: [
-        { time: "09:30", title: "金蛇水神社", desc: "參拜祈福", type: "spot", lat: 38.1064, lng: 140.8930 },
-        { time: "14:00", title: "市區最終購物", desc: "伴手禮補貨", type: "spot", lat: 38.2600, lng: 140.8750 },
-        { time: "19:00", title: "歸還租賃車輛", desc: "還車手續", type: "spot", lat: 38.2601, lng: 140.8824 }
+    {id:"day7", date:"2026-09-25", weekday:"五", accentIdx:6, title:"金蛇水神社・購物・還車", hotel:"ホテル京阪 仙台",
+      items:[
+        {time:"--", cat:"景點", name:"金蛇水神社", map:"金蛇水神社", note:""},
+        {time:"--", cat:"購物", name:"自由購物", map:"仙台駅", note:""},
+        {time:"--", cat:"移動", name:"還車", map:"仙台駅", note:"晚上還租車"}
       ]},
-      { day: 8, date: "9/26(六)", title: "仙台機場返程", spots: [
-        { time: "10:00", title: "行李寄放車站", desc: "最後巡禮", type: "spot", lat: 38.2601, lng: 140.8824 },
-        { time: "19:00", title: "仙台機場起飛", desc: "賦歸溫暖的家", type: "spot", lat: 38.1397, lng: 140.9169 }
+    {id:"day8", date:"2026-09-26", weekday:"六", accentIdx:7, title:"賦歸", hotel:"",
+      items:[
+        {time:"--", cat:"移動", name:"行李寄放車站", map:"仙台駅", note:""},
+        {time:"19:00", cat:"移動", name:"搭機返程", map:"仙台空港", note:""}
       ]}
-    ];
+  ],
+  packing_defaults:["護照","日幣現金","信用卡","手機充電器／行動電源","轉接頭","駕照＋日文譯本（租車用）","國際駕照","常備藥品","盥洗用品","換洗衣物","雨具／外套","太陽眼鏡","防曬乳","相機","隨身Wifi機／SIM卡"],
+  wishlist_defaults:[
+    {text:"牛舌（牛たん）伴手禮", type:"buy"},
+    {text:"萩の月", type:"buy"},
+    {text:"喜久福（毛豆麻糬）", type:"buy"},
+    {text:"ずんだ（毛豆）相關甜點", type:"wish"},
+    {text:"松島限定土產", type:"wish"}
+  ]
+};
 
-    let scheduleData = initialDays;
-    let currentDayIndex = 0;
-    let map, markersGroup;
+/* ---------------- 地點座標（供地圖參考顯示，非精確定位；實際導航以 Google 地圖名稱搜尋為準） ---------------- */
+const COORDS = {
+  "仙台空港":[38.1397,140.9170], "仙台空港駅":[38.1397,140.9170], "仙台駅":[38.2603,140.8823],
+  "仙台駅西口バスプール":[38.2603,140.8813],
+  "Hotel Grand Bach Sendai":[38.2617,140.8785], "ホテル京阪 仙台":[38.2625,140.8795],
+  "たんや善治郎 南町通り店":[38.2595,140.8735],
+  "瑞鳳殿":[38.2495,140.8654], "仙台城跡":[38.2534,140.8557],
+  "牛たん炭焼 利久 仙台駅前店":[38.2605,140.8815], "札幌かに本家 仙台店":[38.2610,140.8805],
+  "松島海岸駅":[38.3707,141.0475], "松島 かき小屋":[38.3690,141.0480],
+  "クロワッサン屋サクサク 松島":[38.3700,141.0470], "MATSUSHIMA SANDWICH STORE":[38.3695,141.0465],
+  "Cafe le Roman 松島":[38.3702,141.0468], "松島蒲鉾本舗":[38.3698,141.0472], "松島":[38.3707,141.0475],
+  "セブンイレブン 仙台":[38.2603,140.8823],
+  "蔵王お釜":[38.1298,140.4520], "山形駅":[38.2404,140.3633], "米沢牛 登起波 山形店":[38.2404,140.3633],
+  "山寺 立石寺":[38.3149,140.4437],
+  "仙台うみの杜水族館":[38.2861,141.0116], "三井アウトレットパーク仙台港":[38.2843,141.0086],
+  "石巻港":[38.4267,141.3033], "石巻港 田代島航路のりば":[38.4267,141.3033], "田代島":[38.2971,141.3814],
+  "金蛇水神社":[38.0999,140.8464]
+};
+const LAYER_OF = {"住宿":"hotel","景點":"spot","用餐":"food","購物":"shop","移動":null};
+const DAY_COLORS = ["--d0","--d1","--d2","--d3","--d4","--d5","--d6","--d7"];
 
-    // ==========================================
-    // 3. UI 渲染與互動邏輯
-    // ==========================================
-    function init() {
-      initMap();
-      renderDayNav();
-      fetchWeather();
-      calcExchange();
+/* ================= Firebase init & sync ================= */
+let db = null, tripData = null, fbReady = false;
+try{
+  firebase.initializeApp(firebaseConfig);
+  db = firebase.database();
+}catch(e){ console.warn("Firebase 尚未設定或初始化失敗，將使用本機示範資料", e); }
 
-      if (isFirebaseReady) {
-        db.ref("sendai_schedule").on("value", (snapshot) => {
-          if (snapshot.exists()) {
-            scheduleData = snapshot.val();
-          } else {
-            db.ref("sendai_schedule").set(initialDays);
-          }
-          renderCurrentDay();
-        });
-      } else {
-        renderCurrentDay();
-      }
+const syncDot = document.getElementById("syncDot");
+const syncText = document.getElementById("syncText");
+
+function setSyncState(state){
+  if(state==="live"){ syncDot.classList.remove("off"); syncText.textContent = "已連線，多人即時同步中"; }
+  else if(state==="local"){ syncDot.classList.add("off"); syncText.textContent = "尚未設定 Firebase，目前為本機示範資料（不會同步）"; }
+  else { syncDot.classList.add("off"); syncText.textContent = "連線中斷，重新整理後再試"; }
+}
+
+function startApp(){
+  if(!db){ tripData = JSON.parse(JSON.stringify(SEED)); setSyncState("local"); afterDataReady(); return; }
+  const ref = db.ref(TRIP_PATH);
+  ref.once("value").then(snap=>{
+    if(!snap.exists()){
+      return ref.set(SEED).then(()=>true);
     }
+    return false;
+  }).catch(err=>{ console.warn("初次讀取/寫入失敗", err); }).finally(()=>{
+    ref.on("value", snap=>{
+      const val = snap.val();
+      if(!val){ return; }
+      tripData = val;
+      setSyncState("live");
+      afterDataReady();
+    }, err=>{ console.warn("同步失敗", err); setSyncState("error"); });
+  });
+  // 離線時用本機資料先渲染，避免空白
+  setTimeout(()=>{ if(!tripData){ tripData = JSON.parse(JSON.stringify(SEED)); afterDataReady(); } }, 3500);
+}
 
-    function renderDayNav() {
-      const nav = document.getElementById("dayNav");
-      nav.innerHTML = scheduleData.map((d, idx) => `
-        <div class="day-btn ${idx === currentDayIndex ? 'active' : ''}" onclick="switchDay(${idx})">
-          <div>Day ${d.day}</div>
-          <div style="font-size:0.75rem">${d.date.split('(')[0]}</div>
+function saveDay(dayIdx){
+  if(!db) return;
+  db.ref(`${TRIP_PATH}/days/${dayIdx}/items`).set(tripData.days[dayIdx].items);
+}
+function saveWishlist(list){ if(db) db.ref(`${TRIP_PATH}/wishlist`).set(list); }
+
+let firstRenderDone = false;
+function afterDataReady(){
+  renderTabs();
+  renderDays();
+  renderWishlist();
+  if(!firstRenderDone){
+    firstRenderDone = true;
+    renderPackingDefaultsIfNeeded();
+    initMap();
+    setupCountdown();
+    setTimeout(highlightToday, 300);
+    setupModal();
+  } else {
+    updateMapMarkers();
+  }
+}
+
+/* ================= 天分頁 & 內容渲染 ================= */
+function fmtDate(iso){
+  const d = new Date(iso+"T00:00:00");
+  return (d.getMonth()+1)+"/"+d.getDate();
+}
+function renderTabs(){
+  const wrap = document.getElementById("tabsInner");
+  wrap.innerHTML = "";
+  tripData.days.forEach((day, i)=>{
+    const b = document.createElement("button");
+    b.type="button"; b.className="tab"; b.dataset.target=day.id;
+    b.style.setProperty("--accent", `var(${DAY_COLORS[day.accentIdx % DAY_COLORS.length]})`);
+    b.innerHTML = `<span class="d-num hand">Day ${i+1}</span><span class="d-date mono">${fmtDate(day.date)}</span>`;
+    b.addEventListener("click", ()=>scrollToDay(day.id));
+    wrap.appendChild(b);
+  });
+}
+function scrollToDay(id){
+  const el = document.getElementById(id);
+  if(!el) return;
+  const y = el.getBoundingClientRect().top + window.scrollY - 58;
+  window.scrollTo({top:y, behavior:"smooth"});
+}
+const io = new IntersectionObserver((entries)=>{
+  entries.forEach(en=>{
+    if(en.isIntersecting){
+      document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
+      const t = document.querySelector(`.tab[data-target="${en.target.id}"]`);
+      if(t){ t.classList.add("active"); t.scrollIntoView({inline:"center", block:"nearest", behavior:"smooth"}); }
+    }
+  });
+}, {rootMargin:"-30% 0px -55% 0px"});
+
+function renderDays(){
+  const container = document.getElementById("daysContainer");
+  const scrollBefore = window.scrollY;
+  container.innerHTML = "";
+  tripData.days.forEach((day, dIdx)=>{
+    const accentVar = `var(${DAY_COLORS[day.accentIdx % DAY_COLORS.length]})`;
+    const sec = document.createElement("section");
+    sec.className = "day"; sec.id = day.id;
+    sec.innerHTML = `
+      <div class="sketch-card day-card" style="--accent:${accentVar}">
+        ${day.hotel ? `<div class="hotel-band" style="--accent:${accentVar}">🏨 ${day.hotel}</div>` : ""}
+        <div class="day-head" style="background:${accentVar}">
+          <div class="num hand">DAY ${dIdx+1} · ${day.weekday}</div>
+          <div class="date mono">${day.date}</div>
+          <h3>${day.title}</h3>
         </div>
-      `).join('');
-    }
+        <ul class="timeline" data-day="${dIdx}"></ul>
+        <button type="button" class="add-item-btn" data-day="${dIdx}">＋ 新增行程項目</button>
+      </div>`;
+    container.appendChild(sec);
+    io.observe(sec);
+    const tl = sec.querySelector(".timeline");
+    day.items.forEach((item, iIdx)=> tl.appendChild(buildStopEl(dIdx, iIdx, item)));
+    sec.querySelector(".add-item-btn").addEventListener("click", ()=> openItemModal(dIdx, null));
+  });
+  window.scrollTo({top:scrollBefore});
+  enableDragReorder();
+  updateMapMarkers();
+  setTimeout(highlightToday, 50);
+}
 
-    function switchDay(idx) {
-      currentDayIndex = idx;
-      renderDayNav();
-      renderCurrentDay();
-    }
+function buildStopEl(dIdx, iIdx, item){
+  const li = document.createElement("li");
+  li.className = "stop"; li.dataset.day = dIdx; li.dataset.idx = iIdx;
+  const mapQuery = encodeURIComponent(item.map || item.name);
+  li.innerHTML = `
+    <span class="drag-handle">≡</span>
+    <div class="stop-time">${item.time && item.time!=="--" ? item.time : ""}</div>
+    <div class="stop-dot-wrap"><div class="stop-dot"></div></div>
+    <div class="stop-body">
+      <div class="stop-head">
+        <span class="tag tag-${item.cat}">${item.cat}</span>
+        <button type="button" class="edit-btn" style="border:none;background:none;color:var(--muted);cursor:pointer;font-size:12px;">✏️ 編輯</button>
+      </div>
+      <h4>${item.name}</h4>
+      ${item.note ? `<div class="stop-note">${item.note}</div>` : ""}
+      <div class="stop-actions">
+        <a class="map-btn" href="https://www.google.com/maps/search/?api=1&query=${mapQuery}" target="_blank" rel="noopener">📍 地圖</a>
+        <button type="button" class="copy-btn">📋 複製名稱</button>
+      </div>
+    </div>`;
+  li.querySelector(".edit-btn").addEventListener("click", ()=> openItemModal(dIdx, iIdx));
+  li.querySelector(".copy-btn").addEventListener("click", (e)=>{
+    const btn = e.currentTarget;
+    const text = item.name;
+    const done = ()=>{ const old = btn.textContent; btn.textContent="✓ 已複製"; btn.classList.add("copied"); setTimeout(()=>{btn.textContent=old; btn.classList.remove("copied");},1500); };
+    if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(text).then(done).catch(()=>fallbackCopy(text,done)); }
+    else fallbackCopy(text, done);
+  });
+  return li;
+}
+function fallbackCopy(text, done){
+  const ta = document.createElement("textarea"); ta.value=text; ta.style.position="fixed"; ta.style.opacity="0";
+  document.body.appendChild(ta); ta.select();
+  try{ document.execCommand("copy"); done(); }catch(e){}
+  document.body.removeChild(ta);
+}
 
-    function renderCurrentDay() {
-      const dayData = scheduleData[currentDayIndex];
-      const listContainer = document.getElementById("spotList");
-      listContainer.innerHTML = "";
-
-      dayData.spots.forEach((spot, spotIdx) => {
-        const card = document.createElement("div");
-        card.className = `spot-card ${spot.type}`;
-        card.dataset.index = spotIdx;
-        card.innerHTML = `
-          <div class="drag-handle">≡</div>
-          <div class="spot-content">
-            <div class="spot-time">⏰ ${spot.time}</div>
-            <div class="spot-title">${spot.title}</div>
-            ${spot.desc ? `<div class="spot-desc">${spot.desc}</div>` : ''}
-          </div>
-          <div class="spot-actions">
-            <button class="btn-sm btn-edit" onclick="editSpot(${spotIdx})">編輯</button>
-            <a class="btn-sm btn-nav" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(spot.title)}" target="_blank">導航</a>
-          </div>
-        `;
-        listContainer.appendChild(card);
-      });
-
-      // 初始化 Sortable 拖拉
-      new Sortable(listContainer, {
-        handle: '.drag-handle',
-        animation: 150,
-        onEnd: function () {
-          const newOrder = [];
-          document.querySelectorAll('#spotList .spot-card').forEach((el) => {
-            const oldIdx = el.dataset.index;
-            newOrder.push(dayData.spots[oldIdx]);
+/* ================= 拖拉排序（Pointer Events，支援手機觸控） ================= */
+function enableDragReorder(){
+  document.querySelectorAll(".timeline").forEach(tl=>{
+    tl.querySelectorAll(".drag-handle").forEach(handle=>{
+      handle.onpointerdown = (e)=>{
+        e.preventDefault();
+        const stop = handle.closest(".stop");
+        const list = Array.from(tl.children);
+        let startY = e.clientY;
+        stop.classList.add("dragging");
+        stop.setPointerCapture && handle.setPointerCapture(e.pointerId);
+        function move(ev){
+          const dy = ev.clientY - startY;
+          stop.style.transform = `translateY(${dy}px)`;
+          stop.style.zIndex = 10;
+          const after = list.find(s=>{
+            if(s===stop) return false;
+            const r = s.getBoundingClientRect();
+            return ev.clientY < r.top + r.height/2;
           });
-          scheduleData[currentDayIndex].spots = newOrder;
-          saveData();
+          if(after){ tl.insertBefore(stop, after); } else { tl.appendChild(stop); }
         }
-      });
-
-      updateMapMarkers();
-    }
-
-    // ==========================================
-    // 4. 地圖控制 (Leaflet)
-    // ==========================================
-    function initMap() {
-      map = L.map('map').setView([38.2601, 140.8824], 11);
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap'
-      }).addTo(map);
-      markersGroup = L.layerGroup().addTo(map);
-    }
-
-    function updateMapMarkers() {
-      markersGroup.clearLayers();
-      const spots = scheduleData[currentDayIndex].spots;
-      const latLngs = [];
-
-      spots.forEach(spot => {
-        if(spot.lat && spot.lng) {
-          latLngs.push([spot.lat, spot.lng]);
-          const marker = L.marker([spot.lat, spot.lng])
-            .bindPopup(`<b>${spot.title}</b><br>${spot.time}<br><a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(spot.title)}" target="_blank">Google Maps 導航</a>`);
-          markersGroup.addLayer(marker);
+        function up(){
+          stop.classList.remove("dragging");
+          stop.style.transform=""; stop.style.zIndex="";
+          document.removeEventListener("pointermove", move);
+          document.removeEventListener("pointerup", up);
+          const dIdx = parseInt(tl.dataset.day,10);
+          const newOrder = Array.from(tl.children).map(li=> tripData.days[dIdx].items[parseInt(li.dataset.idx,10)]);
+          tripData.days[dIdx].items = newOrder;
+          saveDay(dIdx);
+          renderDays();
         }
-      });
-
-      if(latLngs.length > 1) {
-        const polyline = L.polyline(latLngs, {color: '#1b4b6b', weight: 3, dashArray: '5, 10'}).addTo(markersGroup);
-        map.fitBounds(polyline.getBounds().pad(0.2));
-      } else if(latLngs.length === 1) {
-        map.setView(latLngs[0], 13);
-      }
-    }
-
-    function openDayGoogleMap() {
-      const spots = scheduleData[currentDayIndex].spots;
-      if (spots.length === 0) return;
-      const query = spots.map(s => encodeURIComponent(s.title)).join('/');
-      window.open(`https://www.google.com/maps/dir/${query}`, '_blank');
-    }
-
-    // ==========================================
-    // 5. 即時資料編輯與儲存
-    // ==========================================
-    function saveData() {
-      if (isFirebaseReady) {
-        db.ref("sendai_schedule").set(scheduleData);
-      } else {
-        localStorage.setItem("sendai_schedule", JSON.stringify(scheduleData));
-      }
-    }
-
-    function editSpot(spotIdx) {
-      const spot = scheduleData[currentDayIndex].spots[spotIdx];
-      const newTitle = prompt("請輸入景點名稱：", spot.title);
-      if (newTitle === null) return;
-      const newTime = prompt("請輸入時間：", spot.time);
-      const newDesc = prompt("請輸入備忘描述：", spot.desc || "");
-
-      scheduleData[currentDayIndex].spots[spotIdx] = {
-        ...spot,
-        title: newTitle,
-        time: newTime,
-        desc: newDesc
+        document.addEventListener("pointermove", move);
+        document.addEventListener("pointerup", up);
       };
+    });
+  });
+}
 
-      saveData();
-      renderCurrentDay();
+/* ================= 編輯 / 新增 / 刪除 項目 Modal ================= */
+let modalCtx = {dayIdx:null, itemIdx:null};
+function setupModal(){
+  document.getElementById("itemCancelBtn").addEventListener("click", closeItemModal);
+  document.getElementById("itemModalOverlay").addEventListener("click", (e)=>{ if(e.target.id==="itemModalOverlay") closeItemModal(); });
+  document.getElementById("itemSaveBtn").addEventListener("click", saveItemModal);
+  document.getElementById("itemDeleteBtn").addEventListener("click", deleteItemModal);
+}
+function openItemModal(dayIdx, itemIdx){
+  modalCtx = {dayIdx, itemIdx};
+  const isNew = itemIdx===null;
+  document.getElementById("itemModalTitle").textContent = isNew ? "新增行程項目" : "編輯行程項目";
+  const item = isNew ? {time:"", cat:"景點", name:"", map:"", note:""} : tripData.days[dayIdx].items[itemIdx];
+  document.getElementById("fItemTime").value = item.time || "";
+  document.getElementById("fItemCat").value = item.cat || "景點";
+  document.getElementById("fItemName").value = item.name || "";
+  document.getElementById("fItemMap").value = item.map || "";
+  document.getElementById("fItemNote").value = item.note || "";
+  document.getElementById("itemDeleteBtn").style.display = isNew ? "none" : "block";
+  document.getElementById("itemModalOverlay").classList.add("open");
+}
+function closeItemModal(){ document.getElementById("itemModalOverlay").classList.remove("open"); }
+function saveItemModal(){
+  const {dayIdx, itemIdx} = modalCtx;
+  const item = {
+    time: document.getElementById("fItemTime").value.trim() || "--",
+    cat: document.getElementById("fItemCat").value,
+    name: document.getElementById("fItemName").value.trim() || "未命名項目",
+    map: document.getElementById("fItemMap").value.trim(),
+    note: document.getElementById("fItemNote").value.trim()
+  };
+  if(itemIdx===null) tripData.days[dayIdx].items.push(item);
+  else tripData.days[dayIdx].items[itemIdx] = item;
+  saveDay(dayIdx);
+  closeItemModal();
+  renderDays();
+}
+function deleteItemModal(){
+  const {dayIdx, itemIdx} = modalCtx;
+  if(itemIdx===null) return;
+  if(!confirm("確定要刪除這個行程項目嗎？")) return;
+  tripData.days[dayIdx].items.splice(itemIdx,1);
+  saveDay(dayIdx);
+  closeItemModal();
+  renderDays();
+}
+
+/* ================= 倒數計時 / 今天高亮 / 現在進度 ================= */
+function setupCountdown(){
+  tick();
+  setInterval(tick, 30000);
+  function tick(){
+    const now = new Date();
+    const start = new Date(tripData.meta.departAt);
+    const end = new Date(tripData.meta.tripEndAt);
+    const cdValue = document.getElementById("cdValue");
+    const cdNote = document.getElementById("cdNote");
+    if(now < start){
+      const diff = start - now;
+      const days = Math.floor(diff/86400000);
+      const hours = Math.floor((diff%86400000)/3600000);
+      const mins = Math.floor((diff%3600000)/60000);
+      cdValue.innerHTML = `距離出發還有 <b>${days}</b>天 <b>${hours}</b>時 <b>${mins}</b>分`;
+      cdNote.textContent = `出發：${start.getMonth()+1}/${start.getDate()}（${"日一二三四五六"[start.getDay()]}） ${String(start.getHours()).padStart(2,"0")}:${String(start.getMinutes()).padStart(2,"0")} 抵達仙台機場`;
+    } else if(now >= start && now <= end){
+      cdValue.textContent = "🎉 旅程進行中！好好享受仙台吧";
+      cdNote.textContent = "";
+    } else {
+      cdValue.textContent = "旅程已結束，收假愉快 🍂";
+      cdNote.textContent = "";
     }
+  }
+}
+function highlightToday(){
+  document.querySelectorAll(".today-badge,.today-dot").forEach(el=>el.remove());
+  const todayStr = localDateStr(new Date());
+  const idx = tripData.days.findIndex(d=>d.date===todayStr);
+  if(idx<0) return;
+  const sec = document.getElementById(tripData.days[idx].id);
+  if(!sec) return;
+  const h3 = sec.querySelector(".day-head h3");
+  const badge = document.createElement("span"); badge.className="today-badge"; badge.textContent="今天";
+  h3.appendChild(badge);
+  const tab = document.querySelector(`.tab[data-target="${tripData.days[idx].id}"]`);
+  if(tab){ const dot=document.createElement("span"); dot.className="today-dot"; tab.appendChild(dot); }
+  markNowStop(sec);
+}
+function localDateStr(dt){
+  return dt.getFullYear()+"-"+String(dt.getMonth()+1).padStart(2,"0")+"-"+String(dt.getDate()).padStart(2,"0");
+}
+function markNowStop(sec){
+  const now = new Date(); const nowMin = now.getHours()*60+now.getMinutes();
+  let running=null, lastStarted=null;
+  sec.querySelectorAll(".stop").forEach(stop=>{
+    const t = stop.querySelector(".stop-time").textContent.trim();
+    const m = t.match(/(\d{1,2}):(\d{2})/);
+    if(!m) return;
+    const start = parseInt(m[1],10)*60+parseInt(m[2],10);
+    const end = start+60;
+    if(nowMin>=start) lastStarted=stop;
+    if(nowMin>=start && nowMin<end) running=stop;
+  });
+  const target = running||lastStarted;
+  if(target){
+    target.classList.add("now");
+    const chip = document.createElement("span"); chip.className="now-chip"; chip.textContent="現在";
+    target.querySelector(".stop-head").appendChild(chip);
+  }
+}
 
-    function addSpotPrompt() {
-      const title = prompt("新增行程名稱：");
-      if (!title) return;
-      const time = prompt("新增時間（如 14:00）：", "12:00");
-      scheduleData[currentDayIndex].spots.push({
-        time: time || "12:00",
-        title: title,
-        desc: "自訂行程",
-        type: "spot",
-        lat: 38.2601,
-        lng: 140.8824
+/* ================= 地圖（Leaflet + OSM） ================= */
+let leafletMap=null, layerGroups={hotel:null,spot:null,food:null,shop:null}, activeLayers={hotel:true,spot:true,food:true,shop:true};
+function initMap(){
+  leafletMap = L.map("map", {zoomControl:true}).setView([38.28,140.90], 10);
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    maxZoom:18, attribution:"&copy; OpenStreetMap contributors"
+  }).addTo(leafletMap);
+  Object.keys(layerGroups).forEach(k=> layerGroups[k]=L.layerGroup().addTo(leafletMap));
+  document.querySelectorAll(".layer-toggles button").forEach(btn=>{
+    btn.addEventListener("click", ()=>{
+      const k = btn.dataset.layer;
+      activeLayers[k] = !activeLayers[k];
+      btn.classList.toggle("active", activeLayers[k]);
+      if(activeLayers[k]) leafletMap.addLayer(layerGroups[k]); else leafletMap.removeLayer(layerGroups[k]);
+    });
+  });
+  document.getElementById("dayNavBtn").addEventListener("click", openCurrentDayNav);
+  updateMapMarkers();
+}
+function updateMapMarkers(){
+  if(!leafletMap) return;
+  Object.values(layerGroups).forEach(g=>g.clearLayers());
+  const bounds = [];
+  tripData.days.forEach(day=>{
+    day.items.forEach(item=>{
+      const layerKey = LAYER_OF[item.cat];
+      if(!layerKey) return;
+      const coord = COORDS[item.map] || COORDS[item.name];
+      if(!coord) return;
+      const marker = L.circleMarker(coord, {radius:7, color:"#3B2A1E", weight:1.5, fillColor:accentColorFor(day), fillOpacity:.85});
+      marker.bindPopup(`<b>${item.name}</b><br>${day.title}（${day.date}）<br><a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.map||item.name)}" target="_blank" rel="noopener">在 Google 地圖開啟</a>`);
+      marker.addTo(layerGroups[layerKey]);
+      bounds.push(coord);
+    });
+  });
+  if(bounds.length) leafletMap.fitBounds(bounds, {padding:[24,24]});
+}
+function accentColorFor(day){
+  const varName = DAY_COLORS[day.accentIdx % DAY_COLORS.length];
+  return getComputedStyle(document.documentElement).getPropertyValue(varName).trim() || "#4A7C93";
+}
+function openCurrentDayNav(){
+  const todayStr = localDateStr(new Date());
+  let day = tripData.days.find(d=>d.date===todayStr) || tripData.days[0];
+  const pts = day.items.map(it=>it.map||it.name).filter(Boolean);
+  if(pts.length<2){ alert("這天的地圖資訊不足，無法產生路線"); return; }
+  const origin = encodeURIComponent(pts[0]);
+  const dest = encodeURIComponent(pts[pts.length-1]);
+  const waypoints = pts.slice(1,-1).map(p=>encodeURIComponent(p)).join("|");
+  let url = `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${dest}`;
+  if(waypoints) url += `&waypoints=${waypoints}`;
+  window.open(url, "_blank", "noopener");
+}
+
+/* ================= 行李清單（localStorage，個人裝置） ================= */
+function loadPacking(){ try{ return JSON.parse(localStorage.getItem("sendai_packing")||"null"); }catch(e){ return null; } }
+function savePacking(list){ try{ localStorage.setItem("sendai_packing", JSON.stringify(list)); }catch(e){} }
+function renderPackingDefaultsIfNeeded(){
+  let list = loadPacking();
+  if(!list){ list = SEED.packing_defaults.map(t=>({text:t, checked:false})); savePacking(list); }
+  renderPacking(list);
+  document.getElementById("packingAddBtn").addEventListener("click", ()=>{
+    const input = document.getElementById("packingInput");
+    const v = input.value.trim(); if(!v) return;
+    const l = loadPacking()||[]; l.push({text:v, checked:false}); savePacking(l); renderPacking(l); input.value="";
+  });
+}
+function renderPacking(list){
+  const el = document.getElementById("packingList"); el.innerHTML="";
+  list.forEach((item, i)=>{
+    const row = document.createElement("label"); row.className="check-item";
+    row.innerHTML = `<input type="checkbox" ${item.checked?"checked":""}><span class="check-text">${item.text}</span><button type="button" class="del-btn">✕</button>`;
+    row.querySelector("input").addEventListener("change", (e)=>{
+      const l = loadPacking(); l[i].checked = e.target.checked; savePacking(l);
+    });
+    row.querySelector(".del-btn").addEventListener("click", (e)=>{
+      e.preventDefault(); const l = loadPacking(); l.splice(i,1); savePacking(l); renderPacking(l);
+    });
+    el.appendChild(row);
+  });
+}
+
+/* ================= 願望清單（Firebase 共同同步） ================= */
+let wishFilter = "all";
+function renderWishlist(){
+  const list = tripData.wishlist || SEED.wishlist_defaults.map(w=>({...w, checked:false}));
+  const el = document.getElementById("wishList"); el.innerHTML="";
+  list.forEach((item, i)=>{
+    if(wishFilter!=="all" && item.type!==wishFilter) return;
+    const row = document.createElement("label"); row.className="check-item";
+    const badge = item.type==="buy" ? "🛍️必買" : "✨願望";
+    row.innerHTML = `<input type="checkbox" ${item.checked?"checked":""}><span class="check-text">${badge}　${item.text}</span><button type="button" class="del-btn">✕</button>`;
+    row.querySelector("input").addEventListener("change", (e)=>{
+      const l = tripData.wishlist ? [...tripData.wishlist] : list.slice();
+      l[i] = {...l[i], checked:e.target.checked}; tripData.wishlist=l; saveWishlist(l);
+    });
+    row.querySelector(".del-btn").addEventListener("click", (e)=>{
+      e.preventDefault();
+      const l = (tripData.wishlist ? [...tripData.wishlist] : list.slice());
+      l.splice(i,1); tripData.wishlist=l; saveWishlist(l); renderWishlist();
+    });
+    el.appendChild(row);
+  });
+  if(!tripData.wishlist){ tripData.wishlist = list; saveWishlist(list); }
+}
+document.querySelectorAll("[data-wtab]").forEach(btn=>{
+  btn.addEventListener("click", ()=>{
+    document.querySelectorAll("[data-wtab]").forEach(b=>b.classList.remove("active"));
+    btn.classList.add("active"); wishFilter = btn.dataset.wtab; renderWishlist();
+  });
+});
+document.getElementById("wishAddBtn").addEventListener("click", ()=>{
+  const input = document.getElementById("wishInput");
+  const type = document.getElementById("wishType").value;
+  const v = input.value.trim(); if(!v) return;
+  const l = tripData.wishlist ? [...tripData.wishlist] : [];
+  l.push({text:v, type, checked:false});
+  tripData.wishlist = l; saveWishlist(l); renderWishlist(); input.value="";
+});
+
+/* ================= 匯率速算（免金鑰 API，失敗則用預設值） ================= */
+(function initFx(){
+  const jpyInput = document.getElementById("fxJpy");
+  const rateInput = document.getElementById("fxRate");
+  const rateLabel = document.getElementById("fxRateLabel");
+  const result = document.getElementById("fxResult");
+  const note = document.getElementById("fxRateNote");
+  let rate = 0.21;
+  try{ const saved = localStorage.getItem("sendai_fxrate"); if(saved) rate = parseFloat(saved); }catch(e){}
+  rateInput.value = rate; rateLabel.textContent = rate;
+  function calc(){
+    const j = parseFloat(jpyInput.value);
+    const r = parseFloat(rateInput.value);
+    result.textContent = (!isNaN(j) && !isNaN(r)) ? Math.round(j*r).toLocaleString()+" TWD" : "— TWD";
+  }
+  jpyInput.addEventListener("input", calc);
+  rateInput.addEventListener("input", ()=>{
+    rateLabel.textContent = rateInput.value;
+    try{ localStorage.setItem("sendai_fxrate", rateInput.value); }catch(e){}
+    calc();
+  });
+  fetch("https://api.frankfurter.app/latest?from=JPY&to=TWD").then(r=>r.json()).then(d=>{
+    if(d && d.rates && d.rates.TWD){
+      const live = Math.round(d.rates.TWD*10000)/10000;
+      note.textContent = `即時參考匯率 ${live}（可手動修改）`;
+      const hasSaved = (()=>{ try{ return !!localStorage.getItem("sendai_fxrate"); }catch(e){ return false; } })();
+      if(!hasSaved){ rateInput.value = live; rateLabel.textContent = live; calc(); }
+    }
+  }).catch(()=>{ note.textContent = "無法取得即時匯率，使用預設參考值"; });
+  calc();
+  document.getElementById("fxJump").addEventListener("click", ()=>{
+    document.getElementById("fxJpy").closest(".sketch-card").scrollIntoView({behavior:"smooth", block:"center"});
+    setTimeout(()=>jpyInput.focus(), 400);
+  });
+})();
+
+/* ================= 天氣（Open-Meteo，免金鑰） ================= */
+(function initWeather(){
+  const grid = document.getElementById("weatherGrid");
+  const lat=38.2683, lon=140.8694;
+  fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=weathercode,temperature_2m_max,temperature_2m_min&timezone=Asia%2FTokyo&start_date=2026-09-19&end_date=2026-09-26`)
+    .then(r=>r.json()).then(d=>{
+      if(!d.daily){ grid.innerHTML = `<div class="wx-card"><div class="wx-t">暫無資料</div></div>`; return; }
+      grid.innerHTML = "";
+      d.daily.time.forEach((date,i)=>{
+        const code = d.daily.weathercode[i];
+        const icon = wxIcon(code);
+        const dt = new Date(date+"T00:00:00");
+        const card = document.createElement("div"); card.className="wx-card";
+        card.innerHTML = `<div class="wx-d mono">${dt.getMonth()+1}/${dt.getDate()}</div><div class="wx-i">${icon}</div><div class="wx-t mono">${Math.round(d.daily.temperature_2m_max[i])}°/${Math.round(d.daily.temperature_2m_min[i])}°</div>`;
+        grid.appendChild(card);
       });
-      saveData();
-      renderCurrentDay();
-    }
+    }).catch(()=>{ grid.innerHTML = `<div class="wx-card"><div class="wx-t">載入失敗</div></div>`; });
+  function wxIcon(code){
+    if(code===0) return "☀️";
+    if([1,2].includes(code)) return "🌤️";
+    if(code===3) return "☁️";
+    if([45,48].includes(code)) return "🌫️";
+    if([51,53,55,56,57].includes(code)) return "🌦️";
+    if([61,63,65,80,81,82].includes(code)) return "🌧️";
+    if([71,73,75,77,85,86].includes(code)) return "🌨️";
+    if([95,96,99].includes(code)) return "⛈️";
+    return "🌡️";
+  }
+})();
 
-    // ==========================================
-    // 6. 氣象與匯率 API
-    // ==========================================
-    async function fetchWeather() {
-      try {
-        const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=38.2682&longitude=140.8719&current_weather=true');
-        const data = await res.json();
-        const weather = data.current_weather;
-        document.getElementById('weatherInfo').innerText = `🌡️ ${weather.temperature}°C (風速 ${weather.windspeed} km/h)`;
-      } catch (e) {
-        document.getElementById('weatherInfo').innerText = "無法載入天氣";
-      }
-    }
+/* ================= 回到頂部 ================= */
+(function(){
+  const btn = document.getElementById("backTop");
+  window.addEventListener("scroll", ()=> btn.classList.toggle("show", window.scrollY>600), {passive:true});
+  btn.addEventListener("click", ()=> window.scrollTo({top:0, behavior:"smooth"}));
+})();
 
-    async function calcExchange() {
-      const jpy = document.getElementById('jpyInput').value;
-      try {
-        const res = await fetch('https://open.er-api.com/v6/latest/JPY');
-        const data = await res.json();
-        const rate = data.rates.TWD;
-        const twd = (jpy * rate).toFixed(0);
-        document.getElementById('twdResult').innerText = `= NT$ ${twd} (匯率 ~${rate.toFixed(3)})`;
-      } catch (e) {
-        document.getElementById('twdResult').innerText = `= NT$ ${(jpy * 0.215).toFixed(0)}`;
-      }
-    }
+/* ================= PWA：註冊 service worker ================= */
+if("serviceWorker" in navigator){
+  window.addEventListener("load", ()=>{
+    navigator.serviceWorker.register("sw.js").catch(e=>console.warn("SW 註冊失敗", e));
+  });
+}
 
-    // ==========================================
-    // 7. 隨手勾選清單
-    // ==========================================
-    let checklist = JSON.parse(localStorage.getItem('sendai_checklist')) || [
-      { text: "護照 / 網卡 / 西瓜卡", done: false },
-      { text: "日幣現金 (盧葡兒巴士需現金)", done: false },
-      { text: "保暖外套 (藏王御釜較冷)", done: false }
-    ];
-
-    function renderChecklist() {
-      const container = document.getElementById("checklist");
-      container.innerHTML = checklist.map((item, idx) => `
-        <div class="list-item ${item.done ? 'done' : ''}">
-          <input type="checkbox" ${item.done ? 'checked' : ''} onchange="toggleCheck(${idx})">
-          <span style="flex:1">${item.text}</span>
-          <button class="btn-sm btn-edit" onclick="removeCheckItem(${idx})">🗑️</button>
-        </div>
-      `).join('');
-    }
-
-    function toggleCheck(idx) {
-      checklist[idx].done = !checklist[idx].done;
-      localStorage.setItem('sendai_checklist', JSON.stringify(checklist));
-      renderChecklist();
-    }
-
-    function addChecklistItem() {
-      const input = document.getElementById("newItemText");
-      if(!input.value) return;
-      checklist.push({ text: input.value, done: false });
-      input.value = "";
-      localStorage.setItem('sendai_checklist', JSON.stringify(checklist));
-      renderChecklist();
-    }
-
-    function removeCheckItem(idx) {
-      checklist.splice(idx, 1);
-      localStorage.setItem('sendai_checklist', JSON.stringify(checklist));
-      renderChecklist();
-    }
-
-    // 啟動頁面
-    window.onload = () => {
-      init();
-      renderChecklist();
-    };
-
-    // PWA Service Worker (網絡優先網絡策略)
-    if ('serviceWorker' in navigator) {
-      const swCode = `
-        self.addEventListener('fetch', event => {
-          event.respondWith(
-            fetch(event.request).catch(() => caches.match(event.request))
-          );
-        });
-      `;
-      const blob = new Blob([swCode], { type: 'application/javascript' });
-      navigator.serviceWorker.register(URL.createObjectURL(blob));
-    }
-  </script>
+/* ================= 啟動 ================= */
+startApp();
+</script>
 </body>
 </html>
