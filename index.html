@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>仙台夏日行程 · 9/19–9/26</title>
 <meta name="description" content="五人仙台自由行協作行程表">
-<meta name="theme-color" content="#3F6E7A">
+<meta name="theme-color" content="#0D4A66">
 <link rel="manifest" href="./manifest.json">
 <link rel="icon" href="./icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="./icon.svg">
@@ -19,23 +19,23 @@
 
 <style>
   :root{
-    --paper:#F3EAD3;
-    --paper-card:#FBF6E9;
-    --ink:#2C3B45;
-    --ink-soft:#4C5F6B;
-    --sea:#3F6E7A;
-    --sea-deep:#2A4A54;
-    --sky:#7FBAC4;
-    --sun:#E4692F;
-    --sun-deep:#C6541F;
-    --green:#7C9463;
-    --gold:#C99A3E;
-    --line:#D9C9A3;
-    --danger:#B4483C;
+    --paper:#F4FAFC;
+    --paper-card:#FFFFFF;
+    --ink:#0F3049;
+    --ink-soft:#5A7688;
+    --sea:#1C7EA5;
+    --sea-deep:#0D4A66;
+    --sky:#8FD8E3;
+    --sun:#00A6B8;
+    --sun-deep:#00838F;
+    --green:#5FA88F;
+    --gold:#E3DEC9;
+    --line:#D7E6EC;
+    --danger:#C0392B;
     --radius-lg:22px;
     --radius-md:14px;
     --radius-sm:9px;
-    --shadow-card:0 3px 0 rgba(44,59,69,0.08), 0 10px 24px -14px rgba(44,59,69,0.35);
+    --shadow-card:0 3px 0 rgba(15,48,73,0.06), 0 10px 24px -14px rgba(15,48,73,0.28);
     --font-display:'Zen Maru Gothic', sans-serif;
     --font-body:'Noto Sans TC','Noto Sans JP',sans-serif;
   }
@@ -44,8 +44,8 @@
   html,body{margin:0;padding:0;}
   body{
     background:
-      radial-gradient(circle at 12% 8%, rgba(127,186,196,0.35), transparent 40%),
-      radial-gradient(circle at 90% 4%, rgba(228,105,47,0.15), transparent 45%),
+      radial-gradient(circle at 12% 8%, rgba(143,216,227,0.45), transparent 40%),
+      radial-gradient(circle at 90% 4%, rgba(28,126,165,0.14), transparent 45%),
       var(--paper);
     color:var(--ink);
     font-family:var(--font-body);
@@ -62,24 +62,30 @@
 
   h1,h2,h3{font-family:var(--font-display); margin:0; color:var(--ink);}
 
-  /* ---------- sprocket strip ---------- */
-  .sprockets{
-    display:flex;
-    justify-content:space-between;
-    padding:6px 14px;
-    background:var(--ink);
+  /* ---------- seigaiha (青海波) wave strip ---------- */
+  .wave-strip{
+    height:26px;
+    background-color:var(--ink);
+    background-image:
+      radial-gradient(circle at 0 13px, transparent 8px, var(--gold) 9px, var(--gold) 11px, transparent 12px),
+      radial-gradient(circle at 26px 13px, transparent 8px, var(--gold) 9px, var(--gold) 11px, transparent 12px),
+      radial-gradient(circle at 13px 0, transparent 8px, var(--gold) 9px, var(--gold) 11px, transparent 12px);
+    background-size:26px 26px;
   }
-  .sprockets span{
-    width:8px;height:8px;border-radius:2px;
-    background:var(--paper);
-    opacity:.55;
+
+  /* ---------- fixed top group: header + utility bar + day nav ---------- */
+  .top-fixed{
+    position:sticky;
+    top:0;
+    z-index:40;
+    box-shadow:0 8px 18px -10px rgba(15,48,73,0.35);
   }
 
   /* ---------- header ---------- */
   header.top{
     background:linear-gradient(160deg, var(--sea) 0%, var(--sea-deep) 100%);
     color:var(--paper-card);
-    padding:18px 18px 16px;
+    padding:14px 18px 13px;
     position:relative;
     overflow:hidden;
   }
@@ -87,7 +93,7 @@
     content:"";
     position:absolute; right:-40px; bottom:-60px;
     width:180px;height:180px;border-radius:50%;
-    background:radial-gradient(circle, rgba(228,105,47,0.35), transparent 70%);
+    background:radial-gradient(circle, rgba(143,216,227,0.4), transparent 70%);
   }
   .trip-title{
     font-size:1.5rem;
@@ -122,9 +128,9 @@
   .utility-bar{
     display:flex;
     gap:8px;
-    padding:12px 14px;
+    padding:9px 14px;
     background:var(--paper);
-    border-bottom:1px dashed var(--line);
+    border-bottom:1px solid var(--line);
     overflow-x:auto;
   }
   .util-toggle{
@@ -153,6 +159,8 @@
     padding:14px 16px 18px;
     background:var(--paper-card);
     border-bottom:1px solid var(--line);
+    max-height:44vh;
+    overflow-y:auto;
   }
   .util-panel.open{display:block;}
 
@@ -204,7 +212,7 @@
   .day-nav{
     display:flex;
     gap:8px;
-    padding:12px 14px;
+    padding:10px 14px;
     overflow-x:auto;
     background:var(--sea-deep);
     scroll-snap-type:x proximity;
@@ -232,7 +240,7 @@
     border-color:var(--sun-deep);
     color:#fff;
   }
-  .day-chip.active .fno{color:#FBD9C4;}
+  .day-chip.active .fno{color:#DFF9FB;}
 
   /* ---------- trip info card ---------- */
   .wrap{max-width:640px; margin:0 auto; padding:16px;}
@@ -268,7 +276,7 @@
   }
 
   /* ---------- day section ---------- */
-  .day-section{scroll-margin-top:12px; margin-bottom:26px;}
+  .day-section{scroll-margin-top:var(--sticky-offset, 190px); margin-bottom:26px;}
   .day-head{
     display:flex; align-items:baseline; gap:10px; margin-bottom:12px; padding-left:2px;
   }
@@ -367,7 +375,7 @@
 
   /* ---------- modal ---------- */
   .sheet-backdrop{
-    position:fixed; inset:0; background:rgba(44,59,69,0.45);
+    position:fixed; inset:0; background:rgba(15,48,73,0.45);
     display:none; align-items:flex-end; justify-content:center;
     z-index:50;
   }
@@ -419,6 +427,24 @@
     text-align:center; font-size:.72rem; color:var(--ink-soft); padding:20px 16px 6px;
   }
 
+  .back-to-top{
+    position:fixed;
+    right:16px;
+    bottom:calc(16px + env(safe-area-inset-bottom));
+    width:48px;height:48px;
+    border-radius:50%;
+    background:var(--sun);
+    color:#fff;
+    border:2px solid var(--paper-card);
+    box-shadow:0 8px 18px -4px rgba(15,48,73,0.4);
+    font-size:1.3rem;
+    line-height:1;
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;
+    z-index:60;
+  }
+  .back-to-top:active{background:var(--sun-deep);}
+
   @media (min-width:560px){
     .info-grid{grid-template-columns:1fr 1fr;}
   }
@@ -430,80 +456,52 @@
 </head>
 <body>
 
-<div class="sprockets" aria-hidden="true">
-  <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
-  <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
-</div>
+<div class="top-fixed">
+  <div class="wave-strip" aria-hidden="true"></div>
 
-<header class="top">
-  <div class="trip-title"><span class="accent">仙台</span>夏日行</div>
-  <div class="trip-sub">
-    <span id="hdrDateRange">9/19 – 9/26</span>
-    <span id="connIndicator" class="conn-dot offline"><i></i>連線中…</span>
-  </div>
-</header>
-
-<!-- Utility bar -->
-<div class="utility-bar">
-  <button class="util-toggle" id="toggleFx" aria-expanded="false"><span class="ico">💴</span>匯率換算</button>
-  <button class="util-toggle" id="toggleWx" aria-expanded="false"><span class="ico">🌤️</span>仙台天氣</button>
-</div>
-
-<div class="util-panel" id="fxPanel">
-  <div class="fx-row">
-    <div class="fx-field">
-      <label for="fxFrom">從</label>
-      <input type="number" id="fxAmount" value="1000" inputmode="decimal">
-      <select id="fxFrom"></select>
+  <header class="top">
+    <div class="trip-title"><span class="accent">仙台</span>夏日行</div>
+    <div class="trip-sub">
+      <span>9/19 – 9/26</span>
+      <span id="connIndicator" class="conn-dot offline"><i></i>連線中…</span>
     </div>
-    <button class="fx-swap" id="fxSwap" title="交換幣別" type="button">⇄</button>
-    <div class="fx-field">
-      <label for="fxTo">換成</label>
-      <input type="text" id="fxResult" readonly>
-      <select id="fxTo"></select>
+  </header>
+
+  <!-- Utility bar -->
+  <div class="utility-bar">
+    <button class="util-toggle" id="toggleFx" aria-expanded="false"><span class="ico">💴</span>匯率換算</button>
+    <button class="util-toggle" id="toggleWx" aria-expanded="false"><span class="ico">🌤️</span>仙台天氣</button>
+  </div>
+
+  <div class="util-panel" id="fxPanel">
+    <div class="fx-row">
+      <div class="fx-field">
+        <label for="fxFrom">從</label>
+        <input type="number" id="fxAmount" value="1000" inputmode="decimal">
+        <select id="fxFrom"></select>
+      </div>
+      <button class="fx-swap" id="fxSwap" title="交換幣別" type="button">⇄</button>
+      <div class="fx-field">
+        <label for="fxTo">換成</label>
+        <input type="text" id="fxResult" readonly>
+        <select id="fxTo"></select>
+      </div>
     </div>
+    <div class="fx-note" id="fxUpdated">即時匯率讀取中…</div>
   </div>
-  <div class="fx-note" id="fxUpdated">即時匯率讀取中…</div>
-</div>
 
-<div class="util-panel" id="wxPanel">
-  <div class="weather-grid" id="weatherGrid">
-    <div class="weather-cell"><div class="wd">讀取中</div></div>
+  <div class="util-panel" id="wxPanel">
+    <div class="weather-grid" id="weatherGrid">
+      <div class="weather-cell"><div class="wd">讀取中</div></div>
+    </div>
+    <div class="fx-note">資料來源：Open-Meteo（免金鑰），僅未來 16 天內提供實際預報</div>
   </div>
-  <div class="fx-note">資料來源：Open-Meteo（免金鑰），僅未來 16 天內提供實際預報</div>
-</div>
 
-<!-- Day navigation -->
-<nav class="day-nav" id="dayNav" aria-label="行程天數"></nav>
+  <!-- Day navigation -->
+  <nav class="day-nav" id="dayNav" aria-label="行程天數"></nav>
+</div>
 
 <div class="wrap">
-
-  <!-- Trip info -->
-  <section class="card">
-    <h2>旅程資訊 <span class="tag">可編輯</span></h2>
-    <div class="info-grid">
-      <div class="info-item">
-        <span class="k">目的地</span>
-        <div contenteditable="true" id="infoDestination" data-path="tripInfo/destination"></div>
-      </div>
-      <div class="info-item">
-        <span class="k">日期</span>
-        <div contenteditable="true" id="infoDates" data-path="tripInfo/dateRange"></div>
-      </div>
-      <div class="info-item">
-        <span class="k">成員</span>
-        <div contenteditable="true" id="infoMembers" data-path="tripInfo/members"></div>
-      </div>
-      <div class="info-item">
-        <span class="k">住宿</span>
-        <div contenteditable="true" id="infoHotels" data-path="tripInfo/hotels"></div>
-      </div>
-      <div class="info-item" style="grid-column:1/-1">
-        <span class="k">航班</span>
-        <div contenteditable="true" id="infoFlights" data-path="tripInfo/flights"></div>
-      </div>
-    </div>
-  </section>
 
   <div id="daysContainer"></div>
 
@@ -512,6 +510,8 @@
 <footer class="app-footer">
   仙台夏日行 · 內容由所有持有連結的成員共同即時編輯
 </footer>
+
+<button class="back-to-top" id="backToTop" title="回到最上方" type="button">↑</button>
 
 <!-- Edit / Add item sheet -->
 <div class="sheet-backdrop" id="sheetBackdrop">
@@ -566,14 +566,6 @@ const db = firebase.database();
    種子資料：僅在資料庫「days」節點完全不存在時（例如全新的 Firebase 專案）
    寫入一次，之後所有內容一律以 Firebase 上的即時資料為準。
 --------------------------------------------------------------------- */
-const SEED_TRIP_INFO = {
-  destination: "仙台遊",
-  dateRange: "9/19（六）～9/26（六）",
-  members: "5 人",
-  hotels: "共 2 間：Hotel Grand Bach Sendai、ホテル京阪（各幾晚，待確認）",
-  flights: "去程 / 回程班機資訊待補（回程 9/26 19:00 飛機）"
-};
-
 const SEED_DAYS = {
   day1: { order:1, date:"9/19（六）", label:"第一天", items:{
     i1:{order:1, time:"18:10", title:"抵達仙台機場", note:""},
@@ -663,38 +655,6 @@ db.ref('days').once('value').then((snap) => {
   if (!snap.exists()) {
     db.ref('days').set(SEED_DAYS);
   }
-});
-db.ref('tripInfo').once('value').then((snap) => {
-  if (!snap.exists()) {
-    db.ref('tripInfo').set(SEED_TRIP_INFO);
-  }
-});
-
-/* ---------------------------------------------------------------------
-   旅程資訊：可編輯欄位，雙向同步
---------------------------------------------------------------------- */
-function bindEditableField(elId, path) {
-  const el = document.getElementById(elId);
-  db.ref(path).on('value', (snap) => {
-    if (document.activeElement === el) return; // 使用者正在打字時不要覆蓋
-    const val = snap.val();
-    el.textContent = val || '';
-  });
-  const save = () => db.ref(path).set(el.textContent.trim());
-  el.addEventListener('blur', save);
-  el.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') { e.preventDefault(); el.blur(); }
-  });
-}
-bindEditableField('infoDestination', 'tripInfo/destination');
-bindEditableField('infoDates', 'tripInfo/dateRange');
-bindEditableField('infoMembers', 'tripInfo/members');
-bindEditableField('infoHotels', 'tripInfo/hotels');
-bindEditableField('infoFlights', 'tripInfo/flights');
-
-db.ref('tripInfo/dateRange').on('value', (snap) => {
-  const v = snap.val();
-  if (v) document.getElementById('hdrDateRange').textContent = v;
 });
 
 /* ---------------------------------------------------------------------
@@ -904,10 +864,24 @@ function setupToggle(btnId, panelId, otherBtnId, otherPanelId) {
       document.getElementById(otherPanelId).classList.remove('open');
       document.getElementById(otherBtnId).setAttribute('aria-expanded', 'false');
     }
+    updateStickyOffset();
   });
 }
 setupToggle('toggleFx','fxPanel','toggleWx','wxPanel');
 setupToggle('toggleWx','wxPanel','toggleFx','fxPanel');
+
+/* ---------------------------------------------------------------------
+   固定頂部區塊（標題＋匯率天氣列＋天數選單）高度會隨面板展開而變動，
+   即時量測並寫入 CSS 變數，讓下方各天內容捲動定位時不會被蓋住
+--------------------------------------------------------------------- */
+function updateStickyOffset() {
+  const topFixed = document.querySelector('.top-fixed');
+  if (!topFixed) return;
+  document.documentElement.style.setProperty('--sticky-offset', topFixed.offsetHeight + 12 + 'px');
+}
+window.addEventListener('load', updateStickyOffset);
+window.addEventListener('resize', updateStickyOffset);
+setTimeout(updateStickyOffset, 300);
 
 /* ---------------------------------------------------------------------
    匯率換算（Open Exchange Rates 免金鑰公開端點）
@@ -1015,6 +989,13 @@ async function loadWeather() {
   }
 }
 loadWeather();
+
+/* ---------------------------------------------------------------------
+   回到最上方
+--------------------------------------------------------------------- */
+document.getElementById('backToTop').addEventListener('click', () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
 
 /* ---------------------------------------------------------------------
    PWA：註冊 Service Worker
