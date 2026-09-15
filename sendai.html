@@ -19,7 +19,16 @@ import {initializeApp} from 'https://www.gstatic.com/firebasejs/10.12.2/firebase
 import {getDatabase,ref,onValue,runTransaction,set} from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js';
 
 // 請將下方物件完整替換為你的 Firebase 專案設定。
-const firebaseConfig={apiKey:'PASTE_YOUR_API_KEY',authDomain:'PASTE_YOUR_PROJECT.firebaseapp.com',databaseURL:'https://PASTE_YOUR_PROJECT-default-rtdb.firebaseio.com',projectId:'PASTE_YOUR_PROJECT',storageBucket:'PASTE_YOUR_PROJECT.appspot.com',messagingSenderId:'PASTE_YOUR_SENDER_ID',appId:'PASTE_YOUR_APP_ID'};
+const firebaseConfig = {
+  apiKey: "AIzaSyDxMwkCU23PB6Q60r3TWEu3elG00r4ywM0",
+  authDomain: "sendai-6666.firebaseapp.com",
+  databaseURL: "https://sendai-6666-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "sendai-6666",
+  storageBucket: "sendai-6666.firebasestorage.app",
+  messagingSenderId: "317293713360",
+  appId: "1:317293713360:web:e3d5175a54ae43c801cbd5",
+  measurementId: "G-Y1EH4G7745"
+};
 const initial=[
 ['9/19','六','第一天',[['18:10','抵達仙台機場',''],['19:00','搭仙台機場 Access 線','可能搭 19:00／19:28\n行李只能放腳邊，有點擠；下車時要自己按開關打開門\n只能刷西瓜卡進站，或機器買票選 660 円\n抵達 3／4 號月台，手扶梯到二樓，左手邊東口改札'],['19:27','抵達仙台車站','步行去飯店'],['19:45','Hotel Grand Bach Sendai','步行 10 分，CHECK IN 放行李'],['20:10','晚餐｜たんや善治郎 南町通り店','步行 15 分，這間人潮較少']]],
 ['9/20','日','第二天',[['07:15','大廳寄行李＋早餐',''],['08:20','LOOPLE 盧葡兒仙台觀光巴士','買一日券 630 円（現金）。早點到，第一班 09:00 人潮應該就很多'],['09:13','瑞鳳殿','停留 1H；班次 10:13／10:28／10:43'],['10:28','仙台城跡','停留 30M；11:08／11:23，一定要搭到這班，不然得搭計程車回來'],['12:07','回到仙台車站','先走路過去晃晃，6 分'],['12:45','中餐｜仔虎燒肉站前店',''],['14:15','逛街',''],['18:00','晚餐｜札幌螃蟹本家 仙台店','']]],
