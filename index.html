@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>仙台遊 9/19-9/26</title>
 <meta name="description" content="仙台自由行協作行程表，多人即時共同編輯">
-<meta name="theme-color" content="#ECE5D6">
+<meta name="theme-color" content="#F4EEDF">
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
@@ -14,20 +14,31 @@
 <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --paper: #ECE5D6;
-    --paper-deep: #E1D8C4;
-    --paper-card: #F4EFE3;
-    --ink: #2B2822;
-    --ink-soft: #6B6659;
-    --ink-faint: #A69C87;
-    --line: #C9BEA4;
-    --indigo: #4B5B63;
-    --indigo-soft: #7C8D93;
-    --clay: #93604A;
-    --gold: #A07A2E;
-    --moss: #6C7A57;
-    --shadow: 0 1px 0 rgba(43,40,34,.06);
-    --radius: 3px;
+    --sand: #F4EEDF;
+    --sand-deep: #EBE2C9;
+    --card: #FFFDF6;
+    --ink: #2C2A22;
+    --ink-soft: #6B6656;
+    --ink-faint: #A79E85;
+    --line: #E1D6B8;
+    --sea-deep: #23566A;
+    --sea: #3D7C93;
+    --sea-light: #8AB2BE;
+    --sea-pale: #E3EFF1;
+    --sun: #C48A2E;
+    --sun-pale: #F7ECD6;
+    --coral: #B4633F;
+    --coral-pale: #F6E8DF;
+    --plum: #7C6A8E;
+    --plum-pale: #EFE9F2;
+    --gold: #A98429;
+    --gold-pale: #F5EDD9;
+    --rose: #A65C6B;
+    --rose-pale: #F5E4E6;
+    --amber: #B8791E;
+    --amber-pale: #FBEBD0;
+    --shadow: 0 1px 2px rgba(35,86,106,.08);
+    --radius: 12px;
     --serif: 'Shippori Mincho', 'Noto Serif TC', serif;
     --sans: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, 'PingFang TC', 'Microsoft JhengHei', sans-serif;
     --safe-b: env(safe-area-inset-bottom, 0px);
@@ -40,306 +51,225 @@
     margin:0;
     font-family:var(--sans);
     color:var(--ink);
-    background:
-      radial-gradient(ellipse at 15% 0%, rgba(255,255,255,.35), transparent 55%),
-      radial-gradient(ellipse at 100% 30%, rgba(0,0,0,.03), transparent 45%),
-      var(--paper);
+    background:var(--sand);
     min-height:100vh;
     line-height:1.6;
     -webkit-font-smoothing:antialiased;
   }
-
-  ::selection{ background:var(--gold); color:var(--paper); }
-
+  ::selection{ background:var(--sea); color:#fff; }
   a{ color:inherit; }
+  button{ font-family:inherit; -webkit-tap-highlight-color:transparent; }
 
-  button{
-    font-family:inherit;
-    -webkit-tap-highlight-color:transparent;
-  }
-
-  /* ---------- 紙紋質感（極輕量，用漸層模擬，不用外部圖檔）---------- */
-  .grain{
-    position:fixed; inset:0; pointer-events:none; z-index:0; opacity:.5; mix-blend-mode:multiply;
-    background-image:
-      repeating-linear-gradient(115deg, rgba(43,40,34,.015) 0px, rgba(43,40,34,.015) 1px, transparent 1px, transparent 3px),
-      repeating-linear-gradient(25deg, rgba(43,40,34,.012) 0px, rgba(43,40,34,.012) 1px, transparent 1px, transparent 4px);
+  /* ---------- 青海波底紋（輕量 SVG 重複圖案，用在頁首背景）---------- */
+  .wave-bg{
+    position:fixed; inset:0; pointer-events:none; z-index:0; opacity:.55;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='32'%3E%3Cpath d='M0 24 Q16 8 32 24 T64 24' fill='none' stroke='%233D7C93' stroke-opacity='0.07' stroke-width='2'/%3E%3Cpath d='M0 30 Q16 14 32 30 T64 30' fill='none' stroke='%233D7C93' stroke-opacity='0.05' stroke-width='2'/%3E%3C/svg%3E");
+    background-size:64px 32px;
   }
 
   /* ---------- 頁首 ---------- */
   header.topbar{
     position:sticky; top:0; z-index:30;
     padding:calc(14px + var(--safe-t)) 20px 12px;
-    background:var(--paper);
+    background:linear-gradient(180deg, var(--sand) 60%, rgba(244,238,223,.92));
     border-bottom:1px solid var(--line);
-  }
-  header.topbar::after{
-    content:"";
-    position:absolute; left:0; right:0; bottom:-6px; height:6px;
-    background:
-      linear-gradient(90deg, transparent 0%, rgba(43,40,34,.05) 8%, transparent 16%,
-      transparent 30%, rgba(43,40,34,.04) 38%, transparent 46%,
-      transparent 62%, rgba(43,40,34,.05) 70%, transparent 78%);
   }
   .title-row{ display:flex; align-items:baseline; justify-content:space-between; gap:10px; }
   h1{
-    font-family:var(--serif);
-    font-weight:700;
-    font-size:22px;
-    letter-spacing:.04em;
-    margin:0;
-    display:flex; align-items:baseline; gap:10px; flex-wrap:wrap;
+    font-family:var(--serif); font-weight:700; font-size:21px; letter-spacing:.03em; margin:0;
+    display:flex; align-items:baseline; gap:9px; flex-wrap:wrap; color:var(--sea-deep);
   }
-  h1 .dates{
-    font-family:var(--sans);
-    font-weight:500;
-    font-size:13px;
-    color:var(--ink-soft);
-    letter-spacing:.02em;
-  }
+  h1 .wave-ic{ font-size:17px; }
+  h1 .dates{ font-family:var(--sans); font-weight:500; font-size:12.5px; color:var(--ink-soft); }
   .sync-pill{
-    flex:none;
-    font-size:11px;
-    color:var(--ink-soft);
+    flex:none; font-size:11px; color:var(--ink-soft);
     display:flex; align-items:center; gap:5px;
-    padding:4px 9px;
-    border:1px solid var(--line);
-    border-radius:999px;
-    background:var(--paper-card);
+    padding:4px 9px; border:1px solid var(--line); border-radius:999px; background:var(--card);
     white-space:nowrap;
   }
   .sync-dot{ width:6px; height:6px; border-radius:50%; background:var(--ink-faint); flex:none; }
-  .sync-pill.live .sync-dot{ background:var(--moss); box-shadow:0 0 0 3px rgba(108,122,87,.18); }
-  .sync-pill.local .sync-dot{ background:var(--clay); }
+  .sync-pill.live .sync-dot{ background:var(--sea); box-shadow:0 0 0 3px rgba(61,124,147,.18); }
+  .sync-pill.local .sync-dot{ background:var(--coral); }
 
   /* ---------- 日期分頁 ---------- */
   nav.daytabs{
-    position:sticky; top:calc(56px + var(--safe-t)); z-index:29;
+    position:sticky; top:calc(54px + var(--safe-t)); z-index:29;
     display:flex; gap:8px; overflow-x:auto;
-    padding:10px 16px 12px;
-    background:var(--paper);
-    border-bottom:1px solid var(--line);
+    padding:10px 16px 12px; background:var(--sand); border-bottom:1px solid var(--line);
     scrollbar-width:none;
   }
   nav.daytabs::-webkit-scrollbar{ display:none; }
   .tab{
-    flex:none;
-    font-family:var(--serif);
-    font-size:13px;
-    color:var(--ink-soft);
-    background:var(--paper-card);
-    border:1px solid var(--line);
-    border-radius:2px;
-    padding:7px 12px 6px;
-    cursor:pointer;
-    position:relative;
-    display:flex; flex-direction:column; align-items:center; gap:1px;
-    line-height:1.25;
-    transition:color .15s ease, border-color .15s ease;
+    flex:none; font-family:var(--serif); font-size:13px; color:var(--ink-soft);
+    background:var(--card); border:1px solid var(--line); border-radius:10px;
+    padding:7px 12px 6px; cursor:pointer; position:relative;
+    display:flex; flex-direction:column; align-items:center; gap:1px; line-height:1.25;
+    transition:color .15s ease, border-color .15s ease, background .15s ease;
   }
   .tab .n{ font-size:10px; letter-spacing:.12em; color:var(--ink-faint); }
-  .tab.active{
-    color:var(--ink);
-    border-color:var(--ink);
-    background:var(--paper-deep);
-  }
-  .tab.active::after{
-    content:"";
-    position:absolute; left:50%; bottom:-7px; transform:translateX(-50%);
-    width:4px; height:4px; border-radius:50%;
-    background:var(--gold);
-  }
+  .tab.active{ color:#fff; border-color:var(--sea-deep); background:var(--sea); }
+  .tab.active .n{ color:rgba(255,255,255,.75); }
 
   /* ---------- 主體 ---------- */
   main{ max-width:640px; margin:0 auto; padding:22px 16px calc(120px + var(--safe-b)); position:relative; z-index:1; }
 
-  .day-section{ margin-bottom:40px; scroll-margin-top:118px; }
-  .day-head{ margin-bottom:18px; padding-left:2px; }
-  .day-head .d-label{
-    font-family:var(--serif); font-size:12px; letter-spacing:.18em; color:var(--indigo);
-  }
-  .day-head h2{
-    font-family:var(--serif); font-weight:600; font-size:19px; margin:3px 0 0;
-    letter-spacing:.02em;
-  }
+  .day-section{ margin-bottom:38px; scroll-margin-top:116px; }
+  .day-head{ margin-bottom:16px; padding-left:2px; }
+  .day-head .d-label{ font-family:var(--serif); font-size:12px; letter-spacing:.16em; color:var(--sea); }
+  .day-head h2{ font-family:var(--serif); font-weight:600; font-size:18px; margin:3px 0 0; color:var(--ink); }
 
   .timeline{ position:relative; list-style:none; margin:0; padding:0 0 0 2px; }
   .timeline::before{
-    content:"";
-    position:absolute; left:52px; top:6px; bottom:6px; width:1px;
-    background:linear-gradient(var(--line), var(--line) 92%, transparent);
+    content:""; position:absolute; left:46px; top:6px; bottom:6px; width:2px;
+    background:linear-gradient(var(--sea-light), var(--sea-light) 92%, transparent);
+    border-radius:2px;
   }
 
-  .item{
-    position:relative;
-    display:grid;
-    grid-template-columns:44px 1fr;
-    column-gap:14px;
-    padding:9px 0;
-    touch-action:pan-y;
-  }
-  .item.dragging{ opacity:.55; }
-  .item.drag-over-before{ box-shadow: inset 0 2px 0 var(--gold); }
-  .item.drag-over-after{ box-shadow: inset 0 -2px 0 var(--gold); }
+  .item{ position:relative; display:grid; grid-template-columns:38px 1fr; column-gap:12px; padding:8px 0; touch-action:pan-y; }
+  .item.dragging{ opacity:.5; }
+  .item.drag-over-before{ box-shadow: inset 0 2px 0 var(--sun); }
+  .item.drag-over-after{ box-shadow: inset 0 -2px 0 var(--sun); }
 
-  .item .time{
-    font-family:var(--serif);
-    font-size:13px;
-    color:var(--ink-soft);
-    padding-top:9px;
-    text-align:right;
-    white-space:nowrap;
-  }
-  .item .time.empty{ color:var(--ink-faint); }
+  .item .time{ font-family:var(--serif); font-size:12.5px; font-weight:600; color:var(--sea-deep); padding-top:14px; text-align:right; white-space:nowrap; }
+  .item .time.empty{ color:var(--ink-faint); font-weight:400; }
   .item .dot{
-    position:absolute; left:52px; top:15px; width:7px; height:7px; margin-left:-3.5px;
-    border-radius:50%; background:var(--paper); border:1.5px solid var(--indigo);
+    position:absolute; left:46px; top:19px; width:9px; height:9px; margin-left:-5px;
+    border-radius:50%; background:var(--card); border:2px solid var(--sea);
   }
 
   .card{
-    background:var(--paper-card);
-    border:1px solid var(--line);
-    border-radius:var(--radius);
-    padding:10px 12px 9px 14px;
-    box-shadow:var(--shadow);
+    background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
+    padding:13px 14px 12px; box-shadow:var(--shadow); position:relative;
   }
-  .card .row1{ display:flex; align-items:flex-start; gap:8px; }
   .card .grip{
-    flex:none; cursor:grab; color:var(--ink-faint); font-size:15px; line-height:1;
-    padding:3px 2px 3px 0; margin-top:1px; touch-action:none; user-select:none;
-    letter-spacing:-1px;
+    position:absolute; top:10px; right:10px; cursor:grab; color:var(--ink-faint); font-size:14px;
+    line-height:1; padding:3px; touch-action:none; user-select:none;
   }
   .card .grip:active{ cursor:grabbing; }
-  .card h3{
-    font-family:var(--serif); font-weight:600; font-size:15px; margin:0; flex:1;
-    letter-spacing:.01em;
+
+  .badges{ display:flex; flex-wrap:wrap; gap:6px; margin-bottom:9px; padding-right:20px; }
+  .badge{
+    display:inline-flex; align-items:center; gap:4px; font-size:11px; font-weight:700;
+    padding:4px 10px; border-radius:999px; white-space:nowrap;
   }
-  .card .desc{
-    font-size:12.5px; color:var(--ink-soft); margin:5px 0 0 0; line-height:1.65;
-    white-space:pre-line;
+  .badge.status{ background:var(--amber-pale); color:var(--amber); }
+  .badge.cat-transport{ background:var(--sea-pale); color:var(--sea-deep); }
+  .badge.cat-stay{ background:var(--plum-pale); color:var(--plum); }
+  .badge.cat-meal{ background:var(--coral-pale); color:var(--coral); }
+  .badge.cat-sight{ background:var(--sea-pale); color:var(--sea); }
+  .badge.cat-shop{ background:var(--gold-pale); color:var(--gold); }
+  .badge.cat-cafe{ background:var(--rose-pale); color:var(--rose); }
+
+  .card h3{ font-family:var(--serif); font-weight:700; font-size:16px; margin:0; letter-spacing:.01em; padding-right:20px; }
+  .card .subtitle{ font-size:12px; color:var(--ink-soft); margin-top:3px; }
+
+  .meta-row{ display:flex; align-items:center; gap:6px; font-size:12px; color:var(--ink-soft); margin-top:7px; }
+  .meta-row .ic{ font-size:12.5px; flex:none; }
+
+  .tip{
+    display:flex; gap:8px; align-items:flex-start;
+    background:var(--sun-pale); border-radius:9px; padding:9px 11px; margin-top:10px;
   }
-  .card .actions{ display:flex; gap:6px; margin-top:8px; }
-  .card .actions a, .card .actions button{
-    font-size:11px; color:var(--ink-soft);
-    background:transparent; border:1px solid var(--line); border-radius:999px;
-    padding:4px 10px; display:inline-flex; align-items:center; gap:4px;
+  .tip .ic{ font-size:13px; margin-top:1px; flex:none; }
+  .tip p{ margin:0; font-size:12.5px; color:#6B4E1C; line-height:1.65; white-space:pre-line; }
+
+  .actions{ display:flex; gap:6px; margin-top:10px; }
+  .actions a, .actions button{
+    font-size:11.5px; font-weight:500; color:var(--sea-deep);
+    background:var(--sea-pale); border:1px solid transparent; border-radius:999px;
+    padding:5px 11px; display:inline-flex; align-items:center; gap:4px;
     text-decoration:none; cursor:pointer;
   }
-  .card .actions a:hover, .card .actions button:hover{ border-color:var(--indigo); color:var(--indigo); }
+  .actions a{ background:var(--sea); color:#fff; }
+  .actions a:hover{ background:var(--sea-deep); }
+  .actions button:hover{ border-color:var(--sea); }
 
   .add-item{
-    margin:14px 0 0 56px;
-    background:transparent;
-    border:1px dashed var(--line);
-    color:var(--ink-soft);
-    font-size:12.5px;
-    padding:9px 14px;
-    border-radius:var(--radius);
-    cursor:pointer;
-    width:calc(100% - 56px);
-    text-align:left;
+    margin:14px 0 0 50px; background:transparent; border:1px dashed var(--line); color:var(--ink-soft);
+    font-size:12.5px; padding:9px 14px; border-radius:var(--radius); cursor:pointer;
+    width:calc(100% - 50px); text-align:left;
   }
-  .add-item:hover{ border-color:var(--indigo); color:var(--indigo); }
+  .add-item:hover{ border-color:var(--sea); color:var(--sea-deep); }
 
   /* ---------- 浮動按鈕 ---------- */
-  .fab-stack{
-    position:fixed; right:16px; bottom:calc(20px + var(--safe-b)); z-index:40;
-    display:flex; flex-direction:column; gap:10px;
-  }
+  .fab-stack{ position:fixed; right:16px; bottom:calc(20px + var(--safe-b)); z-index:40; display:flex; flex-direction:column; gap:10px; }
   .fab{
-    width:46px; height:46px; border-radius:50%;
-    background:var(--ink); color:var(--paper);
-    border:1px solid var(--ink);
-    font-size:18px;
-    display:flex; align-items:center; justify-content:center;
-    cursor:pointer;
-    box-shadow:0 3px 10px rgba(43,40,34,.25);
+    width:46px; height:46px; border-radius:50%; background:var(--sea-deep); color:#fff; border:1px solid var(--sea-deep);
+    font-size:18px; display:flex; align-items:center; justify-content:center; cursor:pointer;
+    box-shadow:0 3px 10px rgba(35,86,106,.3);
   }
 
   /* ---------- 底部彈出面板 ---------- */
-  .backdrop{
-    position:fixed; inset:0; background:rgba(43,40,34,.38);
-    opacity:0; pointer-events:none; transition:opacity .2s ease; z-index:49;
-  }
+  .backdrop{ position:fixed; inset:0; background:rgba(35,50,58,.35); opacity:0; pointer-events:none; transition:opacity .2s ease; z-index:49; }
   .backdrop.show{ opacity:1; pointer-events:auto; }
 
   .sheet{
-    position:fixed; left:0; right:0; bottom:0; z-index:50;
-    max-width:640px; margin:0 auto;
-    background:var(--paper);
-    border:1px solid var(--line); border-bottom:none;
-    border-radius:14px 14px 0 0;
+    position:fixed; left:0; right:0; bottom:0; z-index:50; max-width:640px; margin:0 auto;
+    background:var(--sand); border:1px solid var(--line); border-bottom:none; border-radius:18px 18px 0 0;
     padding:16px 20px calc(22px + var(--safe-b));
-    transform:translateY(105%);
-    transition:transform .25s cubic-bezier(.32,.72,.31,1);
-    box-shadow:0 -8px 24px rgba(43,40,34,.18);
-    max-height:82vh; overflow-y:auto;
+    transform:translateY(105%); transition:transform .25s cubic-bezier(.32,.72,.31,1);
+    box-shadow:0 -8px 24px rgba(35,50,58,.2); max-height:85vh; overflow-y:auto;
   }
   .sheet.show{ transform:translateY(0); }
   .sheet .grabber{ width:36px; height:4px; border-radius:2px; background:var(--line); margin:0 auto 14px; }
-  .sheet h3{ font-family:var(--serif); font-size:16px; margin:0 0 4px; }
+  .sheet h3{ font-family:var(--serif); font-size:16px; margin:0 0 4px; color:var(--sea-deep); }
   .sheet .sub{ font-size:12px; color:var(--ink-soft); margin:0 0 16px; }
-  .sheet .close-x{
-    position:absolute; right:14px; top:14px; background:none; border:none;
-    font-size:18px; color:var(--ink-soft); cursor:pointer; padding:6px;
-  }
+  .sheet .close-x{ position:absolute; right:14px; top:14px; background:none; border:none; font-size:18px; color:var(--ink-soft); cursor:pointer; padding:6px; }
 
   label.field{ display:block; margin-bottom:13px; }
-  label.field .lbl{ display:block; font-size:11.5px; color:var(--ink-soft); margin-bottom:5px; letter-spacing:.04em; }
-  label.field input, label.field textarea{
+  label.field .lbl{ display:block; font-size:11.5px; color:var(--ink-soft); margin-bottom:5px; letter-spacing:.03em; }
+  label.field input, label.field textarea, label.field select{
     width:100%; font-family:inherit; font-size:14.5px; color:var(--ink);
-    background:var(--paper-card); border:1px solid var(--line); border-radius:var(--radius);
-    padding:9px 11px; resize:vertical;
+    background:var(--card); border:1px solid var(--line); border-radius:9px; padding:9px 11px; resize:vertical;
   }
-  label.field input:focus, label.field textarea:focus{ outline:none; border-color:var(--indigo); }
+  label.field input:focus, label.field textarea:focus, label.field select:focus{ outline:none; border-color:var(--sea); }
+  .field-row{ display:flex; gap:10px; }
+  .field-row > label.field{ flex:1; }
+  .cat-select{ display:flex; flex-wrap:wrap; gap:7px; }
+  .cat-opt{
+    font-size:12px; padding:6px 11px; border-radius:999px; border:1px solid var(--line); background:var(--card);
+    cursor:pointer; color:var(--ink-soft); display:flex; align-items:center; gap:4px;
+  }
+  .cat-opt.picked{ border-color:transparent; color:#fff; }
+  .cat-opt[data-cat="transport"].picked{ background:var(--sea-deep); }
+  .cat-opt[data-cat="stay"].picked{ background:var(--plum); }
+  .cat-opt[data-cat="meal"].picked{ background:var(--coral); }
+  .cat-opt[data-cat="sight"].picked{ background:var(--sea); }
+  .cat-opt[data-cat="shop"].picked{ background:var(--gold); }
+  .cat-opt[data-cat="cafe"].picked{ background:var(--rose); }
 
   .btn-row{ display:flex; gap:10px; margin-top:6px; }
-  .btn{
-    flex:1; text-align:center; padding:11px; border-radius:var(--radius);
-    font-size:14px; cursor:pointer; border:1px solid var(--line); background:var(--paper-card); color:var(--ink);
-  }
-  .btn.primary{ background:var(--ink); color:var(--paper); border-color:var(--ink); }
-  .btn.danger{ background:transparent; color:var(--clay); border-color:var(--clay); flex:none; padding:11px 16px; }
+  .btn{ flex:1; text-align:center; padding:11px; border-radius:10px; font-size:14px; cursor:pointer; border:1px solid var(--line); background:var(--card); color:var(--ink); }
+  .btn.primary{ background:var(--sea-deep); color:#fff; border-color:var(--sea-deep); }
+  .btn.danger{ background:transparent; color:var(--coral); border-color:var(--coral); flex:none; padding:11px 16px; }
 
   /* 匯率 */
   .rate-line{ font-size:12px; color:var(--ink-soft); margin-bottom:14px; }
-  .rate-line b{ color:var(--ink); font-family:var(--serif); }
+  .rate-line b{ color:var(--sea-deep); font-family:var(--serif); }
   .conv-row{ display:flex; align-items:center; gap:10px; margin-bottom:12px; }
   .conv-row .cur{ width:52px; font-size:12px; color:var(--ink-soft); font-family:var(--serif); }
-  .conv-row input{
-    flex:1; font-size:18px; font-family:var(--serif); color:var(--ink);
-    background:var(--paper-card); border:1px solid var(--line); border-radius:var(--radius);
-    padding:10px 12px;
-  }
-  .conv-row input:focus{ outline:none; border-color:var(--indigo); }
+  .conv-row input{ flex:1; font-size:18px; font-family:var(--serif); color:var(--ink); background:var(--card); border:1px solid var(--line); border-radius:9px; padding:10px 12px; }
+  .conv-row input:focus{ outline:none; border-color:var(--sea); }
   .swap-mark{ text-align:center; font-size:11px; color:var(--ink-faint); margin:-4px 0 10px; letter-spacing:.2em; }
 
   /* 天氣 */
   .wx-list{ list-style:none; margin:0; padding:0; }
-  .wx-list li{
-    display:flex; align-items:center; gap:12px;
-    padding:9px 0; border-bottom:1px solid var(--line);
-  }
+  .wx-list li{ display:flex; align-items:center; gap:12px; padding:9px 0; border-bottom:1px solid var(--line); }
   .wx-list li:last-child{ border-bottom:none; }
   .wx-date{ width:78px; font-family:var(--serif); font-size:12.5px; color:var(--ink); flex:none; }
   .wx-icon{ font-size:20px; width:26px; text-align:center; flex:none; }
   .wx-desc{ flex:1; font-size:12px; color:var(--ink-soft); }
-  .wx-temp{ font-size:12.5px; color:var(--ink); white-space:nowrap; font-family:var(--serif); }
+  .wx-temp{ font-size:12.5px; color:var(--sea-deep); white-space:nowrap; font-family:var(--serif); }
   .wx-empty{ font-size:12px; color:var(--ink-faint); padding:14px 0; text-align:center; }
 
   .toast{
     position:fixed; left:50%; bottom:calc(28px + var(--safe-b)); transform:translateX(-50%) translateY(12px);
-    background:var(--ink); color:var(--paper); font-size:12.5px;
-    padding:9px 16px; border-radius:999px; z-index:60;
-    opacity:0; pointer-events:none; transition:opacity .2s ease, transform .2s ease;
-    white-space:nowrap;
+    background:var(--sea-deep); color:#fff; font-size:12.5px; padding:9px 16px; border-radius:999px; z-index:60;
+    opacity:0; pointer-events:none; transition:opacity .2s ease, transform .2s ease; white-space:nowrap;
   }
   .toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
 
-  footer.credit{
-    text-align:center; font-size:11px; color:var(--ink-faint);
-    padding:0 20px calc(30px + var(--safe-b)); letter-spacing:.05em;
-  }
+  footer.credit{ text-align:center; font-size:11px; color:var(--ink-faint); padding:0 20px calc(30px + var(--safe-b)); letter-spacing:.05em; }
 
   @media (min-width:640px){
     nav.daytabs{ padding-left:calc((100% - 640px)/2 + 16px); padding-right:calc((100% - 640px)/2 + 16px); }
@@ -348,11 +278,11 @@
 </style>
 </head>
 <body>
-<div class="grain"></div>
+<div class="wave-bg"></div>
 
 <header class="topbar">
   <div class="title-row">
-    <h1>仙台遊 <span class="dates">9/19 – 9/26</span></h1>
+    <h1><span class="wave-ic">〰️</span>仙台遊 <span class="dates">9/19 – 9/26</span></h1>
     <span class="sync-pill local" id="syncPill"><span class="sync-dot"></span><span id="syncText">連線中…</span></span>
   </div>
 </header>
@@ -383,15 +313,9 @@
   <div class="grabber"></div>
   <h3>日幣・新台幣 速算</h3>
   <p class="rate-line" id="rateLine">正在取得即時匯率…</p>
-  <div class="conv-row">
-    <span class="cur">JPY ¥</span>
-    <input type="number" inputmode="decimal" id="jpyInput" placeholder="0">
-  </div>
+  <div class="conv-row"><span class="cur">JPY ¥</span><input type="number" inputmode="decimal" id="jpyInput" placeholder="0"></div>
   <div class="swap-mark">≈ ⇅ ≈</div>
-  <div class="conv-row">
-    <span class="cur">TWD $</span>
-    <input type="number" inputmode="decimal" id="twdInput" placeholder="0">
-  </div>
+  <div class="conv-row"><span class="cur">TWD $</span><input type="number" inputmode="decimal" id="twdInput" placeholder="0"></div>
 </section>
 
 <section class="sheet" id="editSheet">
@@ -399,22 +323,59 @@
   <div class="grabber"></div>
   <h3 id="editTitle">編輯行程</h3>
   <p class="sub" id="editDayLabel"></p>
+
   <label class="field">
-    <span class="lbl">時間（可留白，或填「晚上」等文字）</span>
-    <input type="text" id="fTime" placeholder="例如 09:20">
+    <span class="lbl">類型</span>
+    <div class="cat-select" id="catSelect">
+      <span class="cat-opt" data-cat="transport">🚃 交通</span>
+      <span class="cat-opt" data-cat="stay">🏨 住宿</span>
+      <span class="cat-opt" data-cat="meal">🍴 用餐</span>
+      <span class="cat-opt" data-cat="sight">⛩️ 景點</span>
+      <span class="cat-opt" data-cat="shop">🛍️ 購物</span>
+      <span class="cat-opt" data-cat="cafe">☕ 咖啡</span>
+    </div>
   </label>
+
+  <div class="field-row">
+    <label class="field">
+      <span class="lbl">時間</span>
+      <input type="text" id="fTime" placeholder="例如 09:20">
+    </label>
+    <label class="field">
+      <span class="lbl">預約狀態（選填）</span>
+      <input type="text" id="fStatus" placeholder="例如 已預約 18:30">
+    </label>
+  </div>
+
   <label class="field">
     <span class="lbl">標題</span>
     <input type="text" id="fTitle" placeholder="行程名稱">
   </label>
   <label class="field">
-    <span class="lbl">備註</span>
-    <textarea id="fDesc" rows="3" placeholder="交通、注意事項…"></textarea>
+    <span class="lbl">副標（選填，例如地區・評分・分類）</span>
+    <input type="text" id="fSubtitle" placeholder="例如 松島・人氣景點">
+  </label>
+
+  <div class="field-row">
+    <label class="field">
+      <span class="lbl">🚶 交通／移動（選填）</span>
+      <input type="text" id="fTransit" placeholder="例如 步行 10 分">
+    </label>
+    <label class="field">
+      <span class="lbl">🕐 營業時間（選填）</span>
+      <input type="text" id="fHours" placeholder="例如 10:00–17:00">
+    </label>
+  </div>
+
+  <label class="field">
+    <span class="lbl">備註 / 小提醒</span>
+    <textarea id="fNote" rows="3" placeholder="注意事項、亮點介紹…"></textarea>
   </label>
   <label class="field">
     <span class="lbl">地圖搜尋關鍵字（給導航按鈕用，留白則用標題）</span>
     <input type="text" id="fLoc" placeholder="例如 瑞鳳殿">
   </label>
+
   <div class="btn-row">
     <button class="btn danger" id="btnDelete">刪除</button>
     <button class="btn" data-close>取消</button>
@@ -434,88 +395,98 @@
 /* =========================================================================
    1) 基本設定 — 請將 firebaseConfig 換成你自己的專案設定
    ========================================================================= */
-const firebaseConfig = {
+var firebaseConfig = {
   apiKey: "AIzaSyDxMwkCU23PB6Q60r3TWEu3elG00r4ywM0",
   authDomain: "sendai-6666.firebaseapp.com",
   databaseURL: "https://sendai-6666-default-rtdb.asia-southeast1.firebasedatabase.app",
   projectId: "sendai-6666",
   storageBucket: "sendai-6666.firebasestorage.app",
   messagingSenderId: "317293713360",
-  appId: "1:317293713360:web:e3d5175a54ae43c801cbd5",
-  measurementId: "G-Y1EH4G7745"
+  appId: "1:317293713360:web:e3d5175a54ae43c801cbd5"
 };
 var DB_ROOT = "sendaiTrip2026"; // Realtime Database 底下的資料節點
 
 var LAT = 38.2682, LON = 140.8694; // 仙台
 
+/* 類型設定：圖示、顯示名稱 */
+var CATS = {
+  transport:{ icon:"🚃", label:"交通" },
+  stay:{ icon:"🏨", label:"住宿" },
+  meal:{ icon:"🍴", label:"用餐" },
+  sight:{ icon:"⛩️", label:"景點" },
+  shop:{ icon:"🛍️", label:"購物" },
+  cafe:{ icon:"☕", label:"咖啡" }
+};
+
 /* =========================================================================
    2) 預設行程（第一次啟用、資料庫還是空的時候，會拿這份去建立初始資料）
+   欄位：time / category / status / title / subtitle / transit / hours / note / loc
    ========================================================================= */
 var SEED_DAYS = [
   { id:"day1", iso:"2026-09-19", label:"9/19（六）", title:"第一天・抵達仙台", events:[
-    { time:"18:10", title:"抵達仙台機場", desc:"", loc:"仙台空港" },
-    { time:"19:00", title:"搭仙台機場 Access 線", desc:"可能搭 19:00 / 19:28 班次。行李只能放腳邊，車廂有點擠；下車要自己按開關開門。只能刷西瓜卡進站，或用機器買票選 660 日圓。抵達 3/4 號月台，搭手扶梯到二樓，左手邊是東口改札。", loc:"仙台空港アクセス線 仙台空港駅" },
-    { time:"19:27", title:"抵達仙台車站，步行前往飯店", desc:"", loc:"仙台駅 東口" },
-    { time:"19:45", title:"Hotel Grand Bach Sendai", desc:"步行約 10 分。Check in、放行李。", loc:"ホテルグランバッハ仙台" },
-    { time:"20:10", title:"晚餐：たんや善治郎 南町通り店", desc:"步行約 15 分，這間人潮較少。", loc:"たんや善治郎 南町通り店" }
+    { time:"18:10", category:"transport", title:"抵達仙台機場", loc:"仙台空港" },
+    { time:"19:00", category:"transport", title:"搭仙台機場 Access 線", note:"可能搭 19:00 / 19:28 班次。行李只能放腳邊，車廂有點擠；下車要自己按開關開門。只能刷西瓜卡進站，或用機器買票選 660 日圓。抵達 3/4 號月台，搭手扶梯到二樓，左手邊是東口改札。", loc:"仙台空港アクセス線 仙台空港駅" },
+    { time:"19:27", category:"transport", title:"抵達仙台車站", subtitle:"步行前往飯店", loc:"仙台駅 東口" },
+    { time:"19:45", category:"stay", title:"Hotel Grand Bach Sendai", transit:"步行 10 分", note:"Check in、放行李。", loc:"ホテルグランバッハ仙台" },
+    { time:"20:10", category:"meal", title:"たんや善治郎 南町通り店", transit:"步行 15 分", note:"這間人潮較少。", loc:"たんや善治郎 南町通り店" }
   ]},
   { id:"day2", iso:"2026-09-20", label:"9/20（日）", title:"第二天・仙台城下町", events:[
-    { time:"07:15", title:"大廳寄放行李、飯店早餐", desc:"", loc:"" },
-    { time:"08:20", title:"LOOPLE 盧葡兒仙台觀光巴士", desc:"買一日券 630 日圓（限現金）。早點到，搭第一班人潮應該就很多。", loc:"るーぷる仙台 仙台駅前のりば" },
-    { time:"09:13", title:"瑞鳳殿（停留約 1 小時）", desc:"預計搭 10:13 / 10:28 / 10:43 的巴士離開。", loc:"瑞鳳殿" },
-    { time:"10:28", title:"仙台城跡（停留約 30 分）", desc:"一定要搭到 11:08 / 11:23 這班，不然得搭計程車回去。", loc:"仙台城跡" },
-    { time:"12:07", title:"回到仙台車站，先散步過去晃晃", desc:"步行約 6 分。", loc:"仙台駅" },
-    { time:"12:45", title:"中餐：仔虎燒肉 站前店", desc:"", loc:"焼肉 仔虎 仙台站前店" },
-    { time:"14:15", title:"逛街", desc:"", loc:"仙台駅前 商店街" },
-    { time:"18:00", title:"晚餐：札幌螃蟹本家 仙台店", desc:"", loc:"札幌かに本家 仙台店" }
+    { time:"07:15", category:"meal", title:"大廳寄放行李、飯店早餐", loc:"" },
+    { time:"08:20", category:"transport", title:"LOOPLE 盧葡兒仙台觀光巴士", note:"買一日券 630 日圓（限現金）。早點到，搭第一班人潮應該就很多。", loc:"るーぷる仙台 仙台駅前のりば" },
+    { time:"09:13", category:"sight", title:"瑞鳳殿", subtitle:"停留約 1 小時", note:"預計搭 10:13 / 10:28 / 10:43 的巴士離開。", loc:"瑞鳳殿" },
+    { time:"10:28", category:"sight", title:"仙台城跡", subtitle:"停留約 30 分", note:"一定要搭到 11:08 / 11:23 這班，不然得搭計程車回去。", loc:"仙台城跡" },
+    { time:"12:07", category:"transport", title:"回到仙台車站", transit:"步行 6 分", note:"先散步過去晃晃。", loc:"仙台駅" },
+    { time:"12:45", category:"meal", title:"仔虎燒肉 站前店", loc:"焼肉 仔虎 仙台站前店" },
+    { time:"14:15", category:"shop", title:"逛街", loc:"仙台駅前 商店街" },
+    { time:"18:00", category:"meal", title:"札幌螃蟹本家 仙台店", loc:"札幌かに本家 仙台店" }
   ]},
   { id:"day3", iso:"2026-09-21", label:"9/21（一）", title:"第三天・松島一日", events:[
-    { time:"", title:"換飯店，寄放行李", desc:"ホテル京阪", loc:"ホテル京阪 仙台" },
-    { time:"", title:"松島（停留約 50 分）", desc:"", loc:"松島" },
-    { time:"", title:"牡蠣", desc:"40 分吃到飽或單點，大部分 15:00 收店。", loc:"松島 牡蠣小屋" },
-    { time:"", title:"搭觀光船", desc:"15:30 過後天氣容易不好。班次：10:00、11:00、12:00、13:00、14:00、15:00。", loc:"松島島巡り観光船" },
-    { time:"", title:"瑞巖寺", desc:"", loc:"瑞巌寺" },
-    { time:"", title:"瑞巖寺五大堂", desc:"必去", loc:"五大堂 松島" },
-    { time:"", title:"福浦橋", desc:"", loc:"福浦橋" },
-    { time:"", title:"クロワッサン屋サクサク", desc:"可頌，營業 10:00–17:00，有分店。", loc:"クロワッサン屋サクサク 松島" },
-    { time:"11:00", title:"MATSUSHIMA SANDWICH STORE", desc:"松島三明治，營業 11:00–16:00。", loc:"MATSUSHIMA SANDWICH STORE" },
-    { time:"", title:"Cafe le Roman 松島", desc:"咖啡廳，營業 11:00–17:00。", loc:"Cafe le Roman 松島" },
-    { time:"", title:"松島蒲鉾本舗", desc:"烤魚板", loc:"松島蒲鉾本舗" },
-    { time:"", title:"烤仙貝", desc:"", loc:"松島 焼き煎餅" }
+    { time:"", category:"stay", title:"換飯店，寄放行李", subtitle:"ホテル京阪", loc:"ホテル京阪 仙台" },
+    { time:"", category:"sight", title:"松島", subtitle:"自由散策 50 分", loc:"松島" },
+    { time:"", category:"meal", title:"牡蠣", hours:"大部分 15:00 收店", note:"40 分吃到飽或單點。", loc:"松島 牡蠣小屋" },
+    { time:"", category:"sight", title:"搭觀光船", hours:"10:00、11:00、12:00、13:00、14:00、15:00 開船", note:"15:30 過後天氣容易不好。", loc:"松島島巡り観光船" },
+    { time:"", category:"sight", title:"瑞巖寺", loc:"瑞巌寺" },
+    { time:"", category:"sight", title:"瑞巖寺五大堂", note:"必去。", loc:"五大堂 松島" },
+    { time:"", category:"sight", title:"福浦橋", loc:"福浦橋" },
+    { time:"", category:"cafe", title:"クロワッサン屋サクサク", subtitle:"可頌專賣・有分店", hours:"10:00–17:00", loc:"クロワッサン屋サクサク 松島" },
+    { time:"11:00", category:"cafe", title:"MATSUSHIMA SANDWICH STORE", subtitle:"松島三明治", hours:"11:00–16:00", loc:"MATSUSHIMA SANDWICH STORE" },
+    { time:"", category:"cafe", title:"Cafe le Roman 松島", hours:"11:00–17:00", loc:"Cafe le Roman 松島" },
+    { time:"", category:"shop", title:"松島蒲鉾本舗", subtitle:"烤魚板", loc:"松島蒲鉾本舗" },
+    { time:"", category:"shop", title:"烤仙貝", loc:"松島 焼き煎餅" }
   ]},
   { id:"day4", iso:"2026-09-22", label:"9/22（二）", title:"第四天・藏王御釜・山形・山寺", events:[
-    { time:"", title:"早餐：超商", desc:"", loc:"" },
-    { time:"08:00", title:"出發前往藏王御釜", desc:"車程約 1 小時 20 分。", loc:"蔵王 御釜" },
-    { time:"09:20", title:"藏王御釜（停留約 1 小時）", desc:"", loc:"蔵王 御釜" },
-    { time:"10:20", title:"出發前往山形", desc:"車程約 1 小時。", loc:"山形市" },
-    { time:"11:30", title:"米澤牛 登起波 山形店", desc:"", loc:"米沢牛 登起波 山形店" },
-    { time:"13:00", title:"出發前往山寺", desc:"車程約 30 分。", loc:"山寺" },
-    { time:"13:30", title:"山寺", desc:"爬山約 1.5 小時。", loc:"山寺 立石寺" },
-    { time:"15:00", title:"回仙台", desc:"車程約 1 小時 10 分。", loc:"仙台市" },
-    { time:"16:20", title:"回飯店休息", desc:"建議先去睡一下。", loc:"" },
-    { time:"18:00", title:"晚餐：牛舌", desc:"", loc:"仙台 牛たん通り" }
+    { time:"", category:"meal", title:"早餐：超商", loc:"" },
+    { time:"08:00", category:"transport", title:"出發前往藏王御釜", transit:"車程約 1 小時 20 分", loc:"蔵王 御釜" },
+    { time:"09:20", category:"sight", title:"藏王御釜", subtitle:"停留約 1 小時", loc:"蔵王 御釜" },
+    { time:"10:20", category:"transport", title:"出發前往山形", transit:"車程約 1 小時", loc:"山形市" },
+    { time:"11:30", category:"meal", title:"米澤牛 登起波 山形店", loc:"米沢牛 登起波 山形店" },
+    { time:"13:00", category:"transport", title:"出發前往山寺", transit:"車程約 30 分", loc:"山寺" },
+    { time:"13:30", category:"sight", title:"山寺", note:"爬山約 1.5 小時。", loc:"山寺 立石寺" },
+    { time:"15:00", category:"transport", title:"回仙台", transit:"車程約 1 小時 10 分", loc:"仙台市" },
+    { time:"16:20", category:"stay", title:"回飯店休息", note:"建議先去睡一下。", loc:"" },
+    { time:"18:00", category:"meal", title:"晚餐：牛舌", loc:"仙台 牛たん通り" }
   ]},
   { id:"day5", iso:"2026-09-23", label:"9/23（三）", title:"第五天・海洋森林水族館", events:[
-    { time:"08:30", title:"仙台海洋森林水族館", desc:"10:30 有餵企鵝。", loc:"仙台うみの杜水族館" },
-    { time:"", title:"中餐", desc:"去隔壁三井 Outlet 吃，或回市區吃。", loc:"三井アウトレットパーク仙台港" },
-    { time:"", title:"下午行程", desc:"尚未決定。", loc:"" }
+    { time:"08:30", category:"sight", title:"仙台海洋森林水族館", note:"10:30 有餵企鵝。", loc:"仙台うみの杜水族館" },
+    { time:"", category:"meal", title:"中餐", note:"去隔壁三井 Outlet 吃，或回市區吃。", loc:"三井アウトレットパーク仙台港" },
+    { time:"", category:"sight", title:"下午行程", note:"尚未決定。", loc:"" }
   ]},
   { id:"day6", iso:"2026-09-24", label:"9/24（四）", title:"第六天・石卷貓島", events:[
-    { time:"07:00", title:"開車前往石卷", desc:"", loc:"石巻市" },
-    { time:"09:00", title:"石卷出航", desc:"", loc:"石巻港" },
-    { time:"09:44", title:"抵達貓島（田代島）", desc:"", loc:"田代島" },
-    { time:"11:06", title:"回航", desc:"", loc:"田代島" },
-    { time:"11:51", title:"抵達石卷", desc:"", loc:"石巻港" },
-    { time:"13:00", title:"回仙台，中餐", desc:"", loc:"仙台市" }
+    { time:"07:00", category:"transport", title:"開車前往石卷", loc:"石巻市" },
+    { time:"09:00", category:"transport", title:"石卷出航", loc:"石巻港" },
+    { time:"09:44", category:"sight", title:"抵達貓島", subtitle:"田代島", loc:"田代島" },
+    { time:"11:06", category:"transport", title:"回航", loc:"田代島" },
+    { time:"11:51", category:"transport", title:"抵達石卷", loc:"石巻港" },
+    { time:"13:00", category:"meal", title:"回仙台，中餐", loc:"仙台市" }
   ]},
   { id:"day7", iso:"2026-09-25", label:"9/25（五）", title:"第七天・金蛇水神社・購物", events:[
-    { time:"", title:"金蛇水神社", desc:"", loc:"金蛇水神社" },
-    { time:"", title:"購物", desc:"", loc:"仙台駅" },
-    { time:"晚上", title:"還車", desc:"", loc:"仙台市 レンタカー返却" }
+    { time:"", category:"sight", title:"金蛇水神社", loc:"金蛇水神社" },
+    { time:"", category:"shop", title:"購物", loc:"仙台駅" },
+    { time:"晚上", category:"transport", title:"還車", loc:"仙台市 レンタカー返却" }
   ]},
   { id:"day8", iso:"2026-09-26", label:"9/26（六）", title:"第八天・賦歸", events:[
-    { time:"", title:"行李寄放車站", desc:"", loc:"仙台駅" },
-    { time:"19:00", title:"搭機返程", desc:"", loc:"仙台空港" }
+    { time:"", category:"transport", title:"行李寄放車站", loc:"仙台駅" },
+    { time:"19:00", category:"transport", title:"搭機返程", loc:"仙台空港" }
   ]}
 ];
 
@@ -540,16 +511,24 @@ function showToast(msg){
 
 /* =========================================================================
    4) 資料狀態
-   本機記憶體中的資料結構： DATA = { day1:[{id,time,title,desc,loc,order}, ...], day2:[...], ... }
+   DATA = { day1:[{id,time,category,status,title,subtitle,transit,hours,note,loc,order}, ...], ... }
    ========================================================================= */
 var DATA = {};
-var DAY_META = {}; // id -> {iso,label,title}
+var DAY_META = {};
 SEED_DAYS.forEach(function(d){ DAY_META[d.id] = { iso:d.iso, label:d.label, title:d.title }; });
 
-var dbRef = null;       // firebase database ref（有連上才會設定）
+var dbRef = null;
 var useFirebase = false;
-var lastRenderedJSON = {}; // 每天的資料 JSON 快取，避免不必要的重繪
-var draggingDay = null;    // 正在拖曳排序中的天，暫停該天的即時重繪
+var lastRenderedJSON = {};
+var draggingDay = null;
+
+var FIELD_KEYS = ["time","category","status","title","subtitle","transit","hours","note","loc"];
+function normalizeEvent(id, raw, order){
+  var ev = { id:id, order: (typeof order==="number")?order:0 };
+  FIELD_KEYS.forEach(function(k){ ev[k] = raw && raw[k] ? raw[k] : ""; });
+  if (!ev.category || !CATS[ev.category]) ev.category = "sight";
+  return ev;
+}
 
 /* =========================================================================
    5) Firebase 初始化與同步
@@ -560,9 +539,7 @@ function isConfigPlaceholder(){
 
 function seedLocalData(){
   SEED_DAYS.forEach(function(d){
-    DATA[d.id] = d.events.map(function(ev, i){
-      return { id: uid(), time: ev.time||"", title: ev.title||"", desc: ev.desc||"", loc: ev.loc||"", order: i };
-    });
+    DATA[d.id] = d.events.map(function(ev, i){ return normalizeEvent(uid(), ev, i); });
   });
 }
 
@@ -582,13 +559,14 @@ function initFirebase(){
 
     dbRef.once("value").then(function(snap){
       if (!snap.exists()) {
-        // 資料庫是空的：寫入預設行程
         var initPayload = {};
         SEED_DAYS.forEach(function(d){
           var obj = {};
           d.events.forEach(function(ev, i){
             var id = uid();
-            obj[id] = { time: ev.time||"", title: ev.title||"", desc: ev.desc||"", loc: ev.loc||"", order:i };
+            var e = normalizeEvent(id, ev, i);
+            var payload = {}; FIELD_KEYS.forEach(function(k){ payload[k]=e[k]; }); payload.order = i;
+            obj[id] = payload;
           });
           initPayload[d.id] = obj;
         });
@@ -605,10 +583,7 @@ function initFirebase(){
       var val = snap.val() || {};
       SEED_DAYS.forEach(function(d){
         var raw = val[d.id] || {};
-        var list = Object.keys(raw).map(function(key){
-          var e = raw[key] || {};
-          return { id:key, time:e.time||"", title:e.title||"", desc:e.desc||"", loc:e.loc||"", order: (typeof e.order==="number")?e.order:0 };
-        });
+        var list = Object.keys(raw).map(function(key){ return normalizeEvent(key, raw[key], raw[key] && raw[key].order); });
         list.sort(function(a,b){ return a.order - b.order; });
         DATA[d.id] = list;
       });
@@ -632,7 +607,6 @@ function setSyncState(state, text){
   $("#syncText").textContent = text;
 }
 
-/* 沒接 Firebase 時，退而求其次用 localStorage 記住本機的編輯（僅限這台裝置） */
 function loadLocalStorageFallback(){
   try{
     var raw = localStorage.getItem("sendaiTripLocal");
@@ -647,11 +621,11 @@ function saveLocalStorageFallback(){
 }
 
 /* =========================================================================
-   6) 寫入操作（新增 / 編輯 / 刪除 / 排序），兩種模式（Firebase or 本機）共用介面
+   6) 寫入操作
    ========================================================================= */
 function writeEvent(dayId, ev){
   if (useFirebase) {
-    var payload = { time: ev.time||"", title: ev.title||"", desc: ev.desc||"", loc: ev.loc||"", order: ev.order||0 };
+    var payload = {}; FIELD_KEYS.forEach(function(k){ payload[k]=ev[k]||""; }); payload.order = ev.order||0;
     dbRef.child(dayId).child(ev.id).set(payload);
   } else {
     var list = DATA[dayId] || (DATA[dayId] = []);
@@ -723,16 +697,25 @@ function buildSkeleton(){
 function eventCardHTML(dayId, ev){
   var mapQ = encodeURIComponent((ev.loc && ev.loc.trim()) ? ev.loc.trim() : ev.title);
   var mapHref = "https://www.google.com/maps/search/?api=1&query=" + mapQ;
+  var cat = CATS[ev.category] || CATS.sight;
+
+  var badges = '<span class="badge cat-'+ev.category+'">'+cat.icon+' '+cat.label+'</span>';
+  if (ev.status) badges += '<span class="badge status">✓ '+esc(ev.status)+'</span>';
+
+  var subtitle = ev.subtitle ? '<div class="subtitle">'+esc(ev.subtitle)+'</div>' : '';
+  var transitRow = ev.transit ? '<div class="meta-row"><span class="ic">🚶</span>'+esc(ev.transit)+'</div>' : '';
+  var hoursRow = ev.hours ? '<div class="meta-row"><span class="ic">🕐</span>'+esc(ev.hours)+'</div>' : '';
+  var tip = ev.note ? '<div class="tip"><span class="ic">📍</span><p>'+esc(ev.note)+'</p></div>' : '';
+
   return (
     '<li class="item" data-id="'+ev.id+'" data-day="'+dayId+'">'+
       '<div class="time'+(ev.time?'':' empty')+'">'+(esc(ev.time)||'－')+'</div>'+
       '<div class="dot"></div>'+
       '<div class="card">'+
-        '<div class="row1">'+
-          '<span class="grip" data-grip>⠿</span>'+
-          '<h3>'+esc(ev.title || "（未命名）")+'</h3>'+
-        '</div>'+
-        (ev.desc ? '<p class="desc">'+esc(ev.desc)+'</p>' : '')+
+        '<span class="grip" data-grip>⠿</span>'+
+        '<div class="badges">'+badges+'</div>'+
+        '<h3>'+esc(ev.title || "（未命名）")+'</h3>'+
+        subtitle + transitRow + hoursRow + tip +
         '<div class="actions">'+
           '<a href="'+mapHref+'" target="_blank" rel="noopener">🗺️ 導航</a>'+
           '<button type="button" data-edit>✏️ 編輯</button>'+
@@ -749,21 +732,16 @@ function renderDay(dayId){
   ul.innerHTML = list.map(function(ev){ return eventCardHTML(dayId, ev); }).join("");
   lastRenderedJSON[dayId] = JSON.stringify(list);
 }
-
-function renderAllDays(){
-  SEED_DAYS.forEach(function(d){ renderDay(d.id); });
-}
-
+function renderAllDays(){ SEED_DAYS.forEach(function(d){ renderDay(d.id); }); }
 function renderChangedDays(){
   SEED_DAYS.forEach(function(d){
-    if (draggingDay === d.id) return; // 拖曳中先不要重繪，避免手感被打斷
+    if (draggingDay === d.id) return;
     var list = (DATA[d.id]||[]).slice().sort(function(a,b){ return a.order-b.order; });
     var json = JSON.stringify(list);
     if (json !== lastRenderedJSON[d.id]) renderDay(d.id);
   });
 }
 
-/* Sticky 分頁：捲動時自動高亮目前所在的天 */
 function setupActiveTabObserver(){
   var tabs = $all(".tab");
   var sections = SEED_DAYS.map(function(d){ return document.getElementById(d.id); });
@@ -780,40 +758,71 @@ function setupActiveTabObserver(){
 /* =========================================================================
    8) 事件代理：導航、編輯、刪除、新增
    ========================================================================= */
-var editingCtx = null; // { dayId, evId } 或 { dayId, isNew:true }
+var editingCtx = null;
+var pickedCat = "sight";
+
+function setPickedCat(cat){
+  pickedCat = cat;
+  $all(".cat-opt", $("#catSelect")).forEach(function(el){
+    el.classList.toggle("picked", el.dataset.cat===cat);
+  });
+}
+$("#catSelect").addEventListener("click", function(e){
+  var opt = e.target.closest(".cat-opt");
+  if (opt) setPickedCat(opt.dataset.cat);
+});
 
 function openEditSheet(dayId, evId){
   var meta = DAY_META[dayId];
   var isNew = !evId;
-  var ev = isNew ? { time:"", title:"", desc:"", loc:"" } : (DATA[dayId]||[]).find(function(x){ return x.id===evId; });
+  var ev = isNew ? { time:"", category:"sight", status:"", title:"", subtitle:"", transit:"", hours:"", note:"", loc:"" }
+                 : (DATA[dayId]||[]).find(function(x){ return x.id===evId; });
   if (!ev) return;
   editingCtx = { dayId:dayId, evId: isNew? null : evId, isNew: isNew };
   $("#editTitle").textContent = isNew ? "新增行程" : "編輯行程";
   $("#editDayLabel").textContent = meta ? (meta.label + "　" + meta.title) : "";
+  setPickedCat(ev.category || "sight");
   $("#fTime").value = ev.time||"";
+  $("#fStatus").value = ev.status||"";
   $("#fTitle").value = ev.title||"";
-  $("#fDesc").value = ev.desc||"";
+  $("#fSubtitle").value = ev.subtitle||"";
+  $("#fTransit").value = ev.transit||"";
+  $("#fHours").value = ev.hours||"";
+  $("#fNote").value = ev.note||"";
   $("#fLoc").value = ev.loc||"";
   $("#btnDelete").style.display = isNew ? "none" : "inline-block";
   openSheet("#editSheet");
   setTimeout(function(){ $("#fTitle").focus(); }, 260);
 }
 
+function collectForm(){
+  return {
+    time: $("#fTime").value.trim(),
+    category: pickedCat,
+    status: $("#fStatus").value.trim(),
+    title: $("#fTitle").value.trim(),
+    subtitle: $("#fSubtitle").value.trim(),
+    transit: $("#fTransit").value.trim(),
+    hours: $("#fHours").value.trim(),
+    note: $("#fNote").value.trim(),
+    loc: $("#fLoc").value.trim()
+  };
+}
+
 function saveEditSheet(){
   if (!editingCtx) return;
-  var title = $("#fTitle").value.trim();
-  if (!title) { showToast("請輸入標題"); return; }
+  var form = collectForm();
+  if (!form.title) { showToast("請輸入標題"); return; }
   var dayId = editingCtx.dayId;
   if (editingCtx.isNew) {
     var list = DATA[dayId]||[];
     var maxOrder = list.reduce(function(m,x){ return Math.max(m, x.order||0); }, -1);
-    var ev = { id: uid(), time:$("#fTime").value.trim(), title:title, desc:$("#fDesc").value.trim(), loc:$("#fLoc").value.trim(), order: maxOrder+1 };
-    writeEvent(dayId, ev);
+    form.id = uid(); form.order = maxOrder+1;
+    writeEvent(dayId, form);
   } else {
     var cur = (DATA[dayId]||[]).find(function(x){ return x.id===editingCtx.evId; });
-    var order = cur ? cur.order : 0;
-    var ev2 = { id: editingCtx.evId, time:$("#fTime").value.trim(), title:title, desc:$("#fDesc").value.trim(), loc:$("#fLoc").value.trim(), order: order };
-    writeEvent(dayId, ev2);
+    form.id = editingCtx.evId; form.order = cur ? cur.order : 0;
+    writeEvent(dayId, form);
   }
   closeSheets();
   showToast("已儲存");
@@ -829,7 +838,6 @@ function deleteCurrentEvent(){
 document.addEventListener("click", function(e){
   var addBtn = e.target.closest(".add-item");
   if (addBtn) { openEditSheet(addBtn.dataset.day, null); return; }
-
   var editBtn = e.target.closest("[data-edit]");
   if (editBtn) {
     var li = editBtn.closest(".item");
@@ -844,7 +852,7 @@ $("#btnDelete").addEventListener("click", function(){
 });
 
 /* =========================================================================
-   9) 拖拉排序（Pointer Events，支援觸控與滑鼠）
+   9) 拖拉排序（Pointer Events）
    ========================================================================= */
 (function setupDragReorder(){
   var dragEl = null, dayId = null, startY = 0, placeholderIndex = -1, itemsEls = [];
@@ -863,7 +871,7 @@ $("#btnDelete").addEventListener("click", function(){
     itemsEls = $all(".item", ul);
     placeholderIndex = itemsEls.indexOf(li);
     li.classList.add("dragging");
-    li.setPointerCapture && grip.setPointerCapture(e.pointerId);
+    grip.setPointerCapture && grip.setPointerCapture(e.pointerId);
     document.addEventListener("pointermove", onMove);
     document.addEventListener("pointerup", onUp, { once:true });
   });
@@ -875,7 +883,6 @@ $("#btnDelete").addEventListener("click", function(){
     dragEl.style.zIndex = "5";
     dragEl.style.position = "relative";
 
-    // 找出目前指標所在的項目，決定插入位置
     var overEl = null;
     for (var i=0;i<itemsEls.length;i++){
       var el = itemsEls[i];
@@ -910,7 +917,6 @@ $("#btnDelete").addEventListener("click", function(){
     var insertAt = Math.max(0, Math.min(placeholderIndex, order.length));
     order.splice(insertAt, 0, dragEl.dataset.id);
 
-    // 依新順序重排 DOM，立即回饋
     order.forEach(function(id){
       var el = ul.querySelector('.item[data-id="'+id+'"]');
       if (el) ul.appendChild(el);
@@ -923,28 +929,19 @@ $("#btnDelete").addEventListener("click", function(){
 })();
 
 /* =========================================================================
-   10) 底部彈出面板（天氣 / 匯率 / 編輯）共用開關邏輯
+   10) 底部彈出面板
    ========================================================================= */
-function openSheet(sel){
-  $(sel).classList.add("show");
-  $("#backdrop").classList.add("show");
-}
-function closeSheets(){
-  $all(".sheet").forEach(function(s){ s.classList.remove("show"); });
-  $("#backdrop").classList.remove("show");
-  editingCtx = null;
-}
+function openSheet(sel){ $(sel).classList.add("show"); $("#backdrop").classList.add("show"); }
+function closeSheets(){ $all(".sheet").forEach(function(s){ s.classList.remove("show"); }); $("#backdrop").classList.remove("show"); editingCtx = null; }
 $("#backdrop").addEventListener("click", closeSheets);
-document.addEventListener("click", function(e){
-  if (e.target.closest("[data-close]")) closeSheets();
-});
+document.addEventListener("click", function(e){ if (e.target.closest("[data-close]")) closeSheets(); });
 $("#fabWeather").addEventListener("click", function(){ openSheet("#weatherSheet"); loadWeather(); });
 $("#fabCurrency").addEventListener("click", function(){ openSheet("#currencySheet"); loadRate(); });
 
 /* =========================================================================
    11) 匯率速算（open.er-api.com，免金鑰）
    ========================================================================= */
-var FALLBACK_RATE = 0.215; // 抓取失敗時的備援參考值（1 JPY ≈ 幾元 TWD）
+var FALLBACK_RATE = 0.215;
 var currentRate = null;
 var rateLoaded = false;
 
@@ -957,16 +954,13 @@ function loadRate(){
       if (data && data.rates && data.rates.TWD) {
         currentRate = data.rates.TWD;
         $("#rateLine").innerHTML = "即時匯率　1 <b>JPY</b> ≈ <b>"+currentRate.toFixed(4)+"</b> TWD";
-      } else {
-        throw new Error("no rate");
-      }
+      } else { throw new Error("no rate"); }
     })
     .catch(function(){
       currentRate = FALLBACK_RATE;
       $("#rateLine").innerHTML = "（即時匯率取得失敗，暫用參考值）1 <b>JPY</b> ≈ <b>"+FALLBACK_RATE+"</b> TWD";
     });
 }
-
 var jpyEl = $("#jpyInput"), twdEl = $("#twdInput");
 jpyEl.addEventListener("input", function(){
   var r = currentRate || FALLBACK_RATE;
@@ -1004,7 +998,6 @@ function wmoText(code){
     95:"雷雨",96:"雷雨挾冰雹",99:"強雷雨挾冰雹"};
   return map[code] || "－";
 }
-
 function loadWeather(){
   if (wxLoaded) return;
   wxLoaded = true;
@@ -1016,18 +1009,11 @@ function loadWeather(){
     if (!data || !data.daily || !data.daily.time) throw new Error("no data");
     var byIso = {};
     data.daily.time.forEach(function(iso, i){
-      byIso[iso] = {
-        code: data.daily.weather_code[i],
-        max: data.daily.temperature_2m_max[i],
-        min: data.daily.temperature_2m_min[i],
-        pop: data.daily.precipitation_probability_max[i]
-      };
+      byIso[iso] = { code: data.daily.weather_code[i], max: data.daily.temperature_2m_max[i], min: data.daily.temperature_2m_min[i], pop: data.daily.precipitation_probability_max[i] };
     });
     var html = SEED_DAYS.map(function(d){
       var w = byIso[d.iso];
-      if (!w) {
-        return '<li><span class="wx-date">'+d.label.replace(/（.+）/,'')+'</span><span class="wx-desc" style="flex:1">預報尚未開放（僅提供約 16 天內）</span></li>';
-      }
+      if (!w) return '<li><span class="wx-date">'+d.label.replace(/（.+）/,'')+'</span><span class="wx-desc" style="flex:1">預報尚未開放（僅提供約 16 天內）</span></li>';
       return '<li><span class="wx-date">'+d.label.replace(/（.+）/,'')+'</span>'+
         '<span class="wx-icon">'+wmoIcon(w.code)+'</span>'+
         '<span class="wx-desc">'+wmoText(w.code)+'・降雨 '+Math.round(w.pop)+'%</span>'+
