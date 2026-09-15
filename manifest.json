@@ -1,26 +1,17 @@
 {
-  "name": "仙台夏日行程 9/19–9/26",
-  "short_name": "仙台行程",
-  "description": "五人仙台自由行協作行程表，即時同步、匯率與天氣速查",
+  "name": "仙台遊 9/19-9/26",
+  "short_name": "仙台遊",
+  "description": "仙台自由行協作行程表，多人即時共同編輯",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
-  "orientation": "portrait-primary",
-  "background_color": "#0F3049",
-  "theme_color": "#0D4A66",
-  "lang": "zh-TW",
+  "orientation": "portrait",
+  "background_color": "#ECE5D6",
+  "theme_color": "#ECE5D6",
+  "lang": "zh-Hant",
   "icons": [
-    {
-      "src": "icon.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
-      "purpose": "any"
-    },
-    {
-      "src": "icon.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
-      "purpose": "maskable"
-    }
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
   ]
 }

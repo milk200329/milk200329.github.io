@@ -1,1010 +1,1062 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-Hant">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>仙台夏日行程 · 9/19–9/26</title>
-<meta name="description" content="五人仙台自由行協作行程表">
-<meta name="theme-color" content="#0D4A66">
-<link rel="manifest" href="./manifest.json">
-<link rel="icon" href="./icon.svg" type="image/svg+xml">
-<link rel="apple-touch-icon" href="./icon.svg">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="仙台行程">
-
+<title>仙台遊 9/19-9/26</title>
+<meta name="description" content="仙台自由行協作行程表，多人即時共同編輯">
+<meta name="theme-color" content="#ECE5D6">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700;900&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
-
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --paper:#F4FAFC;
-    --paper-card:#FFFFFF;
-    --ink:#0F3049;
-    --ink-soft:#5A7688;
-    --sea:#1C7EA5;
-    --sea-deep:#0D4A66;
-    --sky:#8FD8E3;
-    --sun:#00A6B8;
-    --sun-deep:#00838F;
-    --green:#5FA88F;
-    --gold:#E3DEC9;
-    --line:#D7E6EC;
-    --danger:#C0392B;
-    --radius-lg:22px;
-    --radius-md:14px;
-    --radius-sm:9px;
-    --shadow-card:0 3px 0 rgba(15,48,73,0.06), 0 10px 24px -14px rgba(15,48,73,0.28);
-    --font-display:'Zen Maru Gothic', sans-serif;
-    --font-body:'Noto Sans TC','Noto Sans JP',sans-serif;
+    --paper: #ECE5D6;
+    --paper-deep: #E1D8C4;
+    --paper-card: #F4EFE3;
+    --ink: #2B2822;
+    --ink-soft: #6B6659;
+    --ink-faint: #A69C87;
+    --line: #C9BEA4;
+    --indigo: #4B5B63;
+    --indigo-soft: #7C8D93;
+    --clay: #93604A;
+    --gold: #A07A2E;
+    --moss: #6C7A57;
+    --shadow: 0 1px 0 rgba(43,40,34,.06);
+    --radius: 3px;
+    --serif: 'Shippori Mincho', 'Noto Serif TC', serif;
+    --sans: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+    --safe-b: env(safe-area-inset-bottom, 0px);
+    --safe-t: env(safe-area-inset-top, 0px);
   }
 
-  *{box-sizing:border-box;}
-  html,body{margin:0;padding:0;}
+  *{ box-sizing:border-box; }
+  html{ -webkit-text-size-adjust:100%; }
   body{
-    background:
-      radial-gradient(circle at 12% 8%, rgba(143,216,227,0.45), transparent 40%),
-      radial-gradient(circle at 90% 4%, rgba(28,126,165,0.14), transparent 45%),
-      var(--paper);
+    margin:0;
+    font-family:var(--sans);
     color:var(--ink);
-    font-family:var(--font-body);
+    background:
+      radial-gradient(ellipse at 15% 0%, rgba(255,255,255,.35), transparent 55%),
+      radial-gradient(ellipse at 100% 30%, rgba(0,0,0,.03), transparent 45%),
+      var(--paper);
+    min-height:100vh;
     line-height:1.6;
     -webkit-font-smoothing:antialiased;
-    padding-bottom:64px;
   }
 
-  ::selection{background:var(--sun);color:#fff;}
+  ::selection{ background:var(--gold); color:var(--paper); }
 
-  a{color:var(--sea-deep);}
+  a{ color:inherit; }
 
-  button{font-family:inherit;}
+  button{
+    font-family:inherit;
+    -webkit-tap-highlight-color:transparent;
+  }
 
-  h1,h2,h3{font-family:var(--font-display); margin:0; color:var(--ink);}
-
-  /* ---------- seigaiha (青海波) wave strip ---------- */
-  .wave-strip{
-    height:26px;
-    background-color:var(--ink);
+  /* ---------- 紙紋質感（極輕量，用漸層模擬，不用外部圖檔）---------- */
+  .grain{
+    position:fixed; inset:0; pointer-events:none; z-index:0; opacity:.5; mix-blend-mode:multiply;
     background-image:
-      radial-gradient(circle at 0 13px, transparent 8px, var(--gold) 9px, var(--gold) 11px, transparent 12px),
-      radial-gradient(circle at 26px 13px, transparent 8px, var(--gold) 9px, var(--gold) 11px, transparent 12px),
-      radial-gradient(circle at 13px 0, transparent 8px, var(--gold) 9px, var(--gold) 11px, transparent 12px);
-    background-size:26px 26px;
+      repeating-linear-gradient(115deg, rgba(43,40,34,.015) 0px, rgba(43,40,34,.015) 1px, transparent 1px, transparent 3px),
+      repeating-linear-gradient(25deg, rgba(43,40,34,.012) 0px, rgba(43,40,34,.012) 1px, transparent 1px, transparent 4px);
   }
 
-  /* ---------- fixed top group: header + utility bar + day nav ---------- */
-  .top-fixed{
-    position:sticky;
-    top:0;
-    z-index:40;
-    box-shadow:0 8px 18px -10px rgba(15,48,73,0.35);
-  }
-
-  /* ---------- header ---------- */
-  header.top{
-    background:linear-gradient(160deg, var(--sea) 0%, var(--sea-deep) 100%);
-    color:var(--paper-card);
-    padding:14px 18px 13px;
-    position:relative;
-    overflow:hidden;
-  }
-  header.top::after{
-    content:"";
-    position:absolute; right:-40px; bottom:-60px;
-    width:180px;height:180px;border-radius:50%;
-    background:radial-gradient(circle, rgba(143,216,227,0.4), transparent 70%);
-  }
-  .trip-title{
-    font-size:1.5rem;
-    font-weight:900;
-    letter-spacing:.02em;
-    display:flex;
-    align-items:baseline;
-    gap:10px;
-  }
-  .trip-title .accent{color:var(--sun);}
-  .trip-sub{
-    margin-top:4px;
-    font-size:.85rem;
-    color:#DCEAEA;
-    display:flex;
-    gap:14px;
-    flex-wrap:wrap;
-  }
-  .conn-dot{
-    display:inline-flex; align-items:center; gap:6px;
-    font-size:.75rem; color:#DCEAEA;
-  }
-  .conn-dot i{
-    width:8px;height:8px;border-radius:50%;
-    background:#9AA; display:inline-block;
-    box-shadow:0 0 0 3px rgba(255,255,255,0.08);
-  }
-  .conn-dot.online i{background:#8FC97A;}
-  .conn-dot.offline i{background:var(--danger);}
-
-  /* ---------- utility bar (currency / weather) ---------- */
-  .utility-bar{
-    display:flex;
-    gap:8px;
-    padding:9px 14px;
+  /* ---------- 頁首 ---------- */
+  header.topbar{
+    position:sticky; top:0; z-index:30;
+    padding:calc(14px + var(--safe-t)) 20px 12px;
     background:var(--paper);
     border-bottom:1px solid var(--line);
-    overflow-x:auto;
   }
-  .util-toggle{
-    flex:0 0 auto;
-    display:flex; align-items:center; gap:6px;
-    background:var(--paper-card);
+  header.topbar::after{
+    content:"";
+    position:absolute; left:0; right:0; bottom:-6px; height:6px;
+    background:
+      linear-gradient(90deg, transparent 0%, rgba(43,40,34,.05) 8%, transparent 16%,
+      transparent 30%, rgba(43,40,34,.04) 38%, transparent 46%,
+      transparent 62%, rgba(43,40,34,.05) 70%, transparent 78%);
+  }
+  .title-row{ display:flex; align-items:baseline; justify-content:space-between; gap:10px; }
+  h1{
+    font-family:var(--serif);
+    font-weight:700;
+    font-size:22px;
+    letter-spacing:.04em;
+    margin:0;
+    display:flex; align-items:baseline; gap:10px; flex-wrap:wrap;
+  }
+  h1 .dates{
+    font-family:var(--sans);
+    font-weight:500;
+    font-size:13px;
+    color:var(--ink-soft);
+    letter-spacing:.02em;
+  }
+  .sync-pill{
+    flex:none;
+    font-size:11px;
+    color:var(--ink-soft);
+    display:flex; align-items:center; gap:5px;
+    padding:4px 9px;
     border:1px solid var(--line);
     border-radius:999px;
-    padding:8px 14px;
-    font-size:.82rem;
-    font-weight:500;
-    color:var(--ink-soft);
-    cursor:pointer;
-    box-shadow:var(--shadow-card);
+    background:var(--paper-card);
     white-space:nowrap;
   }
-  .util-toggle .ico{font-size:1rem;}
-  .util-toggle[aria-expanded="true"]{
-    background:var(--sun);
-    color:#fff;
-    border-color:var(--sun-deep);
-  }
+  .sync-dot{ width:6px; height:6px; border-radius:50%; background:var(--ink-faint); flex:none; }
+  .sync-pill.live .sync-dot{ background:var(--moss); box-shadow:0 0 0 3px rgba(108,122,87,.18); }
+  .sync-pill.local .sync-dot{ background:var(--clay); }
 
-  .util-panel{
-    display:none;
-    padding:14px 16px 18px;
-    background:var(--paper-card);
+  /* ---------- 日期分頁 ---------- */
+  nav.daytabs{
+    position:sticky; top:calc(56px + var(--safe-t)); z-index:29;
+    display:flex; gap:8px; overflow-x:auto;
+    padding:10px 16px 12px;
+    background:var(--paper);
     border-bottom:1px solid var(--line);
-    max-height:44vh;
-    overflow-y:auto;
+    scrollbar-width:none;
   }
-  .util-panel.open{display:block;}
-
-  .fx-row{display:flex; gap:10px; align-items:center; flex-wrap:wrap;}
-  .fx-field{
-    display:flex; flex-direction:column; gap:4px; flex:1; min-width:120px;
-  }
-  .fx-field label{font-size:.72rem; color:var(--ink-soft);}
-  .fx-field input, .fx-field select{
-    border:1px solid var(--line);
-    border-radius:var(--radius-sm);
-    padding:9px 10px;
-    font-size:1rem;
-    font-family:inherit;
-    background:#fff;
-    color:var(--ink);
-  }
-  .fx-swap{
-    align-self:flex-end;
-    border:1px solid var(--line);
-    background:#fff;
-    border-radius:50%;
-    width:38px;height:38px;
-    display:flex;align-items:center;justify-content:center;
-    cursor:pointer;
-    color:var(--sea-deep);
-    font-size:1.1rem;
-  }
-  .fx-note{margin-top:8px; font-size:.72rem; color:var(--ink-soft);}
-
-  .weather-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fill,minmax(84px,1fr));
-    gap:8px;
-  }
-  .weather-cell{
-    background:#fff;
-    border:1px solid var(--line);
-    border-radius:var(--radius-sm);
-    padding:8px 6px;
-    text-align:center;
-  }
-  .weather-cell .wd{font-size:.68rem; color:var(--ink-soft);}
-  .weather-cell .wicon{font-size:1.35rem; margin:2px 0;}
-  .weather-cell .wtemp{font-size:.78rem; font-weight:700;}
-  .weather-cell .wtemp .lo{color:var(--sea-deep); font-weight:400;}
-
-  /* ---------- day nav ---------- */
-  .day-nav{
-    display:flex;
-    gap:8px;
-    padding:10px 14px;
-    overflow-x:auto;
-    background:var(--sea-deep);
-    scroll-snap-type:x proximity;
-  }
-  .day-nav::-webkit-scrollbar{display:none;}
-  .day-chip{
-    scroll-snap-align:start;
-    flex:0 0 auto;
-    background:rgba(255,255,255,0.08);
-    border:1px solid rgba(255,255,255,0.18);
-    color:#E4EEEE;
-    border-radius:var(--radius-md);
-    padding:8px 12px;
-    text-align:left;
-    cursor:pointer;
-    min-width:72px;
-  }
-  .day-chip .fno{
-    font-size:.62rem; letter-spacing:.06em; color:#B9D3D3;
-    font-family:var(--font-display);
-  }
-  .day-chip .fdate{font-size:.86rem; font-weight:700;}
-  .day-chip.active{
-    background:var(--sun);
-    border-color:var(--sun-deep);
-    color:#fff;
-  }
-  .day-chip.active .fno{color:#DFF9FB;}
-
-  /* ---------- trip info card ---------- */
-  .wrap{max-width:640px; margin:0 auto; padding:16px;}
-
-  .card{
+  nav.daytabs::-webkit-scrollbar{ display:none; }
+  .tab{
+    flex:none;
+    font-family:var(--serif);
+    font-size:13px;
+    color:var(--ink-soft);
     background:var(--paper-card);
     border:1px solid var(--line);
-    border-radius:var(--radius-lg);
-    box-shadow:var(--shadow-card);
-    padding:16px 16px 18px;
-    margin-bottom:18px;
+    border-radius:2px;
+    padding:7px 12px 6px;
+    cursor:pointer;
+    position:relative;
+    display:flex; flex-direction:column; align-items:center; gap:1px;
+    line-height:1.25;
+    transition:color .15s ease, border-color .15s ease;
   }
-  .card h2{font-size:1.02rem; margin-bottom:10px; display:flex; align-items:center; gap:8px;}
-  .card h2 .tag{
-    font-size:.65rem; background:var(--green); color:#fff; padding:2px 8px; border-radius:999px;
-    font-family:var(--font-body); font-weight:700;
+  .tab .n{ font-size:10px; letter-spacing:.12em; color:var(--ink-faint); }
+  .tab.active{
+    color:var(--ink);
+    border-color:var(--ink);
+    background:var(--paper-deep);
   }
-
-  .info-grid{display:grid; grid-template-columns:1fr; gap:10px;}
-  .info-item{display:flex; flex-direction:column; gap:3px;}
-  .info-item .k{font-size:.7rem; color:var(--ink-soft);}
-  .info-item [contenteditable]{
-    border-bottom:1px dashed var(--line);
-    padding:4px 2px;
-    font-size:.95rem;
-    min-height:1.4em;
-    outline:none;
-    white-space:pre-wrap;
-  }
-  .info-item [contenteditable]:focus{
-    border-bottom:1px solid var(--sun);
-    background:rgba(228,105,47,0.06);
+  .tab.active::after{
+    content:"";
+    position:absolute; left:50%; bottom:-7px; transform:translateX(-50%);
+    width:4px; height:4px; border-radius:50%;
+    background:var(--gold);
   }
 
-  /* ---------- day section ---------- */
-  .day-section{scroll-margin-top:var(--sticky-offset, 190px); margin-bottom:26px;}
-  .day-head{
-    display:flex; align-items:baseline; gap:10px; margin-bottom:12px; padding-left:2px;
-  }
-  .day-head .fno{
-    font-family:var(--font-display); font-weight:900; color:var(--sun);
-    font-size:.78rem; border:1.5px solid var(--sun); border-radius:6px; padding:1px 6px;
-  }
-  .day-head h2{font-size:1.15rem;}
-  .day-head .dlabel{font-size:.8rem; color:var(--ink-soft);}
+  /* ---------- 主體 ---------- */
+  main{ max-width:640px; margin:0 auto; padding:22px 16px calc(120px + var(--safe-b)); position:relative; z-index:1; }
 
-  .timeline{position:relative; padding-left:34px;}
+  .day-section{ margin-bottom:40px; scroll-margin-top:118px; }
+  .day-head{ margin-bottom:18px; padding-left:2px; }
+  .day-head .d-label{
+    font-family:var(--serif); font-size:12px; letter-spacing:.18em; color:var(--indigo);
+  }
+  .day-head h2{
+    font-family:var(--serif); font-weight:600; font-size:19px; margin:3px 0 0;
+    letter-spacing:.02em;
+  }
+
+  .timeline{ position:relative; list-style:none; margin:0; padding:0 0 0 2px; }
   .timeline::before{
     content:"";
-    position:absolute; left:14px; top:6px; bottom:6px; width:2px;
-    background:repeating-linear-gradient(to bottom, var(--gold) 0 6px, transparent 6px 11px);
+    position:absolute; left:52px; top:6px; bottom:6px; width:1px;
+    background:linear-gradient(var(--line), var(--line) 92%, transparent);
   }
 
   .item{
     position:relative;
-    background:var(--paper-card);
-    border:1px solid var(--line);
-    border-radius:var(--radius-md);
-    box-shadow:var(--shadow-card);
-    padding:10px 12px 11px 14px;
-    margin-bottom:10px;
-    display:flex;
-    gap:8px;
-    align-items:flex-start;
+    display:grid;
+    grid-template-columns:44px 1fr;
+    column-gap:14px;
+    padding:9px 0;
+    touch-action:pan-y;
   }
-  .item::before{
-    content:"";
-    position:absolute; left:-27px; top:16px;
-    width:12px; height:12px; border-radius:50%;
-    background:var(--sea);
-    border:2px solid var(--paper-card);
-    box-shadow:0 0 0 2px var(--gold);
-  }
-  .item.sortable-ghost{opacity:.35;}
-  .item.sortable-drag{box-shadow:0 10px 20px -6px rgba(0,0,0,.35);}
+  .item.dragging{ opacity:.55; }
+  .item.drag-over-before{ box-shadow: inset 0 2px 0 var(--gold); }
+  .item.drag-over-after{ box-shadow: inset 0 -2px 0 var(--gold); }
 
-  .item .grip{
-    flex:0 0 auto;
-    color:var(--line);
-    cursor:grab;
-    font-size:1.1rem;
-    line-height:1;
-    padding:4px 2px;
-    touch-action:none;
-    user-select:none;
-  }
-  .item .body{flex:1; min-width:0;}
   .item .time{
-    font-family:var(--font-display);
-    font-weight:700;
-    color:var(--sun-deep);
-    font-size:.86rem;
-    display:inline-block;
-    margin-bottom:2px;
-  }
-  .item .time:empty::before{content:"—"; color:var(--line);}
-  .item .title{font-weight:500; font-size:.97rem; word-break:break-word;}
-  .item .note{
-    margin-top:3px; font-size:.82rem; color:var(--ink-soft);
-    white-space:pre-wrap; word-break:break-word;
-  }
-  .item .edit-btn{
-    flex:0 0 auto;
-    background:none; border:none;
-    color:var(--sea-deep);
-    font-size:1.05rem;
-    cursor:pointer;
-    padding:4px 2px;
-  }
-
-  .add-item-btn{
-    margin-left:34px;
-    display:flex; align-items:center; gap:6px;
-    background:none;
-    border:1.5px dashed var(--sea);
-    color:var(--sea-deep);
-    border-radius:var(--radius-md);
-    padding:10px 14px;
-    font-size:.88rem;
-    font-weight:500;
-    cursor:pointer;
-    width:calc(100% - 34px);
-  }
-  .add-item-btn:active{background:rgba(63,110,122,0.08);}
-
-  .empty-day{
-    margin-left:34px;
+    font-family:var(--serif);
+    font-size:13px;
     color:var(--ink-soft);
-    font-size:.85rem;
-    padding:14px 0;
+    padding-top:9px;
+    text-align:right;
+    white-space:nowrap;
+  }
+  .item .time.empty{ color:var(--ink-faint); }
+  .item .dot{
+    position:absolute; left:52px; top:15px; width:7px; height:7px; margin-left:-3.5px;
+    border-radius:50%; background:var(--paper); border:1.5px solid var(--indigo);
   }
 
-  /* ---------- modal ---------- */
-  .sheet-backdrop{
-    position:fixed; inset:0; background:rgba(15,48,73,0.45);
-    display:none; align-items:flex-end; justify-content:center;
-    z-index:50;
-  }
-  .sheet-backdrop.open{display:flex;}
-  .sheet{
+  .card{
     background:var(--paper-card);
-    width:100%; max-width:640px;
-    border-radius:22px 22px 0 0;
-    padding:18px 18px calc(18px + env(safe-area-inset-bottom));
-    box-shadow:0 -10px 30px rgba(0,0,0,.25);
-    max-height:86vh;
-    overflow-y:auto;
-  }
-  .sheet-handle{
-    width:40px;height:4px;border-radius:2px;background:var(--line);
-    margin:0 auto 14px;
-  }
-  .sheet h3{font-size:1.05rem; margin-bottom:14px;}
-  .field{margin-bottom:12px; display:flex; flex-direction:column; gap:4px;}
-  .field label{font-size:.75rem; color:var(--ink-soft);}
-  .field input, .field textarea{
     border:1px solid var(--line);
-    border-radius:var(--radius-sm);
-    padding:10px 11px;
-    font-size:1rem;
-    font-family:inherit;
-    background:#fff;
-    color:var(--ink);
-    resize:vertical;
+    border-radius:var(--radius);
+    padding:10px 12px 9px 14px;
+    box-shadow:var(--shadow);
   }
-  .field textarea{min-height:70px;}
-  .sheet-actions{display:flex; gap:10px; margin-top:16px;}
+  .card .row1{ display:flex; align-items:flex-start; gap:8px; }
+  .card .grip{
+    flex:none; cursor:grab; color:var(--ink-faint); font-size:15px; line-height:1;
+    padding:3px 2px 3px 0; margin-top:1px; touch-action:none; user-select:none;
+    letter-spacing:-1px;
+  }
+  .card .grip:active{ cursor:grabbing; }
+  .card h3{
+    font-family:var(--serif); font-weight:600; font-size:15px; margin:0; flex:1;
+    letter-spacing:.01em;
+  }
+  .card .desc{
+    font-size:12.5px; color:var(--ink-soft); margin:5px 0 0 0; line-height:1.65;
+    white-space:pre-line;
+  }
+  .card .actions{ display:flex; gap:6px; margin-top:8px; }
+  .card .actions a, .card .actions button{
+    font-size:11px; color:var(--ink-soft);
+    background:transparent; border:1px solid var(--line); border-radius:999px;
+    padding:4px 10px; display:inline-flex; align-items:center; gap:4px;
+    text-decoration:none; cursor:pointer;
+  }
+  .card .actions a:hover, .card .actions button:hover{ border-color:var(--indigo); color:var(--indigo); }
+
+  .add-item{
+    margin:14px 0 0 56px;
+    background:transparent;
+    border:1px dashed var(--line);
+    color:var(--ink-soft);
+    font-size:12.5px;
+    padding:9px 14px;
+    border-radius:var(--radius);
+    cursor:pointer;
+    width:calc(100% - 56px);
+    text-align:left;
+  }
+  .add-item:hover{ border-color:var(--indigo); color:var(--indigo); }
+
+  /* ---------- 浮動按鈕 ---------- */
+  .fab-stack{
+    position:fixed; right:16px; bottom:calc(20px + var(--safe-b)); z-index:40;
+    display:flex; flex-direction:column; gap:10px;
+  }
+  .fab{
+    width:46px; height:46px; border-radius:50%;
+    background:var(--ink); color:var(--paper);
+    border:1px solid var(--ink);
+    font-size:18px;
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer;
+    box-shadow:0 3px 10px rgba(43,40,34,.25);
+  }
+
+  /* ---------- 底部彈出面板 ---------- */
+  .backdrop{
+    position:fixed; inset:0; background:rgba(43,40,34,.38);
+    opacity:0; pointer-events:none; transition:opacity .2s ease; z-index:49;
+  }
+  .backdrop.show{ opacity:1; pointer-events:auto; }
+
+  .sheet{
+    position:fixed; left:0; right:0; bottom:0; z-index:50;
+    max-width:640px; margin:0 auto;
+    background:var(--paper);
+    border:1px solid var(--line); border-bottom:none;
+    border-radius:14px 14px 0 0;
+    padding:16px 20px calc(22px + var(--safe-b));
+    transform:translateY(105%);
+    transition:transform .25s cubic-bezier(.32,.72,.31,1);
+    box-shadow:0 -8px 24px rgba(43,40,34,.18);
+    max-height:82vh; overflow-y:auto;
+  }
+  .sheet.show{ transform:translateY(0); }
+  .sheet .grabber{ width:36px; height:4px; border-radius:2px; background:var(--line); margin:0 auto 14px; }
+  .sheet h3{ font-family:var(--serif); font-size:16px; margin:0 0 4px; }
+  .sheet .sub{ font-size:12px; color:var(--ink-soft); margin:0 0 16px; }
+  .sheet .close-x{
+    position:absolute; right:14px; top:14px; background:none; border:none;
+    font-size:18px; color:var(--ink-soft); cursor:pointer; padding:6px;
+  }
+
+  label.field{ display:block; margin-bottom:13px; }
+  label.field .lbl{ display:block; font-size:11.5px; color:var(--ink-soft); margin-bottom:5px; letter-spacing:.04em; }
+  label.field input, label.field textarea{
+    width:100%; font-family:inherit; font-size:14.5px; color:var(--ink);
+    background:var(--paper-card); border:1px solid var(--line); border-radius:var(--radius);
+    padding:9px 11px; resize:vertical;
+  }
+  label.field input:focus, label.field textarea:focus{ outline:none; border-color:var(--indigo); }
+
+  .btn-row{ display:flex; gap:10px; margin-top:6px; }
   .btn{
-    flex:1;
-    border:none;
-    border-radius:var(--radius-sm);
-    padding:12px;
-    font-size:.94rem;
-    font-weight:700;
-    cursor:pointer;
-    font-family:inherit;
+    flex:1; text-align:center; padding:11px; border-radius:var(--radius);
+    font-size:14px; cursor:pointer; border:1px solid var(--line); background:var(--paper-card); color:var(--ink);
   }
-  .btn-primary{background:var(--sun); color:#fff;}
-  .btn-primary:active{background:var(--sun-deep);}
-  .btn-ghost{background:#fff; color:var(--ink-soft); border:1px solid var(--line);}
-  .btn-danger{background:none; color:var(--danger); border:1px solid var(--danger); flex:0 0 auto; width:44px;}
+  .btn.primary{ background:var(--ink); color:var(--paper); border-color:var(--ink); }
+  .btn.danger{ background:transparent; color:var(--clay); border-color:var(--clay); flex:none; padding:11px 16px; }
 
-  footer.app-footer{
-    text-align:center; font-size:.72rem; color:var(--ink-soft); padding:20px 16px 6px;
+  /* 匯率 */
+  .rate-line{ font-size:12px; color:var(--ink-soft); margin-bottom:14px; }
+  .rate-line b{ color:var(--ink); font-family:var(--serif); }
+  .conv-row{ display:flex; align-items:center; gap:10px; margin-bottom:12px; }
+  .conv-row .cur{ width:52px; font-size:12px; color:var(--ink-soft); font-family:var(--serif); }
+  .conv-row input{
+    flex:1; font-size:18px; font-family:var(--serif); color:var(--ink);
+    background:var(--paper-card); border:1px solid var(--line); border-radius:var(--radius);
+    padding:10px 12px;
+  }
+  .conv-row input:focus{ outline:none; border-color:var(--indigo); }
+  .swap-mark{ text-align:center; font-size:11px; color:var(--ink-faint); margin:-4px 0 10px; letter-spacing:.2em; }
+
+  /* 天氣 */
+  .wx-list{ list-style:none; margin:0; padding:0; }
+  .wx-list li{
+    display:flex; align-items:center; gap:12px;
+    padding:9px 0; border-bottom:1px solid var(--line);
+  }
+  .wx-list li:last-child{ border-bottom:none; }
+  .wx-date{ width:78px; font-family:var(--serif); font-size:12.5px; color:var(--ink); flex:none; }
+  .wx-icon{ font-size:20px; width:26px; text-align:center; flex:none; }
+  .wx-desc{ flex:1; font-size:12px; color:var(--ink-soft); }
+  .wx-temp{ font-size:12.5px; color:var(--ink); white-space:nowrap; font-family:var(--serif); }
+  .wx-empty{ font-size:12px; color:var(--ink-faint); padding:14px 0; text-align:center; }
+
+  .toast{
+    position:fixed; left:50%; bottom:calc(28px + var(--safe-b)); transform:translateX(-50%) translateY(12px);
+    background:var(--ink); color:var(--paper); font-size:12.5px;
+    padding:9px 16px; border-radius:999px; z-index:60;
+    opacity:0; pointer-events:none; transition:opacity .2s ease, transform .2s ease;
+    white-space:nowrap;
+  }
+  .toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
+
+  footer.credit{
+    text-align:center; font-size:11px; color:var(--ink-faint);
+    padding:0 20px calc(30px + var(--safe-b)); letter-spacing:.05em;
   }
 
-  .back-to-top{
-    position:fixed;
-    right:16px;
-    bottom:calc(16px + env(safe-area-inset-bottom));
-    width:48px;height:48px;
-    border-radius:50%;
-    background:var(--sun);
-    color:#fff;
-    border:2px solid var(--paper-card);
-    box-shadow:0 8px 18px -4px rgba(15,48,73,0.4);
-    font-size:1.3rem;
-    line-height:1;
-    display:flex;align-items:center;justify-content:center;
-    cursor:pointer;
-    z-index:60;
-  }
-  .back-to-top:active{background:var(--sun-deep);}
-
-  @media (min-width:560px){
-    .info-grid{grid-template-columns:1fr 1fr;}
-  }
-
-  @media (prefers-reduced-motion: reduce){
-    *{scroll-behavior:auto !important; transition:none !important;}
+  @media (min-width:640px){
+    nav.daytabs{ padding-left:calc((100% - 640px)/2 + 16px); padding-right:calc((100% - 640px)/2 + 16px); }
+    header.topbar{ padding-left:calc((100% - 640px)/2 + 20px); padding-right:calc((100% - 640px)/2 + 20px); }
   }
 </style>
 </head>
 <body>
+<div class="grain"></div>
 
-<div class="top-fixed">
-  <div class="wave-strip" aria-hidden="true"></div>
-
-  <header class="top">
-    <div class="trip-title"><span class="accent">仙台</span>夏日行</div>
-    <div class="trip-sub">
-      <span>9/19 – 9/26</span>
-      <span id="connIndicator" class="conn-dot offline"><i></i>連線中…</span>
-    </div>
-  </header>
-
-  <!-- Utility bar -->
-  <div class="utility-bar">
-    <button class="util-toggle" id="toggleFx" aria-expanded="false"><span class="ico">💴</span>匯率換算</button>
-    <button class="util-toggle" id="toggleWx" aria-expanded="false"><span class="ico">🌤️</span>仙台天氣</button>
+<header class="topbar">
+  <div class="title-row">
+    <h1>仙台遊 <span class="dates">9/19 – 9/26</span></h1>
+    <span class="sync-pill local" id="syncPill"><span class="sync-dot"></span><span id="syncText">連線中…</span></span>
   </div>
+</header>
 
-  <div class="util-panel" id="fxPanel">
-    <div class="fx-row">
-      <div class="fx-field">
-        <label for="fxFrom">從</label>
-        <input type="number" id="fxAmount" value="1000" inputmode="decimal">
-        <select id="fxFrom"></select>
-      </div>
-      <button class="fx-swap" id="fxSwap" title="交換幣別" type="button">⇄</button>
-      <div class="fx-field">
-        <label for="fxTo">換成</label>
-        <input type="text" id="fxResult" readonly>
-        <select id="fxTo"></select>
-      </div>
-    </div>
-    <div class="fx-note" id="fxUpdated">即時匯率讀取中…</div>
-  </div>
+<nav class="daytabs" id="dayTabs"></nav>
 
-  <div class="util-panel" id="wxPanel">
-    <div class="weather-grid" id="weatherGrid">
-      <div class="weather-cell"><div class="wd">讀取中</div></div>
-    </div>
-    <div class="fx-note">資料來源：Open-Meteo（免金鑰），僅未來 16 天內提供實際預報</div>
-  </div>
+<main id="main"></main>
 
-  <!-- Day navigation -->
-  <nav class="day-nav" id="dayNav" aria-label="行程天數"></nav>
+<footer class="credit">旅途中隨手編修 · 內容會即時同步給所有人</footer>
+
+<div class="fab-stack">
+  <button class="fab" id="fabWeather" title="天氣">🌤️</button>
+  <button class="fab" id="fabCurrency" title="匯率">💴</button>
 </div>
 
-<div class="wrap">
+<div class="backdrop" id="backdrop"></div>
 
-  <div id="daysContainer"></div>
+<section class="sheet" id="weatherSheet">
+  <button class="close-x" data-close>✕</button>
+  <div class="grabber"></div>
+  <h3>仙台天氣</h3>
+  <p class="sub">資料來源 Open-Meteo（免金鑰，僅提供未來約 16 天內的預報）</p>
+  <ul class="wx-list" id="wxList"><li class="wx-empty">讀取中…</li></ul>
+</section>
 
-</div>
-
-<footer class="app-footer">
-  仙台夏日行 · 內容由所有持有連結的成員共同即時編輯
-</footer>
-
-<button class="back-to-top" id="backToTop" title="回到最上方" type="button">↑</button>
-
-<!-- Edit / Add item sheet -->
-<div class="sheet-backdrop" id="sheetBackdrop">
-  <div class="sheet">
-    <div class="sheet-handle"></div>
-    <h3 id="sheetTitle">編輯行程</h3>
-    <div class="field">
-      <label for="fldTime">時間</label>
-      <input type="text" id="fldTime" placeholder="例如 09:20 或 → 10:13/10:28">
-    </div>
-    <div class="field">
-      <label for="fldTitle">內容</label>
-      <input type="text" id="fldTitle" placeholder="行程標題">
-    </div>
-    <div class="field">
-      <label for="fldNote">備註</label>
-      <textarea id="fldNote" placeholder="交通方式、注意事項…（選填）"></textarea>
-    </div>
-    <div class="sheet-actions">
-      <button class="btn btn-danger" id="btnDelete" title="刪除" type="button">🗑</button>
-      <button class="btn btn-ghost" id="btnCancel" type="button">取消</button>
-      <button class="btn btn-primary" id="btnSave" type="button">儲存</button>
-    </div>
+<section class="sheet" id="currencySheet">
+  <button class="close-x" data-close>✕</button>
+  <div class="grabber"></div>
+  <h3>日幣・新台幣 速算</h3>
+  <p class="rate-line" id="rateLine">正在取得即時匯率…</p>
+  <div class="conv-row">
+    <span class="cur">JPY ¥</span>
+    <input type="number" inputmode="decimal" id="jpyInput" placeholder="0">
   </div>
-</div>
+  <div class="swap-mark">≈ ⇅ ≈</div>
+  <div class="conv-row">
+    <span class="cur">TWD $</span>
+    <input type="number" inputmode="decimal" id="twdInput" placeholder="0">
+  </div>
+</section>
 
-<!-- ============ Firebase (compat SDK, CDN) ============ -->
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
-<!-- ============ SortableJS for press-and-hold drag reorder ============ -->
-<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
+<section class="sheet" id="editSheet">
+  <button class="close-x" data-close>✕</button>
+  <div class="grabber"></div>
+  <h3 id="editTitle">編輯行程</h3>
+  <p class="sub" id="editDayLabel"></p>
+  <label class="field">
+    <span class="lbl">時間（可留白，或填「晚上」等文字）</span>
+    <input type="text" id="fTime" placeholder="例如 09:20">
+  </label>
+  <label class="field">
+    <span class="lbl">標題</span>
+    <input type="text" id="fTitle" placeholder="行程名稱">
+  </label>
+  <label class="field">
+    <span class="lbl">備註</span>
+    <textarea id="fDesc" rows="3" placeholder="交通、注意事項…"></textarea>
+  </label>
+  <label class="field">
+    <span class="lbl">地圖搜尋關鍵字（給導航按鈕用，留白則用標題）</span>
+    <input type="text" id="fLoc" placeholder="例如 瑞鳳殿">
+  </label>
+  <div class="btn-row">
+    <button class="btn danger" id="btnDelete">刪除</button>
+    <button class="btn" data-close>取消</button>
+    <button class="btn primary" id="btnSave">儲存</button>
+  </div>
+</section>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-database-compat.js"></script>
 
 <script>
+(function(){
+"use strict";
+
 /* =========================================================================
-   將這裡替換成你自己的 Firebase 設定 (Firebase Console → 專案設定 → 你的應用程式)
+   1) 基本設定 — 請將 firebaseConfig 換成你自己的專案設定
    ========================================================================= */
-const firebaseConfig = {
-  apiKey: "AIzaSyDxMwkCU23PB6Q60r3TWEu3elG00r4ywM0",
-  authDomain: "sendai-6666.firebaseapp.com",
-  databaseURL: "https://sendai-6666-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "sendai-6666",
-  storageBucket: "sendai-6666.firebasestorage.app",
-  messagingSenderId: "317293713360",
-  appId: "1:317293713360:web:e3d5175a54ae43c801cbd5",
-  measurementId: "G-Y1EH4G7745"
+var firebaseConfig = {
+  apiKey: "REPLACE_ME_API_KEY",
+  authDomain: "REPLACE_ME.firebaseapp.com",
+  databaseURL: "https://REPLACE_ME-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "REPLACE_ME",
+  storageBucket: "REPLACE_ME.appspot.com",
+  messagingSenderId: "REPLACE_ME",
+  appId: "REPLACE_ME"
 };
+var DB_ROOT = "sendaiTrip2026"; // Realtime Database 底下的資料節點
 
-firebase.initializeApp(firebaseConfig);
-const db = firebase.database();
+var LAT = 38.2682, LON = 140.8694; // 仙台
 
-/* ---------------------------------------------------------------------
-   種子資料：僅在資料庫「days」節點完全不存在時（例如全新的 Firebase 專案）
-   寫入一次，之後所有內容一律以 Firebase 上的即時資料為準。
---------------------------------------------------------------------- */
-const SEED_DAYS = {
-  day1: { order:1, date:"9/19（六）", label:"第一天", items:{
-    i1:{order:1, time:"18:10", title:"抵達仙台機場", note:""},
-    i2:{order:2, time:"19:00", title:"搭仙台機場 Access 線", note:"可能搭 19:00／19:28\n行李只能放腳邊，有點擠，下車時要自己按開關打開門\n只能刷西瓜卡進站，或機器買票選 660 元\n抵達 3／4 號月台，手扶梯到二樓，左手邊東口改札"},
-    i3:{order:3, time:"19:27", title:"抵達仙台車站 → 步行去飯店", note:""},
-    i4:{order:4, time:"19:45", title:"Hotel Grand Bach Sendai", note:"步行 10 分，CHECK IN 放行李"},
-    i5:{order:5, time:"20:10", title:"晚餐－たんや善治郎 南町通り店", note:"步行 15 分，這間人潮較少"}
-  }},
-  day2: { order:2, date:"9/20（日）", label:"第二天", items:{
-    i1:{order:1, time:"07:15", title:"大廳寄行李＋早餐", note:""},
-    i2:{order:2, time:"08:20", title:"LOOPLE 盧葡兒仙台 觀光巴士－買一日券 630（現金）", note:"早點到，第一班約 09 點，人潮應該就很多"},
-    i3:{order:3, time:"09:13", title:"瑞鳳殿（1H）", note:"→ 10:13／10:28／10:43 這幾班接續"},
-    i4:{order:4, time:"10:28", title:"仙台城跡（30M）", note:"→ 11:08／11:23 一定要搭到這班，不然得搭計程車回來"},
-    i5:{order:5, time:"12:07", title:"回到仙台車站", note:"先走路過去晃晃，約 6 分"},
-    i6:{order:6, time:"12:45", title:"中餐－仔虎燒肉 站前店", note:""},
-    i7:{order:7, time:"14:15", title:"逛街", note:""},
-    i8:{order:8, time:"18:00", title:"札幌螃蟹本家 仙台店", note:""}
-  }},
-  day3: { order:3, date:"9/21（一）", label:"第三天", items:{
-    i1:{order:1, time:"", title:"換飯店：寄行李 → ホテル京阪", note:""},
-    i2:{order:2, time:"", title:"松島", note:"車程約 50 分"},
-    i3:{order:3, time:"", title:"牡蠣", note:"40 分吃到飽 or 單點，大部分 15:00 收店"},
-    i4:{order:4, time:"", title:"搭船遊松島", note:"15:30 過後天氣容易不好；船班 10:00／11:00／12:00／13:00／14:00／15:00"},
-    i5:{order:5, time:"", title:"瑞巖寺", note:""},
-    i6:{order:6, time:"", title:"★瑞巖寺五大堂", note:""},
-    i7:{order:7, time:"", title:"福浦橋", note:""},
-    i8:{order:8, time:"", title:"クロワッサン屋サクサク", note:"可頌，營業 10-17，有分店"},
-    i9:{order:9, time:"11:00", title:"MATSUSHIMA SANDWICH STORE 松島三明治", note:"營業 11-16"},
-    i10:{order:10, time:"", title:"Cafe le Roman 松島 咖啡廳", note:"營業 11-17"},
-    i11:{order:11, time:"", title:"松島蒲鉾本舗", note:"烤魚板"},
-    i12:{order:12, time:"", title:"烤仙貝", note:""}
-  }},
-  day4: { order:4, date:"9/22（二）", label:"第四天", items:{
-    i1:{order:1, time:"", title:"早餐超商", note:""},
-    i2:{order:2, time:"08:00", title:"出發", note:"車程約 1H20M"},
-    i3:{order:3, time:"09:20", title:"藏王御釜（1H）", note:""},
-    i4:{order:4, time:"10:20", title:"出發去山形", note:"車程約 1H"},
-    i5:{order:5, time:"11:30", title:"米澤牛 登起波 山形店", note:""},
-    i6:{order:6, time:"13:00", title:"出發去山寺", note:"車程約 30M"},
-    i7:{order:7, time:"13:30", title:"山寺", note:"爬山約 1.5H"},
-    i8:{order:8, time:"15:00", title:"回仙台", note:"車程約 1H10M"},
-    i9:{order:9, time:"16:20", title:"回飯店", note:"建議去睡一下"},
-    i10:{order:10, time:"18:00", title:"晚餐牛舌", note:""}
-  }},
-  day5: { order:5, date:"9/23（三）", label:"第五天", items:{
-    i1:{order:1, time:"08:30", title:"仙台海洋森林水族館", note:"10:30 餵企鵝"},
-    i2:{order:2, time:"", title:"中餐", note:"去隔壁三井 Outlet／百貨吃，或回市區吃"},
-    i3:{order:3, time:"", title:"下午行程", note:"待安排"}
-  }},
-  day6: { order:6, date:"9/24（四）", label:"第六天", items:{
-    i1:{order:1, time:"07:00", title:"開車前往石卷", note:""},
-    i2:{order:2, time:"09:00", title:"石卷出航", note:""},
-    i3:{order:3, time:"09:44", title:"貓島", note:""},
-    i4:{order:4, time:"11:06", title:"回航", note:""},
-    i5:{order:5, time:"11:51", title:"抵達石卷", note:""},
-    i6:{order:6, time:"13:00", title:"回到仙台", note:"中餐"}
-  }},
-  day7: { order:7, date:"9/25（五）", label:"第七天", items:{
-    i1:{order:1, time:"", title:"金蛇水神社", note:""},
-    i2:{order:2, time:"", title:"購物", note:""},
-    i3:{order:3, time:"晚上", title:"還車", note:""}
-  }},
-  day8: { order:8, date:"9/26（六）", label:"第八天", items:{
-    i1:{order:1, time:"", title:"行李寄放車站", note:""},
-    i2:{order:2, time:"19:00", title:"飛機", note:""}
-  }}
-};
+/* =========================================================================
+   2) 預設行程（第一次啟用、資料庫還是空的時候，會拿這份去建立初始資料）
+   ========================================================================= */
+var SEED_DAYS = [
+  { id:"day1", iso:"2026-09-19", label:"9/19（六）", title:"第一天・抵達仙台", events:[
+    { time:"18:10", title:"抵達仙台機場", desc:"", loc:"仙台空港" },
+    { time:"19:00", title:"搭仙台機場 Access 線", desc:"可能搭 19:00 / 19:28 班次。行李只能放腳邊，車廂有點擠；下車要自己按開關開門。只能刷西瓜卡進站，或用機器買票選 660 日圓。抵達 3/4 號月台，搭手扶梯到二樓，左手邊是東口改札。", loc:"仙台空港アクセス線 仙台空港駅" },
+    { time:"19:27", title:"抵達仙台車站，步行前往飯店", desc:"", loc:"仙台駅 東口" },
+    { time:"19:45", title:"Hotel Grand Bach Sendai", desc:"步行約 10 分。Check in、放行李。", loc:"ホテルグランバッハ仙台" },
+    { time:"20:10", title:"晚餐：たんや善治郎 南町通り店", desc:"步行約 15 分，這間人潮較少。", loc:"たんや善治郎 南町通り店" }
+  ]},
+  { id:"day2", iso:"2026-09-20", label:"9/20（日）", title:"第二天・仙台城下町", events:[
+    { time:"07:15", title:"大廳寄放行李、飯店早餐", desc:"", loc:"" },
+    { time:"08:20", title:"LOOPLE 盧葡兒仙台觀光巴士", desc:"買一日券 630 日圓（限現金）。早點到，搭第一班人潮應該就很多。", loc:"るーぷる仙台 仙台駅前のりば" },
+    { time:"09:13", title:"瑞鳳殿（停留約 1 小時）", desc:"預計搭 10:13 / 10:28 / 10:43 的巴士離開。", loc:"瑞鳳殿" },
+    { time:"10:28", title:"仙台城跡（停留約 30 分）", desc:"一定要搭到 11:08 / 11:23 這班，不然得搭計程車回去。", loc:"仙台城跡" },
+    { time:"12:07", title:"回到仙台車站，先散步過去晃晃", desc:"步行約 6 分。", loc:"仙台駅" },
+    { time:"12:45", title:"中餐：仔虎燒肉 站前店", desc:"", loc:"焼肉 仔虎 仙台站前店" },
+    { time:"14:15", title:"逛街", desc:"", loc:"仙台駅前 商店街" },
+    { time:"18:00", title:"晚餐：札幌螃蟹本家 仙台店", desc:"", loc:"札幌かに本家 仙台店" }
+  ]},
+  { id:"day3", iso:"2026-09-21", label:"9/21（一）", title:"第三天・松島一日", events:[
+    { time:"", title:"換飯店，寄放行李", desc:"ホテル京阪", loc:"ホテル京阪 仙台" },
+    { time:"", title:"松島（停留約 50 分）", desc:"", loc:"松島" },
+    { time:"", title:"牡蠣", desc:"40 分吃到飽或單點，大部分 15:00 收店。", loc:"松島 牡蠣小屋" },
+    { time:"", title:"搭觀光船", desc:"15:30 過後天氣容易不好。班次：10:00、11:00、12:00、13:00、14:00、15:00。", loc:"松島島巡り観光船" },
+    { time:"", title:"瑞巖寺", desc:"", loc:"瑞巌寺" },
+    { time:"", title:"瑞巖寺五大堂", desc:"必去", loc:"五大堂 松島" },
+    { time:"", title:"福浦橋", desc:"", loc:"福浦橋" },
+    { time:"", title:"クロワッサン屋サクサク", desc:"可頌，營業 10:00–17:00，有分店。", loc:"クロワッサン屋サクサク 松島" },
+    { time:"11:00", title:"MATSUSHIMA SANDWICH STORE", desc:"松島三明治，營業 11:00–16:00。", loc:"MATSUSHIMA SANDWICH STORE" },
+    { time:"", title:"Cafe le Roman 松島", desc:"咖啡廳，營業 11:00–17:00。", loc:"Cafe le Roman 松島" },
+    { time:"", title:"松島蒲鉾本舗", desc:"烤魚板", loc:"松島蒲鉾本舗" },
+    { time:"", title:"烤仙貝", desc:"", loc:"松島 焼き煎餅" }
+  ]},
+  { id:"day4", iso:"2026-09-22", label:"9/22（二）", title:"第四天・藏王御釜・山形・山寺", events:[
+    { time:"", title:"早餐：超商", desc:"", loc:"" },
+    { time:"08:00", title:"出發前往藏王御釜", desc:"車程約 1 小時 20 分。", loc:"蔵王 御釜" },
+    { time:"09:20", title:"藏王御釜（停留約 1 小時）", desc:"", loc:"蔵王 御釜" },
+    { time:"10:20", title:"出發前往山形", desc:"車程約 1 小時。", loc:"山形市" },
+    { time:"11:30", title:"米澤牛 登起波 山形店", desc:"", loc:"米沢牛 登起波 山形店" },
+    { time:"13:00", title:"出發前往山寺", desc:"車程約 30 分。", loc:"山寺" },
+    { time:"13:30", title:"山寺", desc:"爬山約 1.5 小時。", loc:"山寺 立石寺" },
+    { time:"15:00", title:"回仙台", desc:"車程約 1 小時 10 分。", loc:"仙台市" },
+    { time:"16:20", title:"回飯店休息", desc:"建議先去睡一下。", loc:"" },
+    { time:"18:00", title:"晚餐：牛舌", desc:"", loc:"仙台 牛たん通り" }
+  ]},
+  { id:"day5", iso:"2026-09-23", label:"9/23（三）", title:"第五天・海洋森林水族館", events:[
+    { time:"08:30", title:"仙台海洋森林水族館", desc:"10:30 有餵企鵝。", loc:"仙台うみの杜水族館" },
+    { time:"", title:"中餐", desc:"去隔壁三井 Outlet 吃，或回市區吃。", loc:"三井アウトレットパーク仙台港" },
+    { time:"", title:"下午行程", desc:"尚未決定。", loc:"" }
+  ]},
+  { id:"day6", iso:"2026-09-24", label:"9/24（四）", title:"第六天・石卷貓島", events:[
+    { time:"07:00", title:"開車前往石卷", desc:"", loc:"石巻市" },
+    { time:"09:00", title:"石卷出航", desc:"", loc:"石巻港" },
+    { time:"09:44", title:"抵達貓島（田代島）", desc:"", loc:"田代島" },
+    { time:"11:06", title:"回航", desc:"", loc:"田代島" },
+    { time:"11:51", title:"抵達石卷", desc:"", loc:"石巻港" },
+    { time:"13:00", title:"回仙台，中餐", desc:"", loc:"仙台市" }
+  ]},
+  { id:"day7", iso:"2026-09-25", label:"9/25（五）", title:"第七天・金蛇水神社・購物", events:[
+    { time:"", title:"金蛇水神社", desc:"", loc:"金蛇水神社" },
+    { time:"", title:"購物", desc:"", loc:"仙台駅" },
+    { time:"晚上", title:"還車", desc:"", loc:"仙台市 レンタカー返却" }
+  ]},
+  { id:"day8", iso:"2026-09-26", label:"9/26（六）", title:"第八天・賦歸", events:[
+    { time:"", title:"行李寄放車站", desc:"", loc:"仙台駅" },
+    { time:"19:00", title:"搭機返程", desc:"", loc:"仙台空港" }
+  ]}
+];
 
-/* ---------------------------------------------------------------------
-   連線狀態
---------------------------------------------------------------------- */
-const connEl = document.getElementById('connIndicator');
-db.ref('.info/connected').on('value', (snap) => {
-  if (snap.val() === true) {
-    connEl.className = 'conn-dot online';
-    connEl.innerHTML = '<i></i>已連線・即時同步中';
-  } else {
-    connEl.className = 'conn-dot offline';
-    connEl.innerHTML = '<i></i>離線中（需連線才能同步編輯）';
-  }
-});
-
-/* ---------------------------------------------------------------------
-   種子資料寫入（僅第一次、資料庫是空的時候）
---------------------------------------------------------------------- */
-db.ref('days').once('value').then((snap) => {
-  if (!snap.exists()) {
-    db.ref('days').set(SEED_DAYS);
-  }
-});
-
-/* ---------------------------------------------------------------------
-   天數導覽 + 行程時間軸
---------------------------------------------------------------------- */
-const dayNav = document.getElementById('dayNav');
-const daysContainer = document.getElementById('daysContainer');
-const DAY_IDS = ['day1','day2','day3','day4','day5','day6','day7','day8'];
-let dayMeta = {}; // dayId -> {date,label}
-let draggingNow = false;
-
-// 建立每天的固定 DOM 骨架（導覽 chip + section + timeline 容器）一次即可
-DAY_IDS.forEach((dayId, idx) => {
-  const chip = document.createElement('button');
-  chip.className = 'day-chip';
-  chip.dataset.day = dayId;
-  chip.innerHTML = `<div class="fno">No.${String(idx+1).padStart(2,'0')}</div><div class="fdate">…</div>`;
-  chip.addEventListener('click', () => {
-    document.getElementById('sec-' + dayId).scrollIntoView({ behavior:'smooth', block:'start' });
-    setActiveChip(dayId);
+/* =========================================================================
+   3) 小工具
+   ========================================================================= */
+function $(sel, root){ return (root||document).querySelector(sel); }
+function $all(sel, root){ return Array.prototype.slice.call((root||document).querySelectorAll(sel)); }
+function esc(s){
+  return String(s==null?"":s).replace(/[&<>"']/g, function(c){
+    return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c];
   });
-  dayNav.appendChild(chip);
-
-  const section = document.createElement('section');
-  section.className = 'day-section';
-  section.id = 'sec-' + dayId;
-  section.innerHTML = `
-    <div class="day-head">
-      <span class="fno">No.${String(idx+1).padStart(2,'0')}</span>
-      <h2 class="dtitle">…</h2>
-      <span class="dlabel">…</span>
-    </div>
-    <div class="timeline" id="tl-${dayId}"></div>
-    <button class="add-item-btn" data-day="${dayId}" type="button">＋ 新增行程</button>
-  `;
-  daysContainer.appendChild(section);
-});
-
-function setActiveChip(dayId) {
-  document.querySelectorAll('.day-chip').forEach(c => c.classList.toggle('active', c.dataset.day === dayId));
+}
+function uid(){ return "ev" + Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
+function showToast(msg){
+  var t = $("#toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  clearTimeout(showToast._tm);
+  showToast._tm = setTimeout(function(){ t.classList.remove("show"); }, 1800);
 }
 
-// 監聽每天的 date/label
-DAY_IDS.forEach((dayId) => {
-  db.ref(`days/${dayId}/date`).on('value', (snap) => {
-    const v = snap.val() || '';
-    dayMeta[dayId] = dayMeta[dayId] || {};
-    dayMeta[dayId].date = v;
-    const chip = dayNav.querySelector(`.day-chip[data-day="${dayId}"] .fdate`);
-    if (chip) chip.textContent = v;
-    const h2 = document.querySelector(`#sec-${dayId} .dtitle`);
-    if (h2) h2.textContent = v;
-  });
-  db.ref(`days/${dayId}/label`).on('value', (snap) => {
-    const v = snap.val() || '';
-    const lab = document.querySelector(`#sec-${dayId} .dlabel`);
-    if (lab) lab.textContent = v;
-  });
-});
+/* =========================================================================
+   4) 資料狀態
+   本機記憶體中的資料結構： DATA = { day1:[{id,time,title,desc,loc,order}, ...], day2:[...], ... }
+   ========================================================================= */
+var DATA = {};
+var DAY_META = {}; // id -> {iso,label,title}
+SEED_DAYS.forEach(function(d){ DAY_META[d.id] = { iso:d.iso, label:d.label, title:d.title }; });
 
-// 監聽每天的 items，重繪該天時間軸
-const sortableInstances = {};
-DAY_IDS.forEach((dayId) => {
-  db.ref(`days/${dayId}/items`).on('value', (snap) => {
-    if (draggingNow) return; // 拖曳中先不重繪，避免打架
-    renderTimeline(dayId, snap.val() || {});
+var dbRef = null;       // firebase database ref（有連上才會設定）
+var useFirebase = false;
+var lastRenderedJSON = {}; // 每天的資料 JSON 快取，避免不必要的重繪
+var draggingDay = null;    // 正在拖曳排序中的天，暫停該天的即時重繪
+
+/* =========================================================================
+   5) Firebase 初始化與同步
+   ========================================================================= */
+function isConfigPlaceholder(){
+  return !firebaseConfig.apiKey || firebaseConfig.apiKey.indexOf("REPLACE_ME") === 0;
+}
+
+function seedLocalData(){
+  SEED_DAYS.forEach(function(d){
+    DATA[d.id] = d.events.map(function(ev, i){
+      return { id: uid(), time: ev.time||"", title: ev.title||"", desc: ev.desc||"", loc: ev.loc||"", order: i };
+    });
   });
-});
+}
 
-function renderTimeline(dayId, itemsObj) {
-  const tl = document.getElementById('tl-' + dayId);
-  if (!tl) return;
-  const entries = Object.entries(itemsObj).sort((a,b) => (a[1].order||0) - (b[1].order||0));
-
-  if (entries.length === 0) {
-    tl.innerHTML = '<div class="empty-day">這天還沒有行程，點下方「新增行程」開始安排吧</div>';
+function initFirebase(){
+  if (isConfigPlaceholder()) {
+    setSyncState("local", "本機模式（尚未連接 Firebase）");
+    seedLocalData();
+    loadLocalStorageFallback();
+    renderAllDays();
     return;
   }
+  try{
+    firebase.initializeApp(firebaseConfig);
+    dbRef = firebase.database().ref(DB_ROOT);
+    useFirebase = true;
+    setSyncState("connecting", "連線中…");
 
-  tl.innerHTML = entries.map(([itemId, item]) => `
-    <div class="item" data-id="${itemId}">
-      <div class="grip" title="按住拖曳排序">⠿</div>
-      <div class="body">
-        <div class="time">${escapeHtml(item.time || '')}</div>
-        <div class="title">${escapeHtml(item.title || '')}</div>
-        ${item.note ? `<div class="note">${escapeHtml(item.note)}</div>` : ''}
-      </div>
-      <button class="edit-btn" data-day="${dayId}" data-id="${itemId}" title="編輯">✎</button>
-    </div>
-  `).join('');
-
-  tl.querySelectorAll('.edit-btn').forEach(btn => {
-    btn.addEventListener('click', () => openSheet(btn.dataset.day, btn.dataset.id));
-  });
-
-  // 初始化 / 重新綁定 SortableJS（按住拖曳排序）
-  if (sortableInstances[dayId]) sortableInstances[dayId].destroy();
-  sortableInstances[dayId] = new Sortable(tl, {
-    handle: '.grip',
-    animation: 150,
-    delay: 120,
-    delayOnTouchOnly: true,
-    touchStartThreshold: 4,
-    onStart: () => { draggingNow = true; },
-    onEnd: (evt) => {
-      draggingNow = false;
-      const ids = Array.from(tl.querySelectorAll('.item')).map(el => el.dataset.id);
-      const updates = {};
-      ids.forEach((id, i) => { updates[`days/${dayId}/items/${id}/order`] = i + 1; });
-      db.ref().update(updates);
-    }
-  });
-}
-
-function escapeHtml(str) {
-  return String(str)
-    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-}
-
-/* ---------------------------------------------------------------------
-   新增 / 編輯 / 刪除 行程項目（底部彈出面板）
---------------------------------------------------------------------- */
-const sheetBackdrop = document.getElementById('sheetBackdrop');
-const sheetTitle = document.getElementById('sheetTitle');
-const fldTime = document.getElementById('fldTime');
-const fldTitle = document.getElementById('fldTitle');
-const fldNote = document.getElementById('fldNote');
-const btnSave = document.getElementById('btnSave');
-const btnCancel = document.getElementById('btnCancel');
-const btnDelete = document.getElementById('btnDelete');
-
-let sheetCtx = { dayId:null, itemId:null, mode:'edit' };
-
-function openSheet(dayId, itemId) {
-  sheetCtx = { dayId, itemId, mode:'edit' };
-  sheetTitle.textContent = '編輯行程';
-  btnDelete.style.display = 'inline-block';
-  db.ref(`days/${dayId}/items/${itemId}`).once('value').then(snap => {
-    const v = snap.val() || {};
-    fldTime.value = v.time || '';
-    fldTitle.value = v.title || '';
-    fldNote.value = v.note || '';
-    sheetBackdrop.classList.add('open');
-    fldTitle.focus();
-  });
-}
-
-function openSheetForNew(dayId) {
-  sheetCtx = { dayId, itemId:null, mode:'add' };
-  sheetTitle.textContent = '新增行程';
-  btnDelete.style.display = 'none';
-  fldTime.value = '';
-  fldTitle.value = '';
-  fldNote.value = '';
-  sheetBackdrop.classList.add('open');
-  fldTitle.focus();
-}
-
-function closeSheet() {
-  sheetBackdrop.classList.remove('open');
-}
-
-document.querySelectorAll('.add-item-btn').forEach(btn => {
-  btn.addEventListener('click', () => openSheetForNew(btn.dataset.day));
-});
-
-btnCancel.addEventListener('click', closeSheet);
-sheetBackdrop.addEventListener('click', (e) => { if (e.target === sheetBackdrop) closeSheet(); });
-
-btnSave.addEventListener('click', () => {
-  const title = fldTitle.value.trim();
-  if (!title) { fldTitle.focus(); return; }
-  const data = { time: fldTime.value.trim(), title, note: fldNote.value.trim() };
-
-  if (sheetCtx.mode === 'add') {
-    db.ref(`days/${sheetCtx.dayId}/items`).once('value').then(snap => {
-      const items = snap.val() || {};
-      const maxOrder = Object.values(items).reduce((m,it) => Math.max(m, it.order||0), 0);
-      const newRef = db.ref(`days/${sheetCtx.dayId}/items`).push();
-      newRef.set({ ...data, order: maxOrder + 1 });
-      closeSheet();
+    dbRef.once("value").then(function(snap){
+      if (!snap.exists()) {
+        // 資料庫是空的：寫入預設行程
+        var initPayload = {};
+        SEED_DAYS.forEach(function(d){
+          var obj = {};
+          d.events.forEach(function(ev, i){
+            var id = uid();
+            obj[id] = { time: ev.time||"", title: ev.title||"", desc: ev.desc||"", loc: ev.loc||"", order:i };
+          });
+          initPayload[d.id] = obj;
+        });
+        dbRef.set(initPayload);
+      }
+    }).catch(function(err){
+      console.error(err);
+      setSyncState("local", "連線失敗，改用本機模式");
+      seedLocalData();
+      renderAllDays();
     });
+
+    dbRef.on("value", function(snap){
+      var val = snap.val() || {};
+      SEED_DAYS.forEach(function(d){
+        var raw = val[d.id] || {};
+        var list = Object.keys(raw).map(function(key){
+          var e = raw[key] || {};
+          return { id:key, time:e.time||"", title:e.title||"", desc:e.desc||"", loc:e.loc||"", order: (typeof e.order==="number")?e.order:0 };
+        });
+        list.sort(function(a,b){ return a.order - b.order; });
+        DATA[d.id] = list;
+      });
+      setSyncState("live", "即時同步中");
+      renderChangedDays();
+    }, function(err){
+      console.error(err);
+      setSyncState("local", "連線中斷，改用本機模式");
+    });
+  }catch(err){
+    console.error(err);
+    setSyncState("local", "本機模式（Firebase 設定有誤）");
+    seedLocalData();
+    renderAllDays();
+  }
+}
+
+function setSyncState(state, text){
+  var pill = $("#syncPill");
+  pill.className = "sync-pill " + (state==="live" ? "live" : "local");
+  $("#syncText").textContent = text;
+}
+
+/* 沒接 Firebase 時，退而求其次用 localStorage 記住本機的編輯（僅限這台裝置） */
+function loadLocalStorageFallback(){
+  try{
+    var raw = localStorage.getItem("sendaiTripLocal");
+    if (raw) {
+      var parsed = JSON.parse(raw);
+      Object.keys(parsed).forEach(function(k){ if (DATA[k]) DATA[k] = parsed[k]; });
+    }
+  }catch(e){}
+}
+function saveLocalStorageFallback(){
+  try{ localStorage.setItem("sendaiTripLocal", JSON.stringify(DATA)); }catch(e){}
+}
+
+/* =========================================================================
+   6) 寫入操作（新增 / 編輯 / 刪除 / 排序），兩種模式（Firebase or 本機）共用介面
+   ========================================================================= */
+function writeEvent(dayId, ev){
+  if (useFirebase) {
+    var payload = { time: ev.time||"", title: ev.title||"", desc: ev.desc||"", loc: ev.loc||"", order: ev.order||0 };
+    dbRef.child(dayId).child(ev.id).set(payload);
   } else {
-    db.ref(`days/${sheetCtx.dayId}/items/${sheetCtx.itemId}`).update(data);
-    closeSheet();
+    var list = DATA[dayId] || (DATA[dayId] = []);
+    var idx = list.findIndex(function(x){ return x.id===ev.id; });
+    if (idx>=0) list[idx] = ev; else list.push(ev);
+    saveLocalStorageFallback();
+    renderDay(dayId);
   }
-});
-
-btnDelete.addEventListener('click', () => {
-  if (sheetCtx.mode === 'edit' && sheetCtx.itemId) {
-    db.ref(`days/${sheetCtx.dayId}/items/${sheetCtx.itemId}`).remove();
+}
+function deleteEvent(dayId, evId){
+  if (useFirebase) {
+    dbRef.child(dayId).child(evId).remove();
+  } else {
+    DATA[dayId] = (DATA[dayId]||[]).filter(function(x){ return x.id!==evId; });
+    saveLocalStorageFallback();
+    renderDay(dayId);
   }
-  closeSheet();
-});
+}
+function writeOrder(dayId, orderedIds){
+  if (useFirebase) {
+    var updates = {};
+    orderedIds.forEach(function(id, i){ updates[dayId + "/" + id + "/order"] = i; });
+    dbRef.root.update(prefixUpdates(updates));
+  } else {
+    var list = DATA[dayId]||[];
+    orderedIds.forEach(function(id, i){
+      var it = list.find(function(x){ return x.id===id; });
+      if (it) it.order = i;
+    });
+    list.sort(function(a,b){ return a.order-b.order; });
+    saveLocalStorageFallback();
+  }
+}
+function prefixUpdates(updates){
+  var out = {};
+  Object.keys(updates).forEach(function(k){ out[DB_ROOT + "/" + k] = updates[k]; });
+  return out;
+}
 
-/* ---------------------------------------------------------------------
-   工具列：展開/收合
---------------------------------------------------------------------- */
-function setupToggle(btnId, panelId, otherBtnId, otherPanelId) {
-  const btn = document.getElementById(btnId);
-  const panel = document.getElementById(panelId);
-  btn.addEventListener('click', () => {
-    const isOpen = panel.classList.contains('open');
-    panel.classList.toggle('open', !isOpen);
-    btn.setAttribute('aria-expanded', String(!isOpen));
-    if (!isOpen) {
-      document.getElementById(otherPanelId).classList.remove('open');
-      document.getElementById(otherBtnId).setAttribute('aria-expanded', 'false');
-    }
-    updateStickyOffset();
+/* =========================================================================
+   7) 畫面渲染
+   ========================================================================= */
+function buildTabs(){
+  var nav = $("#dayTabs");
+  nav.innerHTML = SEED_DAYS.map(function(d, i){
+    return '<button type="button" class="tab" data-day="'+d.id+'"><span class="n">DAY '+(i+1)+'</span>'+d.label.replace(/（.+）/,'')+'</button>';
+  }).join("");
+  nav.addEventListener("click", function(e){
+    var btn = e.target.closest(".tab");
+    if (!btn) return;
+    var sec = document.getElementById(btn.dataset.day);
+    if (sec) sec.scrollIntoView({ behavior:"smooth", block:"start" });
   });
 }
-setupToggle('toggleFx','fxPanel','toggleWx','wxPanel');
-setupToggle('toggleWx','wxPanel','toggleFx','fxPanel');
 
-/* ---------------------------------------------------------------------
-   固定頂部區塊（標題＋匯率天氣列＋天數選單）高度會隨面板展開而變動，
-   即時量測並寫入 CSS 變數，讓下方各天內容捲動定位時不會被蓋住
---------------------------------------------------------------------- */
-function updateStickyOffset() {
-  const topFixed = document.querySelector('.top-fixed');
-  if (!topFixed) return;
-  document.documentElement.style.setProperty('--sticky-offset', topFixed.offsetHeight + 12 + 'px');
-}
-window.addEventListener('load', updateStickyOffset);
-window.addEventListener('resize', updateStickyOffset);
-setTimeout(updateStickyOffset, 300);
-
-/* ---------------------------------------------------------------------
-   匯率換算（Open Exchange Rates 免金鑰公開端點）
---------------------------------------------------------------------- */
-const CURRENCIES = [
-  { code:'JPY', label:'日圓 JPY' },
-  { code:'TWD', label:'新台幣 TWD' },
-  { code:'USD', label:'美金 USD' },
-  { code:'CNY', label:'人民幣 CNY' },
-  { code:'KRW', label:'韓元 KRW' },
-  { code:'HKD', label:'港幣 HKD' }
-];
-const fxFrom = document.getElementById('fxFrom');
-const fxTo = document.getElementById('fxTo');
-const fxAmount = document.getElementById('fxAmount');
-const fxResult = document.getElementById('fxResult');
-const fxUpdated = document.getElementById('fxUpdated');
-const fxSwap = document.getElementById('fxSwap');
-
-CURRENCIES.forEach(c => {
-  fxFrom.appendChild(new Option(c.label, c.code));
-  fxTo.appendChild(new Option(c.label, c.code));
-});
-fxFrom.value = 'JPY';
-fxTo.value = 'TWD';
-
-let fxRates = null; // relative to JPY (base)
-
-async function loadFxRates() {
-  try {
-    const res = await fetch('https://open.er-api.com/v6/latest/JPY');
-    const json = await res.json();
-    if (json.result === 'success' && json.rates) {
-      fxRates = json.rates; // 1 JPY = rates[code]
-      const t = new Date(json.time_last_update_utc || Date.now());
-      fxUpdated.textContent = '即時匯率（以 JPY 為基準）更新於 ' + t.toLocaleString('zh-TW');
-      calcFx();
-    } else {
-      throw new Error('bad response');
-    }
-  } catch (e) {
-    fxUpdated.textContent = '匯率讀取失敗，請檢查網路連線後重新整理';
-  }
+function buildSkeleton(){
+  var main = $("#main");
+  main.innerHTML = SEED_DAYS.map(function(d){
+    return (
+      '<section class="day-section" id="'+d.id+'">'+
+        '<div class="day-head"><div class="d-label">'+esc(d.label)+'</div><h2>'+esc(d.title)+'</h2></div>'+
+        '<ul class="timeline" id="tl-'+d.id+'"></ul>'+
+        '<button type="button" class="add-item" data-day="'+d.id+'">＋ 新增行程</button>'+
+      '</section>'
+    );
+  }).join("");
 }
 
-function calcFx() {
-  if (!fxRates) return;
-  const amount = parseFloat(fxAmount.value) || 0;
-  const from = fxFrom.value;
-  const to = fxTo.value;
-  // rates are per 1 JPY. Convert amount(from) -> JPY -> to
-  const fromRate = fxRates[from]; // 1 JPY = fromRate[from]
-  const toRate = fxRates[to];
-  if (!fromRate || !toRate) { fxResult.value = '—'; return; }
-  const amountInJpy = amount / fromRate;
-  const result = amountInJpy * toRate;
-  fxResult.value = result.toLocaleString('zh-TW', { maximumFractionDigits: 2 });
+function eventCardHTML(dayId, ev){
+  var mapQ = encodeURIComponent((ev.loc && ev.loc.trim()) ? ev.loc.trim() : ev.title);
+  var mapHref = "https://www.google.com/maps/search/?api=1&query=" + mapQ;
+  return (
+    '<li class="item" data-id="'+ev.id+'" data-day="'+dayId+'">'+
+      '<div class="time'+(ev.time?'':' empty')+'">'+(esc(ev.time)||'－')+'</div>'+
+      '<div class="dot"></div>'+
+      '<div class="card">'+
+        '<div class="row1">'+
+          '<span class="grip" data-grip>⠿</span>'+
+          '<h3>'+esc(ev.title || "（未命名）")+'</h3>'+
+        '</div>'+
+        (ev.desc ? '<p class="desc">'+esc(ev.desc)+'</p>' : '')+
+        '<div class="actions">'+
+          '<a href="'+mapHref+'" target="_blank" rel="noopener">🗺️ 導航</a>'+
+          '<button type="button" data-edit>✏️ 編輯</button>'+
+        '</div>'+
+      '</div>'+
+    '</li>'
+  );
 }
 
-fxAmount.addEventListener('input', calcFx);
-fxFrom.addEventListener('change', calcFx);
-fxTo.addEventListener('change', calcFx);
-fxSwap.addEventListener('click', () => {
-  const a = fxFrom.value; fxFrom.value = fxTo.value; fxTo.value = a;
-  calcFx();
-});
-loadFxRates();
-
-/* ---------------------------------------------------------------------
-   天氣（Open-Meteo，免金鑰）－ 仙台市
---------------------------------------------------------------------- */
-const SENDAI_LAT = 38.2682, SENDAI_LON = 140.8694;
-const TRIP_START = '2026-09-19', TRIP_END = '2026-09-26';
-
-const WMO_ICON = {
-  0:'☀️',1:'🌤️',2:'⛅',3:'☁️',
-  45:'🌫️',48:'🌫️',
-  51:'🌦️',53:'🌦️',55:'🌦️',
-  61:'🌧️',63:'🌧️',65:'🌧️',
-  71:'🌨️',73:'🌨️',75:'🌨️',
-  80:'🌦️',81:'🌧️',82:'⛈️',
-  95:'⛈️',96:'⛈️',99:'⛈️'
-};
-
-async function loadWeather() {
-  const grid = document.getElementById('weatherGrid');
-  try {
-    const url = `https://api.open-meteo.com/v1/forecast?latitude=${SENDAI_LAT}&longitude=${SENDAI_LON}&daily=weathercode,temperature_2m_max,temperature_2m_min&timezone=Asia%2FTokyo&start_date=${TRIP_START}&end_date=${TRIP_END}`;
-    const res = await fetch(url);
-    const json = await res.json();
-    if (!json.daily || !json.daily.time) throw new Error('no data');
-    const { time, weathercode, temperature_2m_max, temperature_2m_min } = json.daily;
-    grid.innerHTML = time.map((d, i) => {
-      const dt = new Date(d + 'T00:00:00');
-      const md = `${dt.getMonth()+1}/${dt.getDate()}`;
-      const icon = WMO_ICON[weathercode[i]] || '🌡️';
-      return `<div class="weather-cell">
-        <div class="wd">${md}</div>
-        <div class="wicon">${icon}</div>
-        <div class="wtemp">${Math.round(temperature_2m_max[i])}°<span class="lo">/${Math.round(temperature_2m_min[i])}°</span></div>
-      </div>`;
-    }).join('');
-  } catch (e) {
-    grid.innerHTML = '<div class="weather-cell" style="grid-column:1/-1">尚未進入 16 天預報範圍，出發前幾天再回來查看即時預報</div>';
-  }
+function renderDay(dayId){
+  var list = (DATA[dayId]||[]).slice().sort(function(a,b){ return a.order-b.order; });
+  var ul = document.getElementById("tl-"+dayId);
+  if (!ul) return;
+  ul.innerHTML = list.map(function(ev){ return eventCardHTML(dayId, ev); }).join("");
+  lastRenderedJSON[dayId] = JSON.stringify(list);
 }
-loadWeather();
 
-/* ---------------------------------------------------------------------
-   回到最上方
---------------------------------------------------------------------- */
-document.getElementById('backToTop').addEventListener('click', () => {
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-});
+function renderAllDays(){
+  SEED_DAYS.forEach(function(d){ renderDay(d.id); });
+}
 
-/* ---------------------------------------------------------------------
-   PWA：註冊 Service Worker
---------------------------------------------------------------------- */
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./sw.js').catch(() => {});
+function renderChangedDays(){
+  SEED_DAYS.forEach(function(d){
+    if (draggingDay === d.id) return; // 拖曳中先不要重繪，避免手感被打斷
+    var list = (DATA[d.id]||[]).slice().sort(function(a,b){ return a.order-b.order; });
+    var json = JSON.stringify(list);
+    if (json !== lastRenderedJSON[d.id]) renderDay(d.id);
   });
 }
+
+/* Sticky 分頁：捲動時自動高亮目前所在的天 */
+function setupActiveTabObserver(){
+  var tabs = $all(".tab");
+  var sections = SEED_DAYS.map(function(d){ return document.getElementById(d.id); });
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if (!entry.isIntersecting) return;
+      var id = entry.target.id;
+      tabs.forEach(function(t){ t.classList.toggle("active", t.dataset.day===id); });
+    });
+  }, { rootMargin: "-120px 0px -70% 0px", threshold: 0 });
+  sections.forEach(function(s){ if (s) io.observe(s); });
+}
+
+/* =========================================================================
+   8) 事件代理：導航、編輯、刪除、新增
+   ========================================================================= */
+var editingCtx = null; // { dayId, evId } 或 { dayId, isNew:true }
+
+function openEditSheet(dayId, evId){
+  var meta = DAY_META[dayId];
+  var isNew = !evId;
+  var ev = isNew ? { time:"", title:"", desc:"", loc:"" } : (DATA[dayId]||[]).find(function(x){ return x.id===evId; });
+  if (!ev) return;
+  editingCtx = { dayId:dayId, evId: isNew? null : evId, isNew: isNew };
+  $("#editTitle").textContent = isNew ? "新增行程" : "編輯行程";
+  $("#editDayLabel").textContent = meta ? (meta.label + "　" + meta.title) : "";
+  $("#fTime").value = ev.time||"";
+  $("#fTitle").value = ev.title||"";
+  $("#fDesc").value = ev.desc||"";
+  $("#fLoc").value = ev.loc||"";
+  $("#btnDelete").style.display = isNew ? "none" : "inline-block";
+  openSheet("#editSheet");
+  setTimeout(function(){ $("#fTitle").focus(); }, 260);
+}
+
+function saveEditSheet(){
+  if (!editingCtx) return;
+  var title = $("#fTitle").value.trim();
+  if (!title) { showToast("請輸入標題"); return; }
+  var dayId = editingCtx.dayId;
+  if (editingCtx.isNew) {
+    var list = DATA[dayId]||[];
+    var maxOrder = list.reduce(function(m,x){ return Math.max(m, x.order||0); }, -1);
+    var ev = { id: uid(), time:$("#fTime").value.trim(), title:title, desc:$("#fDesc").value.trim(), loc:$("#fLoc").value.trim(), order: maxOrder+1 };
+    writeEvent(dayId, ev);
+  } else {
+    var cur = (DATA[dayId]||[]).find(function(x){ return x.id===editingCtx.evId; });
+    var order = cur ? cur.order : 0;
+    var ev2 = { id: editingCtx.evId, time:$("#fTime").value.trim(), title:title, desc:$("#fDesc").value.trim(), loc:$("#fLoc").value.trim(), order: order };
+    writeEvent(dayId, ev2);
+  }
+  closeSheets();
+  showToast("已儲存");
+}
+
+function deleteCurrentEvent(){
+  if (!editingCtx || editingCtx.isNew) return;
+  deleteEvent(editingCtx.dayId, editingCtx.evId);
+  closeSheets();
+  showToast("已刪除");
+}
+
+document.addEventListener("click", function(e){
+  var addBtn = e.target.closest(".add-item");
+  if (addBtn) { openEditSheet(addBtn.dataset.day, null); return; }
+
+  var editBtn = e.target.closest("[data-edit]");
+  if (editBtn) {
+    var li = editBtn.closest(".item");
+    openEditSheet(li.dataset.day, li.dataset.id);
+    return;
+  }
+});
+
+$("#btnSave").addEventListener("click", saveEditSheet);
+$("#btnDelete").addEventListener("click", function(){
+  if (confirm("確定要刪除這個行程項目嗎？")) deleteCurrentEvent();
+});
+
+/* =========================================================================
+   9) 拖拉排序（Pointer Events，支援觸控與滑鼠）
+   ========================================================================= */
+(function setupDragReorder(){
+  var dragEl = null, dayId = null, startY = 0, placeholderIndex = -1, itemsEls = [];
+
+  document.addEventListener("pointerdown", function(e){
+    var grip = e.target.closest("[data-grip]");
+    if (!grip) return;
+    var li = grip.closest(".item");
+    if (!li) return;
+    e.preventDefault();
+    dragEl = li;
+    dayId = li.dataset.day;
+    draggingDay = dayId;
+    startY = e.clientY;
+    var ul = document.getElementById("tl-"+dayId);
+    itemsEls = $all(".item", ul);
+    placeholderIndex = itemsEls.indexOf(li);
+    li.classList.add("dragging");
+    li.setPointerCapture && grip.setPointerCapture(e.pointerId);
+    document.addEventListener("pointermove", onMove);
+    document.addEventListener("pointerup", onUp, { once:true });
+  });
+
+  function onMove(e){
+    if (!dragEl) return;
+    var dy = e.clientY - startY;
+    dragEl.style.transform = "translateY("+dy+"px)";
+    dragEl.style.zIndex = "5";
+    dragEl.style.position = "relative";
+
+    // 找出目前指標所在的項目，決定插入位置
+    var overEl = null;
+    for (var i=0;i<itemsEls.length;i++){
+      var el = itemsEls[i];
+      if (el===dragEl) continue;
+      var r = el.getBoundingClientRect();
+      if (e.clientY > r.top && e.clientY < r.bottom) { overEl = el; break; }
+    }
+    itemsEls.forEach(function(el){ el.classList.remove("drag-over-before","drag-over-after"); });
+    if (overEl) {
+      var idx = itemsEls.indexOf(overEl);
+      var r2 = overEl.getBoundingClientRect();
+      var before = e.clientY < (r2.top + r2.height/2);
+      overEl.classList.add(before ? "drag-over-before" : "drag-over-after");
+      placeholderIndex = before ? idx : idx+1;
+      if (placeholderIndex > itemsEls.indexOf(dragEl)) placeholderIndex--;
+    }
+  }
+
+  function onUp(){
+    document.removeEventListener("pointermove", onMove);
+    if (!dragEl) return;
+    dragEl.style.transform = "";
+    dragEl.style.zIndex = "";
+    dragEl.style.position = "";
+    dragEl.classList.remove("dragging");
+    itemsEls.forEach(function(el){ el.classList.remove("drag-over-before","drag-over-after"); });
+
+    var ul = document.getElementById("tl-"+dayId);
+    var order = $all(".item", ul).map(function(el){ return el.dataset.id; });
+    var fromIdx = order.indexOf(dragEl.dataset.id);
+    order.splice(fromIdx, 1);
+    var insertAt = Math.max(0, Math.min(placeholderIndex, order.length));
+    order.splice(insertAt, 0, dragEl.dataset.id);
+
+    // 依新順序重排 DOM，立即回饋
+    order.forEach(function(id){
+      var el = ul.querySelector('.item[data-id="'+id+'"]');
+      if (el) ul.appendChild(el);
+    });
+
+    writeOrder(dayId, order);
+    draggingDay = null;
+    dragEl = null;
+  }
+})();
+
+/* =========================================================================
+   10) 底部彈出面板（天氣 / 匯率 / 編輯）共用開關邏輯
+   ========================================================================= */
+function openSheet(sel){
+  $(sel).classList.add("show");
+  $("#backdrop").classList.add("show");
+}
+function closeSheets(){
+  $all(".sheet").forEach(function(s){ s.classList.remove("show"); });
+  $("#backdrop").classList.remove("show");
+  editingCtx = null;
+}
+$("#backdrop").addEventListener("click", closeSheets);
+document.addEventListener("click", function(e){
+  if (e.target.closest("[data-close]")) closeSheets();
+});
+$("#fabWeather").addEventListener("click", function(){ openSheet("#weatherSheet"); loadWeather(); });
+$("#fabCurrency").addEventListener("click", function(){ openSheet("#currencySheet"); loadRate(); });
+
+/* =========================================================================
+   11) 匯率速算（open.er-api.com，免金鑰）
+   ========================================================================= */
+var FALLBACK_RATE = 0.215; // 抓取失敗時的備援參考值（1 JPY ≈ 幾元 TWD）
+var currentRate = null;
+var rateLoaded = false;
+
+function loadRate(){
+  if (rateLoaded) return;
+  rateLoaded = true;
+  fetch("https://open.er-api.com/v6/latest/JPY")
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      if (data && data.rates && data.rates.TWD) {
+        currentRate = data.rates.TWD;
+        $("#rateLine").innerHTML = "即時匯率　1 <b>JPY</b> ≈ <b>"+currentRate.toFixed(4)+"</b> TWD";
+      } else {
+        throw new Error("no rate");
+      }
+    })
+    .catch(function(){
+      currentRate = FALLBACK_RATE;
+      $("#rateLine").innerHTML = "（即時匯率取得失敗，暫用參考值）1 <b>JPY</b> ≈ <b>"+FALLBACK_RATE+"</b> TWD";
+    });
+}
+
+var jpyEl = $("#jpyInput"), twdEl = $("#twdInput");
+jpyEl.addEventListener("input", function(){
+  var r = currentRate || FALLBACK_RATE;
+  var v = parseFloat(jpyEl.value);
+  twdEl.value = isNaN(v) ? "" : Math.round(v * r * 100)/100;
+});
+twdEl.addEventListener("input", function(){
+  var r = currentRate || FALLBACK_RATE;
+  var v = parseFloat(twdEl.value);
+  jpyEl.value = isNaN(v) ? "" : Math.round((v / r) * 100)/100;
+});
+
+/* =========================================================================
+   12) 天氣（Open-Meteo，免金鑰）
+   ========================================================================= */
+var wxLoaded = false;
+function wmoIcon(code){
+  if (code===0) return "☀️";
+  if (code===1) return "🌤️";
+  if (code===2) return "⛅";
+  if (code===3) return "☁️";
+  if (code===45||code===48) return "🌫️";
+  if ([51,53,55,56,57].indexOf(code)>=0) return "🌦️";
+  if ([61,63,65,66,67,80,81,82].indexOf(code)>=0) return "🌧️";
+  if ([71,73,75,77,85,86].indexOf(code)>=0) return "❄️";
+  if ([95,96,99].indexOf(code)>=0) return "⛈️";
+  return "🌡️";
+}
+function wmoText(code){
+  var map = {0:"晴朗",1:"晴時多雲",2:"多雲時晴",3:"陰天",45:"有霧",48:"霧淞",
+    51:"小毛毛雨",53:"毛毛雨",55:"大毛毛雨",56:"凍雨",57:"凍雨",
+    61:"小雨",63:"中雨",65:"大雨",66:"凍雨",67:"凍雨",
+    71:"小雪",73:"中雪",75:"大雪",77:"雪粒",
+    80:"陣雨",81:"陣雨",82:"強陣雨",85:"陣雪",86:"強陣雪",
+    95:"雷雨",96:"雷雨挾冰雹",99:"強雷雨挾冰雹"};
+  return map[code] || "－";
+}
+
+function loadWeather(){
+  if (wxLoaded) return;
+  wxLoaded = true;
+  var start = SEED_DAYS[0].iso, end = SEED_DAYS[SEED_DAYS.length-1].iso;
+  var url = "https://api.open-meteo.com/v1/forecast?latitude="+LAT+"&longitude="+LON+
+    "&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max"+
+    "&timezone=Asia%2FTokyo&start_date="+start+"&end_date="+end;
+  fetch(url).then(function(r){ return r.json(); }).then(function(data){
+    if (!data || !data.daily || !data.daily.time) throw new Error("no data");
+    var byIso = {};
+    data.daily.time.forEach(function(iso, i){
+      byIso[iso] = {
+        code: data.daily.weather_code[i],
+        max: data.daily.temperature_2m_max[i],
+        min: data.daily.temperature_2m_min[i],
+        pop: data.daily.precipitation_probability_max[i]
+      };
+    });
+    var html = SEED_DAYS.map(function(d){
+      var w = byIso[d.iso];
+      if (!w) {
+        return '<li><span class="wx-date">'+d.label.replace(/（.+）/,'')+'</span><span class="wx-desc" style="flex:1">預報尚未開放（僅提供約 16 天內）</span></li>';
+      }
+      return '<li><span class="wx-date">'+d.label.replace(/（.+）/,'')+'</span>'+
+        '<span class="wx-icon">'+wmoIcon(w.code)+'</span>'+
+        '<span class="wx-desc">'+wmoText(w.code)+'・降雨 '+Math.round(w.pop)+'%</span>'+
+        '<span class="wx-temp">'+Math.round(w.min)+'° / '+Math.round(w.max)+'°</span></li>';
+    }).join("");
+    $("#wxList").innerHTML = html;
+  }).catch(function(){
+    $("#wxList").innerHTML = '<li class="wx-empty">天氣資料取得失敗，稍後再試一次。</li>';
+    wxLoaded = false;
+  });
+}
+
+/* =========================================================================
+   13) PWA：註冊 Service Worker
+   ========================================================================= */
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", function(){
+    navigator.serviceWorker.register("sw.js").catch(function(err){ console.warn("SW 註冊失敗", err); });
+  });
+}
+
+/* =========================================================================
+   14) 啟動
+   ========================================================================= */
+buildTabs();
+buildSkeleton();
+setupActiveTabObserver();
+initFirebase();
+
+})();
 </script>
 </body>
 </html>

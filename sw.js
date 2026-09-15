@@ -1,92 +1,63 @@
-// 仙台行程 PWA Service Worker
-// 策略：同源檔案（HTML/CSS/JS/manifest/icon）一律「網路優先」，確保部署新版後不會看到舊快取；
-// 離線時才退回快取。外部 CDN 函式庫則「快取優先」，減少重覆下載並支援離線開啟。
-// Firebase 即時資料庫走 WebSocket / XHR long-polling，不攔截、直接放行給網路。
-
-const SHELL_CACHE = 'sendai-shell-v1';
-const CDN_CACHE = 'sendai-cdn-v1';
-
-const SHELL_ASSETS = [
-  './',
-  './index.html',
-  './manifest.json',
-  './icon.svg'
+// 仙台遊 9/19-9/26 — Service Worker
+// 版本號：更新內容後請務必調整這個字串，才會清掉舊快取、換上新版
+const CACHE_VERSION = "sendai-trip-v1";
+const CORE_ASSETS = [
+  "./",
+  "./index.html",
+  "./manifest.json",
+  "./icon-192.png",
+  "./icon-512.png",
+  "./icon-512-maskable.png"
 ];
 
-self.addEventListener('install', (event) => {
+self.addEventListener("install", (event) => {
   event.waitUntil(
-    caches.open(SHELL_CACHE)
-      .then((cache) => cache.addAll(SHELL_ASSETS))
-      .catch(() => {}) // 首次安裝若離線失敗也不擋住 SW 啟用
+    caches.open(CACHE_VERSION).then((cache) => cache.addAll(CORE_ASSETS)).catch(() => {})
   );
   self.skipWaiting();
 });
 
-self.addEventListener('activate', (event) => {
+self.addEventListener("activate", (event) => {
   event.waitUntil(
     caches.keys().then((keys) =>
-      Promise.all(
-        keys
-          .filter((k) => k !== SHELL_CACHE && k !== CDN_CACHE)
-          .map((k) => caches.delete(k))
-      )
+      Promise.all(keys.filter((k) => k !== CACHE_VERSION).map((k) => caches.delete(k)))
     )
   );
   self.clients.claim();
 });
 
-function isFirebaseRequest(url) {
-  return (
-    url.hostname.includes('firebaseio.com') ||
-    url.hostname.includes('firebasedatabase.app') ||
-    url.hostname.includes('googleapis.com') ||
-    url.hostname.includes('firebaseinstallations') ||
-    url.hostname.includes('firebase.googleapis.com')
-  );
-}
-
-self.addEventListener('fetch', (event) => {
+self.addEventListener("fetch", (event) => {
   const req = event.request;
-  if (req.method !== 'GET') return;
-
   const url = new URL(req.url);
 
-  // Firebase / Google API 呼叫：完全不攔截，讓瀏覽器直接處理即時連線
-  if (isFirebaseRequest(url)) return;
+  // 只處理同源請求；Firebase、字型、匯率、天氣 API 一律直接放行，
+  // 確保永遠拿到最新資料，不被 Service Worker 快取卡住。
+  if (url.origin !== self.location.origin) return;
+  if (req.method !== "GET") return;
 
-  const sameOrigin = url.origin === self.location.origin;
+  const isNavigation = req.mode === "navigate" || (req.headers.get("accept") || "").includes("text/html");
 
-  if (sameOrigin) {
-    // 網路優先：拿到新版本就更新快取並回傳；離線時才用快取
+  if (isNavigation) {
+    // 網路優先：確保更新後不會看到舊版頁面；離線時才退回快取。
     event.respondWith(
       fetch(req)
         .then((res) => {
-          const resClone = res.clone();
-          caches.open(SHELL_CACHE).then((cache) => cache.put(req, resClone));
+          const copy = res.clone();
+          caches.open(CACHE_VERSION).then((cache) => cache.put("./index.html", copy));
           return res;
         })
-        .catch(async () => {
-          const cached = await caches.match(req);
-          if (cached) return cached;
-          if (req.mode === 'navigate') {
-            const fallback = await caches.match('./index.html');
-            if (fallback) return fallback;
-          }
-          return new Response('離線中，且尚無快取內容', { status: 503 });
-        })
+        .catch(() => caches.match("./index.html"))
     );
     return;
   }
 
-  // 外部 CDN 資源（字型、函式庫）：快取優先，背景更新
+  // 其他同源靜態資源：快取優先，背景更新快取。
   event.respondWith(
     caches.match(req).then((cached) => {
       const fetchPromise = fetch(req)
         .then((res) => {
-          if (res && res.status === 200) {
-            const resClone = res.clone();
-            caches.open(CDN_CACHE).then((cache) => cache.put(req, resClone));
-          }
+          const copy = res.clone();
+          caches.open(CACHE_VERSION).then((cache) => cache.put(req, copy));
           return res;
         })
         .catch(() => cached);
