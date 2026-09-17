@@ -108,14 +108,16 @@ a:hover{color:var(--sea-2)}
   background:linear-gradient(90deg,var(--daycolor) 0%,var(--line) 55%,var(--line) 100%)}
 
 /* ── timeline ─────────────────────── */
-.tl{position:relative;padding:14px 0 0 80px}
-.tl:before{content:"";position:absolute;left:45px;top:22px;bottom:26px;width:1px;
-  background:var(--line);opacity:1}
+.tl{position:relative;padding:14px 0 0 62px}
+.stop:after{content:"";position:absolute;left:-31.5px;top:35px;bottom:2px;width:2px;
+  border-radius:2px;pointer-events:none;
+  background:linear-gradient(to bottom,var(--daycolor) 0,color-mix(in oklch,var(--daycolor) 45%,transparent) 55%,transparent 100%);
+  opacity:.75}
 .stop{position:relative;margin-bottom:14px;touch-action:pan-y}
-.stop .when{position:absolute;left:-80px;top:6px;width:36px;text-align:right;
+.stop .when{position:absolute;left:-62px;top:0;width:62px;text-align:center;
   font-family:var(--gothic);font-size:13.5px;font-weight:500;color:var(--ink-2);letter-spacing:.04em}
 .stop .when.empty{color:#c9c8c2;font-size:12px}
-.stop .node{position:absolute;left:-38px;top:13px;width:9px;height:9px;border-radius:50%;
+.stop .node{position:absolute;left:-35px;top:24px;width:9px;height:9px;border-radius:50%;
   background:var(--daycolor);border:none;z-index:2}
 .card{background:var(--washi);border:1px solid var(--line);border-radius:var(--r);
   padding:12px 13px 9px;position:relative;transition:border-color .18s,transform .18s}
@@ -143,7 +145,7 @@ a:hover{color:var(--sea-2)}
 .btn.ghost{color:var(--ink-3)}
 .btn svg{width:15px;height:15px;flex:0 0 auto}
 .btn.sm{min-height:32px;font-size:12px;padding:0 10px}
-.grip{position:absolute;top:10px;left:-25px;width:22px;height:32px;display:grid;place-items:center;
+.grip{position:absolute;top:50%;transform:translateY(-50%);left:-25px;width:22px;height:32px;display:grid;place-items:center;
   color:#bcb1a2;background:none;border:none;padding:0;cursor:grab;touch-action:none;z-index:3}
 .desc a,.note .txt a{color:#3d6f68;word-break:break-all}
 .desc{font-size:13.2px;line-height:1.35;letter-spacing:.05em;color:var(--ink-2);margin-top:6px;
