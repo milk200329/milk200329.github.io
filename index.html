@@ -14,7 +14,7 @@
 <style>
 :root{
   --sand:#f7faf9; --sand-2:#eaf2f0; --washi:#ffffff;
-  --ink:#33403e; --ink-2:#55625f; --ink-3:#95a3a0;
+  --ink:#2e3937; --ink-2:#55625f; --ink-3:#95a3a0;
   --line:#dde7e4; --line-2:#e8efed;
   --sea-1:#5f9e97; --sea-2:#6da9a0; --sea-3:#7ab3a9; --sea-4:#88bdb1;
   --sea-5:#7ba9ad; --sea-6:#68a29e; --sea-7:#84b7ab; --sea-8:#9cb6a8;
@@ -40,9 +40,9 @@ a:hover{color:var(--sea-2)}
 .hero .seaside{display:none}
 .hero h1,.hero h2,.hero .edited{position:relative;z-index:1}
 .hero{--pad-b:78px}
-.hero .edited{position:absolute;top:23px;right:2px;font-size:10px;color:var(--ink-3);letter-spacing:.06em;z-index:1}
+.hero .edited{font-family:var(--mincho);position:absolute;top:23px;right:2px;font-size:11px;color:var(--ink-3);letter-spacing:.06em;z-index:1}
 .hero h1{font-family:var(--mincho);font-weight:600;font-size:23px;line-height:1.3;margin:0;letter-spacing:.06em;color:var(--ink)}
-.hero h2{font-family:var(--mincho);font-weight:600;font-size:15px;line-height:1.3;margin:0;letter-spacing:.06em;color:var(--ink-3)}
+.hero h2{font-family:var(--mincho);font-weight:600;font-size:13px;line-height:1.3;margin:2px 0 0 0;letter-spacing:.06em;color:var(--ink-3)}
 .hero .sub{font-size:11px;color:var(--ink-3);margin:7px 0 0;letter-spacing:.2em}
 .waves{display:block;width:100%;height:34px;margin-top:12px;opacity:.85}
 .hero .live{position:absolute;right:2px;bottom:8px;margin:0;z-index:1;display:flex;align-items:center;gap:6px;
@@ -244,6 +244,57 @@ a:hover{color:var(--sea-2)}
 .utility-menu .btn.on{background:var(--sea-1);border-color:var(--sea-1);color:#fff}
 .utility-item.done .utility-item-title,.utility-item.done .utility-item-text{color:var(--ink-3);text-decoration:line-through}
 
+/* ── split bill ───────────────────── */
+.fxsw{display:flex;gap:4px;flex:0 0 auto}
+.fxb{font:500 10.5px/1 var(--gothic);letter-spacing:.06em;color:var(--ink-2);background:#fff;
+  border:1px solid var(--line);border-radius:20px;padding:5px 8px;cursor:pointer}
+.fxb.on{background:var(--sea-1);border-color:var(--sea-1);color:#fff}
+.seg{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;border:1px solid var(--line);
+  border-radius:11px;overflow:hidden;background:#fff}
+.segb{font:500 13px/1 var(--gothic);color:var(--ink-2);background:#fff;border:0;border-left:1px solid var(--line-2);
+  padding:11px 4px;cursor:pointer;letter-spacing:.04em}
+.segb:first-child{border-left:0}
+.segb.on{background:var(--sea-1);color:#fff}
+.seg.sm{flex:0 0 auto;grid-auto-columns:42px;border-radius:9px}
+.seg.sm .segb{padding:9px 0}
+.splitform{display:flex;flex-direction:column;gap:9px}
+.splitform select,.splitform input[type=text]{width:100%;font:500 14px/1.2 var(--gothic);color:var(--ink);
+  border:1px solid var(--line);border-radius:10px;padding:10px 9px;background:#fff}
+.splitform .fxrow{margin:0}
+.catchip{font:500 12px/1 var(--gothic);letter-spacing:.06em;color:var(--ink-2);background:#fff;
+  border:1px solid var(--line);border-radius:20px;padding:8px 12px;cursor:pointer}
+.catchip.on{background:#e8f3f0;border-color:#9bc9c2;color:#2f6a62}
+.splitwho{display:flex;flex-direction:column;gap:6px}
+.wholbl{font-size:11px;letter-spacing:.1em;color:var(--ink-3)}
+.whochip{font:500 12px/1 var(--gothic);letter-spacing:.06em;color:var(--ink-3);background:#fff;
+  border:1px dashed var(--line);border-radius:20px;padding:8px 11px;cursor:pointer}
+.whochip.on{background:var(--sea-1);border-style:solid;border-color:var(--sea-1);color:#fff}
+.splitsum{display:flex;flex-direction:column;gap:4px;margin-top:2px}
+.sprow{display:flex;align-items:baseline;gap:8px;font-size:12.5px;color:var(--ink-2)}
+.sprow b{font-weight:500;color:var(--ink);min-width:44px}
+.sprow .v{margin-left:auto;font-size:12px;white-space:nowrap}
+.sprow .v.pos{color:#2f6a62}.sprow .v.neg{color:#b4553f}
+.spsettle{margin-top:7px;padding-top:7px;border-top:1px dashed var(--line-2);font-size:12px;color:var(--ink-2);line-height:1.7}
+.spday{font-size:11px;letter-spacing:.1em;color:var(--ink-3);margin:10px 0 2px}
+.spday:first-child{margin-top:0}
+.spitem{display:flex;align-items:flex-start;gap:8px;border-top:1px dashed var(--line-2);padding:8px 0 0}
+.spitem .ic{font-size:15px;line-height:1.3}
+.spitem .tx{flex:1;min-width:0}
+.spitem .t1{font-size:13.5px;font-weight:500;word-break:break-word;display:block}
+.spitem .t2{font-size:11px;color:var(--ink-3);letter-spacing:.04em;margin-top:2px;display:block}
+.spitem .am{font:500 13.5px/1.3 var(--gothic);white-space:nowrap;text-align:right}
+.spitem .am small{display:block;font-size:10px;color:var(--ink-3);font-weight:400}
+.spstat{font:500 10px/1 var(--gothic);letter-spacing:.1em;border-radius:20px;padding:4px 8px;white-space:nowrap}
+.spstat.done{background:#e8f3f0;color:#2f6a62}
+.spstat.wait{background:#fdeee8;color:#b4553f}
+.sppays{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
+.paychip{display:inline-flex;align-items:center;gap:4px;font:500 11.5px/1 var(--gothic);letter-spacing:.04em;
+  color:var(--ink-3);background:#fff;border:1px dashed var(--line);border-radius:20px;padding:6px 9px;cursor:pointer}
+.paychip.on{background:#e8f3f0;border-style:solid;border-color:#9bc9c2;color:#2f6a62}
+.paychip i{font-style:normal;font-size:11px}
+.spfilter{display:flex;gap:5px;margin-bottom:8px;flex-wrap:wrap}
+.spitem .x{border:none;background:none;color:var(--ink-3);font-size:16px;line-height:1;padding:2px 0 0 2px;cursor:pointer}
+
 /* ── floats ───────────────────────── */
 .floats{position:fixed;right:12px;bottom:calc(16px + env(safe-area-inset-bottom));z-index:60;
   display:flex;flex-direction:column;gap:9px}
@@ -298,14 +349,52 @@ footer{text-align:center;font-size:11px;color:var(--ink-3);margin-top:30px;lette
 
   <section id="utilityPanel" hidden>
     <section class="tools" id="toolsPanel">
+      <div class="tool" id="wxCard">
+        <div class="thead"><div class="lbl">9/19 － 9/26 天氣</div><div class="fine tr">仙台・松島・藏王</div></div>
+        <div class="wxstrip" id="wxStrip"></div>
+      </div>
       <div class="tool" id="fxCard">
-        <div class="thead"><div class="lbl">円 → 台幣</div></div>
-        <div class="fxrow"><input id="fxJpy" type="number" inputmode="decimal" value="1000" aria-label="日幣金額"><span>円</span></div>
+        <div class="thead"><div class="lbl" id="fxLbl">日円 → 台幣</div>
+          <div class="fxsw"><button class="fxb on" data-fx="jt">円→NT$</button><button class="fxb" data-fx="tj">NT$→円</button></div>
+        </div>
+        <div class="fxrow"><input id="fxJpy" type="number" inputmode="decimal" value="1000" aria-label="日幣金額"><span id="fxUnit">円</span></div>
         <div class="big" id="fxOut" style="margin-top:5px">NT$ --</div>
         <div class="fine" id="fxRate">匯率讀取中</div>
       </div>
     </section>
     <section class="utility"><div class="utility-grid" id="utilityLists"></div></section>
+  </section>
+
+  <section id="splitPanel" hidden>
+    <section class="tools">
+      <div class="tool">
+        <div class="thead"><div class="lbl">分帳 ・ 5 人均分</div><div class="fine tr" id="spTotal">NT$ 0</div></div>
+        <div class="splitsum" id="spSummary"></div>
+      </div>
+    </section>
+    <section class="utility"><div class="utility-grid">
+      <article class="utility-card">
+        <h3>🧾 記帳 ・ 這筆誰付的？</h3>
+        <div class="hint">選付款人、金額、日期與類型，5 人均分</div>
+        <div class="splitform">
+          <div class="seg" id="spPayer"></div>
+          <div class="fxrow">
+            <input id="spAmt" type="number" inputmode="decimal" placeholder="0" aria-label="金額">
+            <div class="seg sm" id="spCur"><button class="segb on" data-cur="JPY">¥</button><button class="segb" data-cur="TWD">NT$</button></div>
+          </div>
+          <select id="spDate" aria-label="日期"></select>
+          <input id="spNote" type="text" placeholder="這筆是什麼？（選填）">
+          <div class="chips" id="spCat"></div>
+          <div class="splitwho"><span class="wholbl">這筆誰要分？</span><div class="chips" id="spWho"></div></div>
+          <button class="btn edit" id="spSave" style="justify-content:center;min-height:46px">✓ 記下這筆</button>
+        </div>
+      </article>
+      <article class="utility-card">
+        <h3>📋 明細與分帳</h3>
+        <div class="spfilter" id="spFilter"></div>
+        <div class="utility-list" id="spList"></div>
+      </article>
+    </div></section>
   </section>
 </main>
 
@@ -446,7 +535,7 @@ const linkify = s => esc(s).replace(/(https?:\/\/[^\s<]+)/g, u => `<a href="${u}
 const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function toast(msg){ const t = $('#toast'); t.textContent = msg; t.classList.add('on'); clearTimeout(t._t); t._t = setTimeout(() => t.classList.remove('on'), 1900); }
 
-let STATE = { days:{}, tools:{}, checklist:{}, updatedAt:0 };
+let STATE = { days:{}, tools:{}, checklist:{}, expenses:{}, updatedAt:0 };
 let undoStack = [];
 
 function seedIfEmpty(snap){
@@ -473,8 +562,9 @@ if (ROOT) {
     STATE.days = v.days || {};
     STATE.tools = v.tools || {};
     STATE.checklist = v.checklist || {};
+    STATE.expenses = v.expenses || {};
     STATE.updatedAt = v.updatedAt || 0;
-    renderDays(); renderToolLists(); renderLastEdit();
+    renderDays(); renderToolLists(); renderLastEdit(); renderSplit();
   });
   db.ref('.info/connected').on('value', s => {
     const on = !!s.val();
@@ -592,7 +682,7 @@ function renderTabs(){
   $('#tabs').innerHTML = DAYS.map((d,i) =>
     `<a class="tab" href="#${d.id}" data-target="${d.id}" style="--tc:${d.color}">
       <b>${d.date}</b>${d.dow}${d.iso === ti ? '<i class="today-dot"></i>' : ''}
-    </a>`).join('') + `<a class="tab${activePanel === 'utility' ? ' on' : ''}" href="#utilityPanel" data-tool="utility" style="--tc:var(--sea-1)"><b>工具</b>備用・記事</a>`;
+    </a>`).join('') + `<a class="tab${activePanel === 'utility' ? ' on' : ''}" href="#utilityPanel" data-tool="utility" style="--tc:var(--sea-1)"><b>工具</b>備用・記事</a><a class="tab${activePanel === 'split' ? ' on' : ''}" href="#splitPanel" data-tool="split" style="--tc:var(--sea-5)"><b>分帳</b>工具</a>`;
 }
 
 function todayISO(){
@@ -893,7 +983,7 @@ document.addEventListener('click', e => {
   if (zoom){ openLightbox(zoom.currentSrc || zoom.src); return; }
   const btn = e.target.closest('[data-act]');
   const tab = e.target.closest('.tab');
-  if (tab){ e.preventDefault(); tab.dataset.tool ? showPanel('utility') : scrollToDay(tab.dataset.target); return; }
+  if (tab){ e.preventDefault(); tab.dataset.tool ? showPanel(tab.dataset.tool) : scrollToDay(tab.dataset.target); return; }
   if (!btn) return;
   const stop = btn.closest('.stop');
   const day = stop ? stop.dataset.day : btn.dataset.day;
@@ -989,6 +1079,7 @@ function showPanel(panel, scroll=true){
   if (panel === 'utility') activeToolGroup = null;
   $('#itineraryPanel').hidden = panel !== 'itinerary';
   $('#utilityPanel').hidden = panel !== 'utility';
+  $('#splitPanel').hidden = panel !== 'split';
   renderTabs();
   if (scroll) window.scrollTo({ top:0, behavior:'smooth' });
 }
@@ -1032,16 +1123,28 @@ try { const s = localStorage.getItem('sendai.rate'); if (s) { RATE = +s; rateSrc
 function paintRate(){
   $('#fxRate').textContent = rateLabel();
   calc();
+  try { if (typeof MEMBERS !== 'undefined') renderSplit(); } catch(_){}
 }
 function rateLabel(){
   const w = ($('#fxCard') || {}).clientWidth || innerWidth;
   return w < 210 ? `1円≒${RATE.toFixed(4)}` : `1 円 ≒ ${RATE.toFixed(4)} 台幣 ・ ${rateSrc}`;
 }
 function nt(v){ return 'NT$ ' + (Math.round(v * 100) / 100).toLocaleString('zh-TW', {maximumFractionDigits:1}); }
+let fxDir = 'jt';
 function calc(){
-  $('#fxOut').textContent = nt((+$('#fxJpy').value || 0) * RATE);
+  const v = +$('#fxJpy').value || 0;
+  $('#fxOut').textContent = fxDir === 'jt' ? nt(v * RATE)
+    : '¥ ' + Math.round(v / (RATE || 1)).toLocaleString('zh-TW');
 }
 $('#fxJpy').addEventListener('input', calc);
+$('#fxCard').addEventListener('click', e => {
+  const b = e.target.closest('[data-fx]'); if (!b) return;
+  fxDir = b.dataset.fx;
+  $$('#fxCard [data-fx]').forEach(x => x.classList.toggle('on', x === b));
+  $('#fxLbl').textContent = fxDir === 'jt' ? '日円 → 台幣' : '台幣 → 日円';
+  $('#fxUnit').textContent = fxDir === 'jt' ? '円' : '元';
+  calc();
+});
 addEventListener('resize', () => { if (RATE) $('#fxRate').textContent = rateLabel(); });
 async function fetchRate(){
   const manual = (() => { try { return !!localStorage.getItem('sendai.rate'); } catch(_){ return false; } })();
@@ -1090,7 +1193,19 @@ function dayWeatherHTML(day){
   const t = w.hi != null && w.lo != null ? `${Math.round(w.lo)}–${Math.round(w.hi)}°` : '--';
   return `<span class="wi">${m[0]}</span><span class="wt">${m[1]}</span><span class="temp">${t}</span>`;
 }
+function paintWxStrip(){
+  const el = $('#wxStrip'); if (!el) return;
+  const ti = todayISO();
+  el.innerHTML = DAYS.map(d => {
+    const w = wxCache[d.id], m = w ? (WX[w.code] || ['🌡','']) : null;
+    const t = w && w.hi != null && w.lo != null ? Math.round(w.lo) + '–' + Math.round(w.hi) + '°' : '--';
+    return '<div class="wxd' + (d.iso === ti ? ' today' : '') + '"><div class="d">' + d.date + '</div>'
+      + '<div class="i">' + (m ? m[0] : '…') + '</div><div class="t">' + t + '</div>'
+      + '<div class="p">' + esc(d.place) + '</div></div>';
+  }).join('');
+}
 function paintDayWeather(){
+  paintWxStrip();
   DAYS.forEach(d => { const el = document.querySelector('[data-weather="' + d.id + '"]'); if (el) el.innerHTML = dayWeatherHTML(d); });
 }
 async function fetchAllWeather(){
@@ -1122,6 +1237,142 @@ async function fetchAllWeather(){
 fetchAllWeather();
 setWeather(DAYS[0]);
 setTimeout(jumpToToday, 900);
+
+/* ═══ 9. 分帳 ═════════════════════════════════════════════ */
+var MEMBERS = ['米居','拎拎','家伃','老吳','弟弟'];
+var SP_CATS = ['吃飯','伴手禮','交通','門票','住宿'];
+var SP_ICON = {吃飯:'🍳', 伴手禮:'🎁', 交通:'🚄', 門票:'🎟️', 住宿:'🏨'};
+var spPayer = MEMBERS[0], spCur = 'JPY', spCat = SP_CATS[0], spWho = MEMBERS.slice(), spFilter = 'all';
+
+function spBuildForm(){
+  $('#spPayer').innerHTML = MEMBERS.map(m =>
+    '<button class="segb' + (m === spPayer ? ' on' : '') + '" data-payer="' + m + '">' + m + '</button>').join('');
+  $('#spCat').innerHTML = SP_CATS.map(c =>
+    '<button class="catchip' + (c === spCat ? ' on' : '') + '" data-cat="' + c + '">' + c + '</button>').join('');
+  $('#spWho').innerHTML = MEMBERS.map(m =>
+    '<button class="whochip' + (spWho.indexOf(m) > -1 ? ' on' : '') + '" data-who="' + m + '">' + m + '</button>').join('');
+  const ti = todayISO();
+  $('#spDate').innerHTML = DAYS.map(d =>
+    '<option value="' + d.iso + '"' + (d.iso === ti ? ' selected' : '') + '>'
+    + d.date + '（' + d.dow + '）' + (d.iso === ti ? ' ・今天' : '') + '</option>').join('');
+}
+function spTwd(e){ return e.cur === 'TWD' ? (+e.amt || 0) : (+e.amt || 0) * RATE; }
+function spWhoOf(e){ return (e.who && e.who.length) ? e.who : MEMBERS; }
+function spPer(e){ return spTwd(e) / spWhoOf(e).length; }
+function spPerJpy(e){
+  const jpy = e.cur === 'JPY' ? (+e.amt || 0) : (+e.amt || 0) / (RATE || 1);
+  return jpy / spWhoOf(e).length;
+}
+function jp(v){ return '¥ ' + Math.round(v).toLocaleString('zh-TW'); }
+function spDebtors(e){ return spWhoOf(e).filter(m => m !== e.payer); }
+function spIsPaid(e, m){ return !!(e.settled && e.settled[m]); }
+function spDone(e){ return spDebtors(e).every(m => spIsPaid(e, m)); }
+function spAll(){
+  const raw = STATE.expenses || {};
+  return Object.keys(raw).map(k => Object.assign({}, raw[k], {_id:k}))
+    .sort((a,b) => (a.date === b.date ? (a.createdAt || 0) - (b.createdAt || 0) : (a.date < b.date ? -1 : 1)));
+}
+function spSaveEntry(){
+  const amt = +$('#spAmt').value;
+  if (!amt || amt <= 0) { toast('請先輸入金額'); return; }
+  if (!spWho.length) { toast('請至少選一位參與者'); return; }
+  if (!ROOT) { toast('目前無法連線資料庫'); return; }
+  ROOT.child('expenses').push({
+    payer:spPayer, amt, cur:spCur, date:$('#spDate').value, who:spWho.slice(),
+    cat:spCat, note:$('#spNote').value.trim(), createdAt:Date.now()
+  }).then(() => { stamp(); $('#spAmt').value = ''; $('#spNote').value = ''; toast('已記下這筆'); });
+}
+function spSettleText(paid, owe){
+  const deb = [], cre = [];
+  MEMBERS.forEach(m => { const b = (paid[m] || 0) - (owe[m] || 0);
+    if (b < -0.5) deb.push({m:m, v:-b}); else if (b > 0.5) cre.push({m:m, v:b}); });
+  const out = []; let i = 0, j = 0;
+  while (i < deb.length && j < cre.length){
+    const v = Math.min(deb[i].v, cre[j].v);
+    out.push(deb[i].m + ' → ' + cre[j].m + '　' + nt(v));
+    deb[i].v -= v; cre[j].v -= v;
+    if (deb[i].v < 0.5) i++;
+    if (cre[j].v < 0.5) j++;
+  }
+  return out.length ? out.join('<br>') : '目前已經平帳';
+}
+function renderSplit(){
+  if (!$('#spList')) return;
+  if (!$('#spPayer').children.length) spBuildForm();
+  const items = spAll();
+  const total = items.reduce((s,e) => s + spTwd(e), 0);
+  $('#spTotal').textContent = nt(total);
+  const paid = {}, owe = {};
+  MEMBERS.forEach(m => { paid[m] = 0; owe[m] = 0; });
+  items.forEach(e => {
+    paid[e.payer] = (paid[e.payer] || 0) + spTwd(e);
+    const per = spPer(e);
+    spWhoOf(e).forEach(m => { owe[m] = (owe[m] || 0) + per; });
+  });
+  $('#spSummary').innerHTML = MEMBERS.map(m => {
+    const bal = (paid[m] || 0) - (owe[m] || 0);
+    return '<div class="sprow"><b>' + m + '</b><span>付了 ' + nt(paid[m] || 0) + ' ・ 應付 ' + nt(owe[m] || 0) + '</span>'
+      + '<span class="v ' + (bal >= 0 ? 'pos' : 'neg') + '">'
+      + (bal >= 0 ? '可收回 ' : '要再付 ') + nt(Math.abs(bal)) + '</span></div>';
+  }).join('') + (total ? '<div class="spsettle">全程總額 ' + nt(total) + ' ・ 5 人均分每人 ' + nt(total / MEMBERS.length)
+      + '<br>' + spSettleText(paid, owe) + '</div>' : '');
+
+  const nDone = items.filter(spDone).length;
+  const fl = [['all','全部 ' + items.length], ['wait','待收錢 ' + (items.length - nDone)], ['done','已收完 ' + nDone]];
+  $('#spFilter').innerHTML = fl.map(f =>
+    '<button class="catchip' + (spFilter === f[0] ? ' on' : '') + '" data-spf="' + f[0] + '">' + f[1] + '</button>').join('');
+  const shown = items.filter(e => spFilter === 'all' || (spFilter === 'done' ? spDone(e) : !spDone(e)));
+  const byDay = {};
+  shown.forEach(e => { (byDay[e.date] = byDay[e.date] || []).push(e); });
+  const keys = Object.keys(byDay).sort();
+  $('#spList').innerHTML = keys.length ? keys.map(iso => {
+    const d = DAYS.find(x => x.iso === iso), rows = byDay[iso];
+    const sum = rows.reduce((s,e) => s + spTwd(e), 0);
+    return '<div class="spday">' + (d ? d.date + '（' + d.dow + '）' : iso) + ' ・ ' + rows.length + ' 筆 ・ ' + nt(sum) + '</div>'
+      + rows.map(e => '<div class="spitem"><span class="ic">' + (SP_ICON[e.cat] || '🧾') + '</span>'
+        + '<span class="tx"><span class="t1">' + esc(e.note || e.cat) + '</span>'
+        + '<span class="t2">' + esc(e.payer) + ' 付 ・ ' + esc(e.cat)
+        + ' ・ ' + spWhoOf(e).length + ' 人分，每人 ' + jp(spPerJpy(e)) + '（' + nt(spPer(e)) + '）</span></span>'
+        + '<span class="am">' + (e.cur === 'JPY' ? '¥ ' + (+e.amt).toLocaleString('zh-TW') : nt(e.amt))
+        + (e.cur === 'JPY' ? '<small>' + nt(spTwd(e)) + '</small>' : '') + '</span>'
+        + '<button class="x" data-sp-del="' + e._id + '" aria-label="刪除">×</button></div>'
+        + '<div class="sppays">'
+        + '<span class="spstat ' + (spDone(e) ? 'done' : 'wait') + '">' + (spDone(e) ? '已收完' : '待收錢') + '</span>'
+        + spDebtors(e).map(m => '<button class="paychip' + (spIsPaid(e, m) ? ' on' : '')
+            + '" data-sp-paid="' + e._id + '|' + m + '"><i>' + (spIsPaid(e, m) ? '✓' : '○') + '</i>' + m + '</button>').join('')
+        + (spDebtors(e).length ? '' : '<span class="wholbl">只有 ' + esc(e.payer) + ' 分，無需收錢</span>')
+        + '</div>').join('');
+  }).join('') : '<div class="utility-empty">還沒有支出紀錄</div>';
+}
+document.addEventListener('click', e => {
+  const p = e.target.closest('[data-payer]');
+  if (p){ spPayer = p.dataset.payer; $$('#spPayer [data-payer]').forEach(x => x.classList.toggle('on', x === p)); return; }
+  const c = e.target.closest('[data-cat]');
+  if (c){ spCat = c.dataset.cat; $$('#spCat [data-cat]').forEach(x => x.classList.toggle('on', x === c)); return; }
+  const cu = e.target.closest('[data-cur]');
+  if (cu){ spCur = cu.dataset.cur; $$('#spCur [data-cur]').forEach(x => x.classList.toggle('on', x === cu)); return; }
+  const w = e.target.closest('[data-who]');
+  if (w){
+    const m = w.dataset.who, i = spWho.indexOf(m);
+    if (i > -1) spWho.splice(i,1); else spWho.push(m);
+    w.classList.toggle('on', spWho.indexOf(m) > -1);
+    return;
+  }
+  const f = e.target.closest('[data-spf]');
+  if (f){ spFilter = f.dataset.spf; renderSplit(); return; }
+  const pay = e.target.closest('[data-sp-paid]');
+  if (pay && ROOT){
+    const parts = pay.dataset.spPaid.split('|');
+    const cur = pay.classList.contains('on');
+    ROOT.child('expenses/' + parts[0] + '/settled/' + parts[1]).set(cur ? null : true).then(stamp);
+    return;
+  }
+  const del = e.target.closest('[data-sp-del]');
+  if (del && ROOT){ ROOT.child('expenses/' + del.dataset.spDel).remove().then(() => { stamp(); toast('已刪除'); }); }
+});
+$('#spSave').onclick = spSaveEntry;
+spBuildForm(); renderSplit();
+
 
 /* ═══ 9. PWA ═══════════════════════════════════════════════ */
 if ('serviceWorker' in navigator){
