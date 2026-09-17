@@ -1,1049 +1,1119 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>仙台遊 9/19-9/26</title>
-<meta name="description" content="仙台自由行協作行程表，多人即時共同編輯">
-<meta name="theme-color" content="#F4EEDF">
-<link rel="manifest" href="manifest.json">
-<link rel="icon" href="icon-192.png">
-<link rel="apple-touch-icon" href="icon-192.png">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>仙台遊 9/19－9/26</title>
+<meta name="theme-color" content="#f7faf9">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="仙台遊">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --sand: #F4EEDF;
-    --sand-deep: #EBE2C9;
-    --card: #FFFDF6;
-    --ink: #2C2A22;
-    --ink-soft: #6B6656;
-    --ink-faint: #A79E85;
-    --line: #E1D6B8;
-    --sea-deep: #23566A;
-    --sea: #3D7C93;
-    --sea-light: #8AB2BE;
-    --sea-pale: #E3EFF1;
-    --sun: #C48A2E;
-    --sun-pale: #F7ECD6;
-    --coral: #B4633F;
-    --coral-pale: #F6E8DF;
-    --plum: #7C6A8E;
-    --plum-pale: #EFE9F2;
-    --gold: #A98429;
-    --gold-pale: #F5EDD9;
-    --rose: #A65C6B;
-    --rose-pale: #F5E4E6;
-    --amber: #B8791E;
-    --amber-pale: #FBEBD0;
-    --shadow: 0 1px 2px rgba(35,86,106,.08);
-    --radius: 12px;
-    --serif: 'Shippori Mincho', 'Noto Serif TC', serif;
-    --sans: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, 'PingFang TC', 'Microsoft JhengHei', sans-serif;
-    --safe-b: env(safe-area-inset-bottom, 0px);
-    --safe-t: env(safe-area-inset-top, 0px);
-  }
+:root{
+  --sand:#f7faf9; --sand-2:#eaf2f0; --washi:#ffffff;
+  --ink:#33403e; --ink-2:#55625f; --ink-3:#95a3a0;
+  --line:#dde7e4; --line-2:#e8efed;
+  --sea-1:#5f9e97; --sea-2:#6da9a0; --sea-3:#7ab3a9; --sea-4:#88bdb1;
+  --sea-5:#7ba9ad; --sea-6:#68a29e; --sea-7:#84b7ab; --sea-8:#9cb6a8;
+  --accent:#4f9a92; --ok:#6fae9a;
+  --r:12px; --sh:none;
+  --mincho:'Shippori Mincho',"Yu Mincho","Songti TC","Noto Serif TC",serif;
+  --gothic:'Zen Kaku Gothic New',"Hiragino Sans","PingFang TC","Noto Sans TC",system-ui,sans-serif;
+  --daycolor:var(--sea-1);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{
+  background:var(--sand);font-family:var(--gothic);color:var(--ink);
+  font-size:15px;line-height:1.6;-webkit-text-size-adjust:100%;
+  background-image:none;
+}
+a{color:var(--sea-1)}
+a:hover{color:var(--sea-2)}
+.wrap{max-width:720px;margin:0 auto;padding:0 14px 120px}
 
-  *{ box-sizing:border-box; }
-  html{ -webkit-text-size-adjust:100%; }
-  body{
-    margin:0;
-    font-family:var(--sans);
-    color:var(--ink);
-    background:var(--sand);
-    min-height:100vh;
-    line-height:1.6;
-    -webkit-font-smoothing:antialiased;
-  }
-  ::selection{ background:var(--sea); color:#fff; }
-  a{ color:inherit; }
-  button{ font-family:inherit; -webkit-tap-highlight-color:transparent; }
+/* ── Header ───────────────────────── */
+.hero{position:relative;padding:19px 2px 12px;min-height:66px;margin:0;overflow:hidden;background:transparent}
+.hero .seaside{display:none}
+.hero h1,.hero h2,.hero .edited{position:relative;z-index:1}
+.hero{--pad-b:78px}
+.hero .edited{position:absolute;top:23px;right:2px;font-size:10px;color:var(--ink-3);letter-spacing:.06em;z-index:1}
+.hero h1{font-family:var(--mincho);font-weight:600;font-size:23px;line-height:1.3;margin:0;letter-spacing:.06em;color:var(--ink)}
+.hero h2{font-family:var(--mincho);font-weight:600;font-size:15px;line-height:1.3;margin:0;letter-spacing:.06em;color:var(--ink-3)}
+.hero .sub{font-size:11px;color:var(--ink-3);margin:7px 0 0;letter-spacing:.2em}
+.waves{display:block;width:100%;height:34px;margin-top:12px;opacity:.85}
+.hero .live{position:absolute;right:2px;bottom:8px;margin:0;z-index:1;display:flex;align-items:center;gap:6px;
+  font-size:10.5px;color:var(--ink-3);letter-spacing:.06em}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 3px rgba(77,138,95,.18)}
+.dot.off{background:#c0744f;box-shadow:0 0 0 3px rgba(192,116,79,.18)}
 
-  /* ---------- 青海波底紋（輕量 SVG 重複圖案，用在頁首背景）---------- */
-  .wave-bg{
-    position:fixed; inset:0; pointer-events:none; z-index:0; opacity:.55;
-    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='32'%3E%3Cpath d='M0 24 Q16 8 32 24 T64 24' fill='none' stroke='%233D7C93' stroke-opacity='0.07' stroke-width='2'/%3E%3Cpath d='M0 30 Q16 14 32 30 T64 30' fill='none' stroke='%233D7C93' stroke-opacity='0.05' stroke-width='2'/%3E%3C/svg%3E");
-    background-size:64px 32px;
-  }
+/* ── top tools ────────────────────── */
+.tools{display:grid;grid-template-columns:1fr;gap:6px;margin:8px 0 4px;align-items:stretch}
+.tools>.tool{min-width:0}
+.tool{position:relative;background:var(--washi);border:1px solid var(--line);border-radius:var(--r);padding:7px 9px}
+.tool .lbl{font-size:10px;letter-spacing:.16em;color:var(--ink-3);margin-bottom:3px}
+.tool .big{font-family:var(--gothic);font-size:16px;font-weight:500;line-height:1.15;color:var(--ink);letter-spacing:.02em}
+.tool .fine{font-size:10px;color:var(--ink-3);margin-top:2px;letter-spacing:.03em}
+.tool .fine.tr{position:static;margin:0;text-align:right;min-width:0;flex:1;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.thead{display:flex;align-items:baseline;justify-content:space-between;gap:6px;margin-bottom:3px}
+.thead .lbl{margin:0;white-space:nowrap;min-width:0;overflow:hidden;text-overflow:ellipsis}
+#wxDesc{min-width:0}
+.fxrow input{padding:5px 8px;font-size:15px;border-radius:9px;font-weight:500;min-width:0;width:100%}
+.wx-ico{font-size:18px;line-height:1}
+.wxstrip{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;min-width:0;padding-bottom:2px;align-items:stretch}
+.wxstrip::-webkit-scrollbar{display:none}
+.wxd{flex:0 0 auto;min-width:52px;background:var(--washi);border:1px solid var(--line);
+  border-radius:var(--r);padding:7px 6px;text-align:center;display:flex;flex-direction:column;justify-content:center;gap:1px}
+.wxd.today{border-color:#9bc9c2;background:#f4faf8}
+.wxd .d{font-size:10px;color:var(--ink-3);letter-spacing:.06em}
+.wxd .i{font-size:16px;line-height:1.3}
+.wxd .t{font-size:11px;color:var(--ink-2);letter-spacing:.02em}
+.wxd .p{font-size:9.5px;color:var(--ink-3);letter-spacing:.08em}
+.fxrow{display:flex;align-items:center;gap:6px;margin-top:4px}
+.fxrow input{width:100%;min-width:0;font:600 16px/1.2 var(--gothic);color:var(--ink);
+  border:1px solid var(--line);border-radius:9px;padding:7px 8px;background:#fff}
+.fxrow span{font-size:12px;color:var(--ink-3);white-space:nowrap}
 
-  /* ---------- 頁首 ---------- */
-  header.topbar{
-    position:sticky; top:0; z-index:30;
-    padding:calc(14px + var(--safe-t)) 20px 12px;
-    background:linear-gradient(180deg, var(--sand) 60%, rgba(244,238,223,.92));
-    border-bottom:1px solid var(--line);
-  }
-  .title-row{ display:flex; align-items:baseline; justify-content:space-between; gap:10px; }
-  h1{
-    font-family:var(--serif); font-weight:700; font-size:21px; letter-spacing:.03em; margin:0;
-    display:flex; align-items:baseline; gap:9px; flex-wrap:wrap; color:var(--sea-deep);
-  }
-  h1 .wave-ic{ font-size:17px; }
-  h1 .dates{ font-family:var(--sans); font-weight:500; font-size:12.5px; color:var(--ink-soft); }
-  .sync-pill{
-    flex:none; font-size:11px; color:var(--ink-soft);
-    display:flex; align-items:center; gap:5px;
-    padding:4px 9px; border:1px solid var(--line); border-radius:999px; background:var(--card);
-    white-space:nowrap;
-  }
-  .sync-dot{ width:6px; height:6px; border-radius:50%; background:var(--ink-faint); flex:none; }
-  .sync-pill.live .sync-dot{ background:var(--sea); box-shadow:0 0 0 3px rgba(61,124,147,.18); }
-  .sync-pill.local .sync-dot{ background:var(--coral); }
+/* ── sticky tabs ──────────────────── */
+.tabbar{position:sticky;top:0;z-index:40;margin:12px -14px 0;padding:8px 14px;
+  background:rgba(247,250,249,.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.tabs{display:flex;gap:7px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:0 0 auto;position:relative;text-decoration:none;background:#fff;border:1px solid var(--line);
+  border-radius:10px;padding:6px 11px;min-width:58px;text-align:center;color:var(--ink-2);
+  font-size:10.5px;letter-spacing:.08em;cursor:pointer;transition:.18s}
+.tab b{display:block;font-family:var(--gothic);font-size:14px;font-weight:500;color:var(--ink);letter-spacing:.02em}
+.tab.on{background:var(--tc,var(--sea-1));border-color:var(--tc,var(--sea-1));color:rgba(255,255,255,.82)}
+.tab.on b{color:#fff}
+.tab .today-dot{position:absolute;top:5px;right:6px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
 
-  /* ---------- 日期分頁 ---------- */
-  nav.daytabs{
-    position:sticky; top:calc(54px + var(--safe-t)); z-index:29;
-    display:flex; gap:8px; overflow-x:auto;
-    padding:10px 16px 12px; background:var(--sand); border-bottom:1px solid var(--line);
-    scrollbar-width:none;
-  }
-  nav.daytabs::-webkit-scrollbar{ display:none; }
-  .tab{
-    flex:none; font-family:var(--serif); font-size:13px; color:var(--ink-soft);
-    background:var(--card); border:1px solid var(--line); border-radius:10px;
-    padding:7px 12px 6px; cursor:pointer; position:relative;
-    display:flex; flex-direction:column; align-items:center; gap:1px; line-height:1.25;
-    transition:color .15s ease, border-color .15s ease, background .15s ease;
-  }
-  .tab .n{ font-size:10px; letter-spacing:.12em; color:var(--ink-faint); }
-  .tab.active{ color:#fff; border-color:var(--sea-deep); background:var(--sea); }
-  .tab.active .n{ color:rgba(255,255,255,.75); }
+/* ── day ──────────────────────────── */
+.day{scroll-margin-top:74px;padding-top:26px}
+.dayhead{display:flex;align-items:center;gap:10px}
+.daynum{font-family:var(--gothic);font-size:13px;line-height:1.2;font-weight:500;color:var(--sea-1);
+  letter-spacing:.14em;padding-top:4px}
+.dayhead .t{flex:1;min-width:0}
+.dayhead h2{font-family:var(--mincho);font-size:18px;font-weight:600;margin:0;letter-spacing:.05em}
+.dayhead .m{font-size:11.5px;color:var(--ink-3);letter-spacing:.06em;margin-top:2px}
+.dayweather{margin-left:auto;display:flex;align-items:center;gap:5px;white-space:nowrap;color:var(--ink-2);font-size:12px;letter-spacing:.02em;padding-top:3px}
+.dayweather .wi{font-size:17px;line-height:1}.dayweather .wt{font-weight:500}.dayweather .temp{font-size:11px;color:var(--ink-3)}
+.badge-today{display:inline-block;background:var(--accent);color:#fff;font-size:10px;
+  border-radius:20px;padding:2px 8px;margin-left:8px;letter-spacing:.14em;animation:pulse 2.2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.55}}
+.daybar{height:1px;border-radius:0;margin:12px 0 2px;
+  background:linear-gradient(90deg,var(--daycolor) 0%,var(--line) 55%,var(--line) 100%)}
 
-  /* ---------- 主體 ---------- */
-  main{ max-width:640px; margin:0 auto; padding:22px 16px calc(120px + var(--safe-b)); position:relative; z-index:1; }
+/* ── timeline ─────────────────────── */
+.tl{position:relative;padding:14px 0 0 80px}
+.tl:before{content:"";position:absolute;left:45px;top:22px;bottom:26px;width:1px;
+  background:var(--line);opacity:1}
+.stop{position:relative;margin-bottom:14px;touch-action:pan-y}
+.stop .when{position:absolute;left:-80px;top:6px;width:36px;text-align:right;
+  font-family:var(--gothic);font-size:13.5px;font-weight:500;color:var(--ink-2);letter-spacing:.04em}
+.stop .when.empty{color:#c9c8c2;font-size:12px}
+.stop .node{position:absolute;left:-38px;top:13px;width:9px;height:9px;border-radius:50%;
+  background:var(--daycolor);border:none;z-index:2}
+.card{background:var(--washi);border:1px solid var(--line);border-radius:var(--r);
+  padding:12px 13px 9px;position:relative;transition:border-color .18s,transform .18s}
+.stop.now .card{border-color:var(--ink-2);background:#fafaf7}
+.stop.drag .card{transform:scale(1.02);box-shadow:0 14px 30px rgba(36,50,60,.18)}
+.stop.ghost{opacity:.35}
+.chips{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:0}
+.cat{font-size:10.5px;letter-spacing:.12em;color:#3d6f68;background:#e8f3f0;
+  border-radius:20px;padding:3px 9px;font-weight:500}
+.chip-now{font-size:10.5px;letter-spacing:.12em;color:var(--accent);border:1px solid var(--accent);
+  border-radius:20px;padding:2px 8px}
+.card h4{font-family:var(--mincho);font-size:16.5px;font-weight:600;margin:0;line-height:1.4;letter-spacing:.03em;word-break:break-word}
+.card .sub{font-size:13.5px;color:var(--ink-3);margin-top:3px}
+.move{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;letter-spacing:.08em;
+  color:#3d6f68;background:#eef5f3;border:1px solid #dfece9;border-radius:20px;padding:2px 9px}
+.pastebox{border:1px dashed var(--line);border-radius:10px;padding:10px;text-align:center;
+  font-size:12px;color:var(--ink-3);background:var(--sand);margin-top:8px}
+.acts{display:flex;flex-wrap:wrap;gap:7px;margin-top:11px;padding-top:9px;border-top:1px dashed var(--line-2)}
+.btn{display:inline-flex;align-items:center;gap:5px;min-height:36px;padding:0 12px;
+  border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink-2);
+  font:500 12.5px var(--gothic);letter-spacing:.04em;cursor:pointer;text-decoration:none;transition:.15s}
+.btn:active{transform:translateY(1px)}
+.btn.nav{border-color:#bfdcd6;color:#3d6f68;background:#f4faf8}
+.btn.edit{border-color:var(--line);color:var(--ink)}
+.btn.ghost{color:var(--ink-3)}
+.btn svg{width:15px;height:15px;flex:0 0 auto}
+.btn.sm{min-height:32px;font-size:12px;padding:0 10px}
+.grip{position:absolute;top:10px;left:-25px;width:22px;height:32px;display:grid;place-items:center;
+  color:#bcb1a2;background:none;border:none;padding:0;cursor:grab;touch-action:none;z-index:3}
+.desc a,.note .txt a{color:#3d6f68;word-break:break-all}
+.desc{font-size:13.2px;line-height:1.55;letter-spacing:.05em;color:var(--ink-2);margin-top:6px;
+  white-space:pre-wrap;word-break:break-word}
+.descimgs{display:flex;flex-wrap:wrap;gap:7px;margin-top:8px}
+.descimgs .ph{position:relative}
+.descimgs img{width:104px;height:104px;object-fit:cover;border-radius:10px;border:1px solid var(--line-2);display:block}
+.descimgs .rm{position:absolute;top:-6px;right:-6px;width:22px;height:22px;border-radius:50%;
+  border:none;background:#24323c;color:#fff;font-size:13px;line-height:1;cursor:pointer}
+.cardtop{display:flex;align-items:flex-start;gap:8px;flex-wrap:wrap;margin-bottom:6px}
+.ctools{display:flex;gap:6px;margin-left:auto;flex-wrap:wrap;justify-content:flex-end}
+.slist{margin-top:9px;display:flex;flex-direction:column;gap:5px}
+.slist-t{font-family:var(--gothic);font-size:12px;font-weight:500;color:var(--ink-3);letter-spacing:.14em;margin-bottom:2px}
+.slist a,.slist span.n{display:flex;align-items:center;gap:6px;font-size:13px;color:#3d6f68;
+  text-decoration:none;padding:5px 8px;background:#f4faf8;border:1px solid #dfece9;
+  border-radius:9px;min-height:34px}
+.slist span.n{color:var(--ink-2)}
+.slist svg{width:14px;height:14px;flex:0 0 auto}
+.lrow{display:grid;grid-template-columns:24px 1fr 1fr auto;gap:7px;margin-bottom:7px;align-items:center}
+.lrow .lgrip{display:grid;place-items:center;height:36px;color:#bcb1a2;background:none;border:none;
+  padding:0;cursor:grab;touch-action:none}
+.lrow .lgrip svg{width:16px;height:16px}
+.lrow.ldrag{opacity:.9;transform:scale(1.01)}
+.lrow.lover{outline:2px dashed var(--line);outline-offset:3px;border-radius:10px}
+.lrow input{border:1px solid var(--line);border-radius:9px;padding:9px;font:400 14px var(--gothic);min-width:0}
+.lrow button{border:none;background:none;color:#b03c28;font-size:17px;cursor:pointer;padding:0 4px}
 
-  .day-section{ margin-bottom:38px; scroll-margin-top:116px; }
-  .day-head{ margin-bottom:16px; padding-left:2px; }
-  .day-head .d-label{ font-family:var(--serif); font-size:12px; letter-spacing:.16em; color:var(--sea); }
-  .day-head h2{ font-family:var(--serif); font-weight:600; font-size:18px; margin:3px 0 0; color:var(--ink); }
+/* ── note ─────────────────────────── */
+.note{margin-top:8px;border-top:1px solid var(--line-2);padding-top:7px}
+.note>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:6px;
+  font-size:12.5px;color:var(--ink-2);letter-spacing:.08em;padding:3px 0}
+.note>summary::-webkit-details-marker{display:none}
+.note>summary .car{transition:transform .2s;font-size:10px;color:var(--ink-3)}
+.note[open]>summary .car{transform:rotate(90deg)}
+.note .body{padding:6px 0 4px}
+.note textarea{width:100%;min-height:66px;border:1px solid var(--line);border-radius:10px;
+  padding:9px;font:400 14px/1.75 var(--gothic);color:var(--ink);background:#fff;resize:vertical}
+.note .txt{font-size:14px;line-height:1.75;white-space:pre-wrap;color:var(--ink-2);
+  background:#f6faf9;border-left:2px solid #bfdcd6;border-radius:0 10px 10px 0;padding:8px 10px;word-break:break-word}
+.imgs{display:flex;flex-wrap:wrap;gap:7px;margin-top:8px}
+.imgs .ph{position:relative}
+.imgs img{width:88px;height:88px;object-fit:cover;border-radius:9px;border:1px solid var(--line-2);display:block}
+.imgs .rm{position:absolute;top:-6px;right:-6px;width:22px;height:22px;border-radius:50%;
+  border:none;background:#24323c;color:#fff;font-size:13px;line-height:1;cursor:pointer}
+.noteacts{display:flex;gap:7px;margin-top:8px;flex-wrap:wrap}
 
-  .timeline{ position:relative; list-style:none; margin:0; padding:0 0 0 2px; }
-  .timeline::before{
-    content:""; position:absolute; left:46px; top:6px; bottom:6px; width:2px;
-    background:linear-gradient(var(--sea-light), var(--sea-light) 92%, transparent);
-    border-radius:2px;
-  }
+.addstop{width:100%;margin-top:4px;min-height:44px;border:1px dashed var(--line);
+  border-radius:var(--r);background:#fcfbf9;color:var(--ink-2);
+  font:500 13px var(--gothic);cursor:pointer}
 
-  .item{ position:relative; display:grid; grid-template-columns:38px 1fr; column-gap:12px; padding:8px 0; touch-action:pan-y; }
-  .item.dragging{ opacity:.5; }
-  .item.drag-over-before{ box-shadow: inset 0 2px 0 var(--sun); }
-  .item.drag-over-after{ box-shadow: inset 0 -2px 0 var(--sun); }
+/* ── modal ────────────────────────── */
+.mask{position:fixed;inset:0;background:rgba(30,40,48,.42);z-index:90;display:none;
+  align-items:flex-end;justify-content:center;backdrop-filter:blur(2px)}
+.mask.on{display:flex}
+.sheet{width:100%;max-width:520px;background:var(--washi);border-radius:18px 18px 0 0;
+  padding:16px 16px calc(18px + env(safe-area-inset-bottom));max-height:88vh;overflow:auto;
+  box-shadow:0 -10px 40px rgba(0,0,0,.2);animation:up .22s ease}
+@keyframes up{from{transform:translateY(24px);opacity:.6}to{transform:none;opacity:1}}
+.sheet h3{font-family:var(--mincho);font-size:17px;margin:0 0 12px;font-weight:600;letter-spacing:.05em}
+.f{margin-bottom:11px}
+.f label{display:block;font-size:11px;letter-spacing:.12em;color:var(--ink-3);margin-bottom:4px}
+.f input,.f select,.f textarea{width:100%;border:1px solid var(--line);border-radius:9px;
+  padding:10px;font:400 15px var(--gothic);color:var(--ink);background:#fff}
+.f textarea{min-height:80px;line-height:1.6;resize:vertical}
+.f2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.sheetacts{display:flex;gap:8px;margin-top:14px}
+.sheetacts .btn{flex:1;justify-content:center;min-height:44px}
+.btn.primary{background:var(--sea-1);border-color:var(--sea-1);color:#fff}
+.btn.danger{border-color:var(--line);color:#a8534a}
 
-  .item .time{ font-family:var(--serif); font-size:12.5px; font-weight:600; color:var(--sea-deep); padding-top:14px; text-align:right; white-space:nowrap; }
-  .item .time.empty{ color:var(--ink-faint); font-weight:400; }
-  .item .dot{
-    position:absolute; left:46px; top:19px; width:9px; height:9px; margin-left:-5px;
-    border-radius:50%; background:var(--card); border:2px solid var(--sea);
-  }
+/* ── checklist / fx card ──────────── */
+.block{margin-top:34px;background:var(--washi);border:1px solid var(--line);
+  border-radius:var(--r);padding:15px}
+.block h3{font-family:var(--mincho);font-size:16px;margin:0 0 4px;font-weight:600;letter-spacing:.05em}
+.block .hint{font-size:11.5px;color:var(--ink-3);margin-bottom:10px}
+.check{display:flex;align-items:flex-start;gap:9px;padding:7px 0;border-bottom:1px dashed var(--line-2)}
+.check input{width:18px;height:18px;margin:3px 0 0;accent-color:var(--sea-1);flex:0 0 auto}
+.check span{flex:1;font-size:14px;word-break:break-word}
+.check input:checked+span{color:var(--ink-3);text-decoration:line-through}
+.check .rm{border:none;background:none;color:#c4b9aa;font-size:16px;cursor:pointer;padding:0 2px}
+.addrow{display:flex;gap:7px;margin-top:10px}
+.addrow input{flex:1;min-width:0;border:1px solid var(--line);border-radius:9px;padding:9px;font:400 14px var(--gothic)}
+.fxbig{font-family:var(--gothic);font-size:22px;font-weight:500;color:var(--sea-1);margin-top:6px;letter-spacing:.02em}
 
-  .card{
-    background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
-    padding:13px 14px 12px; box-shadow:var(--shadow); position:relative;
-  }
-  .card .grip{
-    position:absolute; top:10px; right:10px; cursor:grab; color:var(--ink-faint); font-size:14px;
-    line-height:1; padding:3px; touch-action:none; user-select:none;
-  }
-  .card .grip:active{ cursor:grabbing; }
+/* ── utility notebook ─────────────── */
+.utility{scroll-margin-top:74px;margin:20px 0 28px}.utility-grid{display:grid;grid-template-columns:1fr;gap:10px}
+.utility-card{background:var(--washi);border:1px solid var(--line);border-radius:var(--r);padding:13px}
+.utility-card h3{font-family:var(--mincho);font-size:16px;margin:0;color:var(--ink);font-weight:600;letter-spacing:.05em}
+.utility-card .hint{font-size:11px;color:var(--ink-3);margin:2px 0 9px}.utility-list{display:flex;flex-direction:column;gap:7px}
+.utility-item{border-top:1px dashed var(--line-2);padding:8px 0 0}.utility-item:first-child{border-top:0;padding-top:0}
+.utility-item-top{display:flex;align-items:flex-start;gap:7px}.utility-item-title{font-size:14px;font-weight:500;flex:1;word-break:break-word}
+.utility-item-text{font-size:12.5px;color:var(--ink-2);white-space:pre-wrap;word-break:break-word;margin-top:3px}
+.utility-item .imgs img{width:70px;height:70px}.utility-empty{font-size:12px;color:var(--ink-3);padding:4px 0 8px}
+.utility-menu{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.utility-menu .btn{min-height:48px;justify-content:center;text-align:center;font-size:13px}
+.utility-menu .btn:last-child:nth-child(odd){grid-column:1/-1}.utility-back{margin-bottom:10px}.utility-done{width:19px;height:19px;accent-color:var(--sea-1);margin:3px 1px 0 0;flex:0 0 auto}
+.utility-menu .btn.on{background:var(--sea-1);border-color:var(--sea-1);color:#fff}
+.utility-item.done .utility-item-title,.utility-item.done .utility-item-text{color:var(--ink-3);text-decoration:line-through}
 
-  .badges{ display:flex; flex-wrap:wrap; gap:6px; margin-bottom:9px; padding-right:20px; }
-  .badge{
-    display:inline-flex; align-items:center; gap:4px; font-size:11px; font-weight:700;
-    padding:4px 10px; border-radius:999px; white-space:nowrap;
-  }
-  .badge.status{ background:var(--amber-pale); color:var(--amber); }
-  .badge.cat-transport{ background:var(--sea-pale); color:var(--sea-deep); }
-  .badge.cat-stay{ background:var(--plum-pale); color:var(--plum); }
-  .badge.cat-meal{ background:var(--coral-pale); color:var(--coral); }
-  .badge.cat-sight{ background:var(--sea-pale); color:var(--sea); }
-  .badge.cat-shop{ background:var(--gold-pale); color:var(--gold); }
-  .badge.cat-cafe{ background:var(--rose-pale); color:var(--rose); }
+/* ── floats ───────────────────────── */
+.floats{position:fixed;right:12px;bottom:calc(16px + env(safe-area-inset-bottom));z-index:60;
+  display:flex;flex-direction:column;gap:9px}
+.fab{width:44px;height:44px;border-radius:50%;border:1px solid #cfe4e0;background:#fff;
+  box-shadow:0 2px 8px rgba(51,64,62,.07);font-size:17px;display:grid;place-items:center;cursor:pointer;
+  color:var(--sea-1);transition:.18s;padding:0}
+.fab.hide{opacity:0;pointer-events:none;transform:scale(.8)}
+.fab.undo{font-size:16px}
+footer{text-align:center;font-size:11px;color:var(--ink-3);margin-top:30px;letter-spacing:.08em;line-height:1.9}
+.toast{position:fixed;left:50%;bottom:86px;transform:translateX(-50%) translateY(10px);z-index:100;
+  background:var(--ink);color:#fff;font-size:12.5px;padding:9px 16px;border-radius:20px;opacity:0;
+  transition:.22s;pointer-events:none;max-width:86vw;text-align:center}
+.toast.on{opacity:1;transform:translateX(-50%)}
+.skel{height:14px;border-radius:7px;background:linear-gradient(90deg,#efece6,#f8f6f2,#efece6);
+  background-size:200% 100%;animation:sh 1.3s infinite}
+@keyframes sh{to{background-position:-200% 0}}
 
-  .card h3{ font-family:var(--serif); font-weight:700; font-size:16px; margin:0; letter-spacing:.01em; padding-right:20px; }
-  .card .subtitle{ font-size:12px; color:var(--ink-soft); margin-top:3px; }
-
-  .meta-row{ display:flex; align-items:center; gap:6px; font-size:12px; color:var(--ink-soft); margin-top:7px; }
-  .meta-row .ic{ font-size:12.5px; flex:none; }
-
-  .tip{
-    display:flex; gap:8px; align-items:flex-start;
-    background:var(--sun-pale); border-radius:9px; padding:9px 11px; margin-top:10px;
-  }
-  .tip .ic{ font-size:13px; margin-top:1px; flex:none; }
-  .tip p{ margin:0; font-size:12.5px; color:#6B4E1C; line-height:1.65; white-space:pre-line; }
-
-  .actions{ display:flex; gap:6px; margin-top:10px; }
-  .actions a, .actions button{
-    font-size:11.5px; font-weight:500; color:var(--sea-deep);
-    background:var(--sea-pale); border:1px solid transparent; border-radius:999px;
-    padding:5px 11px; display:inline-flex; align-items:center; gap:4px;
-    text-decoration:none; cursor:pointer;
-  }
-  .actions a{ background:var(--sea); color:#fff; }
-  .actions a:hover{ background:var(--sea-deep); }
-  .actions button:hover{ border-color:var(--sea); }
-
-  .add-item{
-    margin:14px 0 0 50px; background:transparent; border:1px dashed var(--line); color:var(--ink-soft);
-    font-size:12.5px; padding:9px 14px; border-radius:var(--radius); cursor:pointer;
-    width:calc(100% - 50px); text-align:left;
-  }
-  .add-item:hover{ border-color:var(--sea); color:var(--sea-deep); }
-
-  /* ---------- 浮動按鈕 ---------- */
-  .fab-stack{ position:fixed; right:16px; bottom:calc(20px + var(--safe-b)); z-index:40; display:flex; flex-direction:column; gap:10px; }
-  .fab{
-    width:46px; height:46px; border-radius:50%; background:var(--sea-deep); color:#fff; border:1px solid var(--sea-deep);
-    font-size:18px; display:flex; align-items:center; justify-content:center; cursor:pointer;
-    box-shadow:0 3px 10px rgba(35,86,106,.3);
-  }
-
-  /* ---------- 底部彈出面板 ---------- */
-  .backdrop{ position:fixed; inset:0; background:rgba(35,50,58,.35); opacity:0; pointer-events:none; transition:opacity .2s ease; z-index:49; }
-  .backdrop.show{ opacity:1; pointer-events:auto; }
-
-  .sheet{
-    position:fixed; left:0; right:0; bottom:0; z-index:50; max-width:640px; margin:0 auto;
-    background:var(--sand); border:1px solid var(--line); border-bottom:none; border-radius:18px 18px 0 0;
-    padding:16px 20px calc(22px + var(--safe-b));
-    transform:translateY(105%); transition:transform .25s cubic-bezier(.32,.72,.31,1);
-    box-shadow:0 -8px 24px rgba(35,50,58,.2); max-height:85vh; overflow-y:auto;
-  }
-  .sheet.show{ transform:translateY(0); }
-  .sheet .grabber{ width:36px; height:4px; border-radius:2px; background:var(--line); margin:0 auto 14px; }
-  .sheet h3{ font-family:var(--serif); font-size:16px; margin:0 0 4px; color:var(--sea-deep); }
-  .sheet .sub{ font-size:12px; color:var(--ink-soft); margin:0 0 16px; }
-  .sheet .close-x{ position:absolute; right:14px; top:14px; background:none; border:none; font-size:18px; color:var(--ink-soft); cursor:pointer; padding:6px; }
-
-  label.field{ display:block; margin-bottom:13px; }
-  label.field .lbl{ display:block; font-size:11.5px; color:var(--ink-soft); margin-bottom:5px; letter-spacing:.03em; }
-  label.field input, label.field textarea, label.field select{
-    width:100%; font-family:inherit; font-size:14.5px; color:var(--ink);
-    background:var(--card); border:1px solid var(--line); border-radius:9px; padding:9px 11px; resize:vertical;
-  }
-  label.field input:focus, label.field textarea:focus, label.field select:focus{ outline:none; border-color:var(--sea); }
-  .field-row{ display:flex; gap:10px; }
-  .field-row > label.field{ flex:1; }
-  .cat-select{ display:flex; flex-wrap:wrap; gap:7px; }
-  .cat-opt{
-    font-size:12px; padding:6px 11px; border-radius:999px; border:1px solid var(--line); background:var(--card);
-    cursor:pointer; color:var(--ink-soft); display:flex; align-items:center; gap:4px;
-  }
-  .cat-opt.picked{ border-color:transparent; color:#fff; }
-  .cat-opt[data-cat="transport"].picked{ background:var(--sea-deep); }
-  .cat-opt[data-cat="stay"].picked{ background:var(--plum); }
-  .cat-opt[data-cat="meal"].picked{ background:var(--coral); }
-  .cat-opt[data-cat="sight"].picked{ background:var(--sea); }
-  .cat-opt[data-cat="shop"].picked{ background:var(--gold); }
-  .cat-opt[data-cat="cafe"].picked{ background:var(--rose); }
-
-  .btn-row{ display:flex; gap:10px; margin-top:6px; }
-  .btn{ flex:1; text-align:center; padding:11px; border-radius:10px; font-size:14px; cursor:pointer; border:1px solid var(--line); background:var(--card); color:var(--ink); }
-  .btn.primary{ background:var(--sea-deep); color:#fff; border-color:var(--sea-deep); }
-  .btn.danger{ background:transparent; color:var(--coral); border-color:var(--coral); flex:none; padding:11px 16px; }
-
-  /* 匯率 */
-  .rate-line{ font-size:12px; color:var(--ink-soft); margin-bottom:14px; }
-  .rate-line b{ color:var(--sea-deep); font-family:var(--serif); }
-  .conv-row{ display:flex; align-items:center; gap:10px; margin-bottom:12px; }
-  .conv-row .cur{ width:52px; font-size:12px; color:var(--ink-soft); font-family:var(--serif); }
-  .conv-row input{ flex:1; font-size:18px; font-family:var(--serif); color:var(--ink); background:var(--card); border:1px solid var(--line); border-radius:9px; padding:10px 12px; }
-  .conv-row input:focus{ outline:none; border-color:var(--sea); }
-  .swap-mark{ text-align:center; font-size:11px; color:var(--ink-faint); margin:-4px 0 10px; letter-spacing:.2em; }
-
-  /* 天氣 */
-  .wx-list{ list-style:none; margin:0; padding:0; }
-  .wx-list li{ display:flex; align-items:center; gap:12px; padding:9px 0; border-bottom:1px solid var(--line); }
-  .wx-list li:last-child{ border-bottom:none; }
-  .wx-date{ width:78px; font-family:var(--serif); font-size:12.5px; color:var(--ink); flex:none; }
-  .wx-icon{ font-size:20px; width:26px; text-align:center; flex:none; }
-  .wx-desc{ flex:1; font-size:12px; color:var(--ink-soft); }
-  .wx-temp{ font-size:12.5px; color:var(--sea-deep); white-space:nowrap; font-family:var(--serif); }
-  .wx-empty{ font-size:12px; color:var(--ink-faint); padding:14px 0; text-align:center; }
-
-  .toast{
-    position:fixed; left:50%; bottom:calc(28px + var(--safe-b)); transform:translateX(-50%) translateY(12px);
-    background:var(--sea-deep); color:#fff; font-size:12.5px; padding:9px 16px; border-radius:999px; z-index:60;
-    opacity:0; pointer-events:none; transition:opacity .2s ease, transform .2s ease; white-space:nowrap;
-  }
-  .toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
-
-  footer.credit{ text-align:center; font-size:11px; color:var(--ink-faint); padding:0 20px calc(30px + var(--safe-b)); letter-spacing:.05em; }
-
-  @media (min-width:640px){
-    nav.daytabs{ padding-left:calc((100% - 640px)/2 + 16px); padding-right:calc((100% - 640px)/2 + 16px); }
-    header.topbar{ padding-left:calc((100% - 640px)/2 + 20px); padding-right:calc((100% - 640px)/2 + 20px); }
-  }
+@media print{
+  .tabbar,.floats,.tools,.acts,.grip,.addstop,.waves,.mask,.toast{display:none!important}
+  body{background:#fff}.card,.block{box-shadow:none}.day{page-break-inside:avoid}
+  .stop{page-break-inside:avoid}
+}
 </style>
 </head>
 <body>
-<div class="wave-bg"></div>
+<div class="wrap">
 
-<header class="topbar">
-  <div class="title-row">
-    <h1><span class="wave-ic">〰️</span>仙台遊 <span class="dates">9/19 – 9/26</span></h1>
-    <span class="sync-pill local" id="syncPill"><span class="sync-dot"></span><span id="syncText">連線中…</span></span>
-  </div>
+<header class="hero">
+  <div class="edited" id="lastEdit">—</div>
+  <h1>🌸仙台遊</h1>
+  <h2>　　Sendai 9/19－9/26<h2>
+  <div class="live"><i class="dot off" id="liveDot"></i><span id="liveTxt">連線中…</span></div>
 </header>
 
-<nav class="daytabs" id="dayTabs"></nav>
+<nav class="tabbar"><div class="tabs" id="tabs"></div></nav>
 
-<main id="main"></main>
+<main id="content">
+  <section id="itineraryPanel">
+    <div id="days">
+      <div class="day"><div class="tl" style="padding-left:0">
+        <div class="skel" style="width:60%"></div>
+        <div class="skel" style="width:90%;margin-top:10px;height:70px"></div>
+        <div class="skel" style="width:90%;margin-top:10px;height:70px"></div>
+      </div></div>
+    </div>
+  </section>
 
-<footer class="credit">旅途中隨手編修 · 內容會即時同步給所有人</footer>
+  <section id="utilityPanel" hidden>
+    <section class="tools" id="toolsPanel">
+      <div class="tool" id="fxCard">
+        <div class="thead"><div class="lbl">円 → 台幣</div></div>
+        <div class="fxrow"><input id="fxJpy" type="number" inputmode="decimal" value="1000" aria-label="日幣金額"><span>円</span></div>
+        <div class="big" id="fxOut" style="margin-top:5px">NT$ --</div>
+        <div class="fine" id="fxRate">匯率讀取中</div>
+      </div>
+    </section>
+    <section class="utility"><div class="utility-grid" id="utilityLists"></div></section>
+  </section>
+</main>
 
-<div class="fab-stack">
-  <button class="fab" id="fabWeather" title="天氣">🌤️</button>
-  <button class="fab" id="fabCurrency" title="匯率">💴</button>
+
+
+
+
+<footer>
+  有這個網址的人都能直接編輯，改動即時同步<br>
+  地圖按鈕開啟 Google 地圖導航 ・「今天」依裝置本地時間判斷
+</footer>
 </div>
 
-<div class="backdrop" id="backdrop"></div>
+<div class="floats">
+  <button class="fab undo hide" id="fabUndo" title="復原上一步">↶</button>
+  <button class="fab hide" id="fabTop" title="回到頂部">↑</button>
+</div>
 
-<section class="sheet" id="weatherSheet">
-  <button class="close-x" data-close>✕</button>
-  <div class="grabber"></div>
-  <h3>仙台天氣</h3>
-  <p class="sub">資料來源 Open-Meteo（免金鑰，僅提供未來約 16 天內的預報）</p>
-  <ul class="wx-list" id="wxList"><li class="wx-empty">讀取中…</li></ul>
-</section>
-
-<section class="sheet" id="currencySheet">
-  <button class="close-x" data-close>✕</button>
-  <div class="grabber"></div>
-  <h3>日幣・新台幣 速算</h3>
-  <p class="rate-line" id="rateLine">正在取得即時匯率…</p>
-  <div class="conv-row"><span class="cur">JPY ¥</span><input type="number" inputmode="decimal" id="jpyInput" placeholder="0"></div>
-  <div class="swap-mark">≈ ⇅ ≈</div>
-  <div class="conv-row"><span class="cur">TWD $</span><input type="number" inputmode="decimal" id="twdInput" placeholder="0"></div>
-</section>
-
-<section class="sheet" id="editSheet">
-  <button class="close-x" data-close>✕</button>
-  <div class="grabber"></div>
-  <h3 id="editTitle">編輯行程</h3>
-  <p class="sub" id="editDayLabel"></p>
-
-  <label class="field">
-    <span class="lbl">類型</span>
-    <div class="cat-select" id="catSelect">
-      <span class="cat-opt" data-cat="transport">🚃 交通</span>
-      <span class="cat-opt" data-cat="stay">🏨 住宿</span>
-      <span class="cat-opt" data-cat="meal">🍴 用餐</span>
-      <span class="cat-opt" data-cat="sight">⛩️ 景點</span>
-      <span class="cat-opt" data-cat="shop">🛍️ 購物</span>
-      <span class="cat-opt" data-cat="cafe">☕ 咖啡</span>
-    </div>
-  </label>
-
-  <div class="field-row">
-    <label class="field">
-      <span class="lbl">時間</span>
-      <input type="text" id="fTime" placeholder="例如 09:20">
-    </label>
-    <label class="field">
-      <span class="lbl">預約狀態（選填）</span>
-      <input type="text" id="fStatus" placeholder="例如 已預約 18:30">
-    </label>
-  </div>
-
-  <label class="field">
-    <span class="lbl">標題</span>
-    <input type="text" id="fTitle" placeholder="行程名稱">
-  </label>
-  <label class="field">
-    <span class="lbl">副標（選填，例如地區・評分・分類）</span>
-    <input type="text" id="fSubtitle" placeholder="例如 松島・人氣景點">
-  </label>
-
-  <div class="field-row">
-    <label class="field">
-      <span class="lbl">🚶 交通／移動（選填）</span>
-      <input type="text" id="fTransit" placeholder="例如 步行 10 分">
-    </label>
-    <label class="field">
-      <span class="lbl">🕐 營業時間（選填）</span>
-      <input type="text" id="fHours" placeholder="例如 10:00–17:00">
-    </label>
-  </div>
-
-  <label class="field">
-    <span class="lbl">備註 / 小提醒</span>
-    <textarea id="fNote" rows="3" placeholder="注意事項、亮點介紹…"></textarea>
-  </label>
-  <label class="field">
-    <span class="lbl">地圖搜尋關鍵字（給導航按鈕用，留白則用標題）</span>
-    <input type="text" id="fLoc" placeholder="例如 瑞鳳殿">
-  </label>
-
-  <div class="btn-row">
-    <button class="btn danger" id="btnDelete">刪除</button>
-    <button class="btn" data-close>取消</button>
-    <button class="btn primary" id="btnSave">儲存</button>
-  </div>
-</section>
-
+<div class="mask" id="mask"><div class="sheet" id="sheet"></div></div>
 <div class="toast" id="toast"></div>
 
-<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-database-compat.js"></script>
-
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
 <script>
-(function(){
-"use strict";
+/* ═══ 0. 行程種子資料 ═══════════════════════════════════════ */
+const DAYS = [
+  {id:'day1', date:'9/19', dow:'六', iso:'2026-09-19', title:'抵達仙台・牛舌開場', color:'var(--sea-1)', stay:'Hotel Grand Bach Sendai', place:'仙台', lat:38.2682, lon:140.8694},
+  {id:'day2', date:'9/20', dow:'日', iso:'2026-09-20', title:'盧葡兒巴士・市區', color:'var(--sea-2)', stay:'Hotel Grand Bach Sendai', place:'仙台', lat:38.2682, lon:140.8694},
+  {id:'day3', date:'9/21', dow:'一', iso:'2026-09-21', title:'松島・牡蠣與遊船', color:'var(--sea-3)', stay:'ホテル京阪', place:'松島', lat:38.3739, lon:141.0603},
+  {id:'day4', date:'9/22', dow:'二', iso:'2026-09-22', title:'藏王御釜・山形・山寺', color:'var(--sea-4)', stay:'ホテル京阪', place:'藏王', lat:38.1436, lon:140.4497},
+  {id:'day5', date:'9/23', dow:'三', iso:'2026-09-23', title:'仙台海洋森林水族館', color:'var(--sea-5)', stay:'ホテル京阪', place:'仙台', lat:38.2682, lon:140.8694},
+  {id:'day6', date:'9/24', dow:'四', iso:'2026-09-24', title:'石卷・貓島', color:'var(--sea-6)', stay:'ホテル京阪', place:'石卷', lat:38.4343, lon:141.3029},
+  {id:'day7', date:'9/25', dow:'五', iso:'2026-09-25', title:'金蛇水神社・購物・還車', color:'var(--sea-7)', stay:'ホテル京阪', place:'仙台', lat:38.2682, lon:140.8694},
+  {id:'day8', date:'9/26', dow:'六', iso:'2026-09-26', title:'寄行李・返程', color:'var(--sea-8)', stay:'—', place:'仙台', lat:38.2682, lon:140.8694}
+];
+const CATS = ['交通','吃飯','景點','住宿','購物','其他'];
+const CAT_ICON = {交通:'🚄', 吃飯:'🍽️', 景點:'🏖️', 住宿:'🏨', 購物:'🛍️', 其他:'🐣'};
+const CAT_ALIAS = {'移動':'交通','用餐':'吃飯'};
+const catOf = c => CAT_ALIAS[c] || (CATS.includes(c) ? c : '其他');
 
-/* =========================================================================
-   1) 基本設定 — 請將 firebaseConfig 換成你自己的專案設定
-   ========================================================================= */
-var firebaseConfig = {
+const SEED_VERSION = 2;
+const SEED = {
+  day1:[
+    ['18:10','抵達仙台機場','交通','仙台空港','',''],
+    ['19:00','搭仙台機場Access線','交通','仙台空港駅','可能搭19:00/19:28\n行李只能放腳邊,有點擠,下車時要自己按開關打開門\n只能刷西瓜卡進站or機器買票選660元\n抵達3/4號月台，手扶梯到二樓，左手邊東口改札',''],
+    ['19:27','抵達仙台車站 > 步行去飯店','交通','仙台駅','',''],
+    ['19:45','Hotel Grand Bach Sendai','住宿','ホテルグランバッハ仙台','CHECK IN 放行李','步行10分'],
+    ['20:10','晚餐 - たんや善治郎 南町通り店','吃飯','たんや善治郎 南町通り店','這間人潮較少','步行15分']
+  ],
+  day2:[
+    ['07:15','大廳寄行李 + 早餐','其他','ホテルグランバッハ仙台','',''],
+    ['08:20','LOOPLE 盧葡兒仙台 觀光巴士','交通','仙台駅西口バスプール15-3','買一日券630(現金)\n早點到  第一班09.人潮應該就很多',''],
+    ['09:13','瑞鳳殿','景點','瑞鳳殿','1H > 10:13/10:28/10:43',''],
+    ['10:28','仙台城跡','景點','仙台城跡','30M > 11:08/11:23 一定要搭到這班,不然得搭計程車回來',''],
+    ['12:07','回到仙台車站','交通','仙台駅','先走路過去晃晃','6分'],
+    ['12:45','中餐 - 仔虎燒肉站前店','吃飯','仙台牛たん 仔虎 仙台駅前店','',''],
+    ['14:15','逛街','購物','仙台 一番町アーケード','',''],
+    ['18:00','札幌螃蟹本家 仙台店','吃飯','札幌かに本家 仙台店','','']
+  ],
+  day3:[
+    ['','換飯店寄行李 ホテル京阪','住宿','ホテル京阪 仙台','',''],
+    ['08:00','TOYOTA 租車','交通','トヨタレンタカー 仙台駅前','',''],
+    ['','松島','交通','松島海岸駅','','50M'],
+    ['','牡蠣','吃飯','松島 かき料理','40M吃到飽or單點 幾乎都11-15:00',''],
+    ['','搭船','景點','松島観光船 中央桟橋','15:30過後天氣容易不好\n10:00、11:00、12:00、13:00、14:00、15:00',''],
+    ['','瑞巖寺','景點','瑞巌寺','08:30-17:00 門票1000日圓',''],
+    ['','★★★★ 瑞巖寺五大堂','景點','五大堂 松島','',''],
+    ['','福浦橋','景點','福浦橋 松島','門票200日圓',''],
+    ['','クロワッサン屋サクサク','吃飯','クロワッサン屋 サクサク 松島','可頌 10-17 有分店',''],
+    ['11:00','MATSUSHIMA SANDWICH STORE 松島三明治','吃飯','MATSUSHIMA SANDWICH STORE','11-16',''],
+    ['','Cafe le Roman 松島','吃飯','Cafe le Roman 松島','咖啡廳 11-17',''],
+    ['','松島蒲鉾本舗','吃飯','松島蒲鉾本舗 総本店','烤魚板 09:30-17:00',''],
+    ['','雪竹屋 烤仙貝（砂糖口味）','吃飯','雪竹屋 松島','10-17','']
+  ],
+  day4:[
+    ['07:20','早餐超商','吃飯','セブンイレブン 仙台','',''],
+    ['07:40','出發','交通','ホテル京阪 仙台','','1H20M'],
+    ['09:00','藏王御釜','景點','蔵王 御釜','1H',''],
+    ['10:00','前往山形','交通','山形市','','1H'],
+    ['11:00','米澤牛 登起波 山形店','吃飯','米沢牛 登起波 山形店','11:00 開店',''],
+    ['12:30','出發去山寺','交通','山寺駅','','30M'],
+    ['13:00','山寺（立石寺）','景點','山寺 立石寺','08-16　爬1.5H-2H',''],
+    ['15:00','回仙台','交通','仙台駅','','1H10M'],
+    ['16:20','飯店','住宿','ホテル京阪 仙台','建議去睡一下',''],
+    ['18:00','晚餐 牛舌','吃飯','仙台 牛たん','','']
+  ],
+  day5:[
+    ['08:00','出發','交通','ホテル京阪 仙台','',''],
+    ['08:30','仙台海洋森林水族館','景點','仙台うみの杜水族館','09:00開　門票NT480\n雙K買 要到櫃台兌換 or 自動售票機　現場看哪個快\nhttps://www.uminomori.jp/umino/info/\n提早抵達才能衝買票1030餵企鵝 300日圓（50個名額）\n大門進去左手邊樓梯上去, 二樓左轉往戶外區走的半路就會看到售票機。',''],
+    ['10:00','海豚海獅表演秀','景點','仙台うみの杜水族館','',''],
+    ['10:30','餵食企鵝','景點','仙台うみの杜水族館','',''],
+    ['13:00','中餐','吃飯','三井アウトレットパーク 仙台港','水族館內吃 / 附近吃 / 回仙台吃+逛街',''],
+    ['','廻鮮寿司 塩釜港 塩釜店','吃飯','廻鮮寿司 塩釜港 塩釜店','10-20　附近可以去',''],
+    ['','鹽竈神社','景點','鹽竈神社','05-17　附近可以去','']
+  ],
+  day6:[
+    ['07:00','開車','交通','ホテル京阪 仙台','',''],
+    ['09:00','石卷 中央 出航','交通','石巻 中央発着所','',''],
+    ['09:44','抵達田代島','景點','田代島','',''],
+    ['11:06','回航','交通','田代島 仁斗田港','',''],
+    ['11:51','抵達石卷','交通','石巻 中央発着所','',''],
+    ['13:00','回到仙台吃中餐','吃飯','仙台駅','','']
+  ],
+  day7:[
+    ['','金蛇水神社','景點','金蛇水神社','08:30-16:00','45M'],
+    ['','購物','購物','仙台 一番町アーケード','百貨公司 10-20',''],
+    ['','晚上還車','交通','トヨタレンタカー 仙台駅前','','']
+  ],
+  day8:[
+    ['','行李寄車站','其他','仙台駅 コインロッカー','',''],
+    ['','中餐 Botan とんかつ牡丹','吃飯','とんかつ 牡丹 仙台','11-15 炸豬排　吃2店吧',''],
+    ['19:00','飛機','交通','仙台空港','','']
+  ]
+};
+
+/* ═══ 1. Firebase ══════════════════════════════════════════ */
+const firebaseConfig = {
   apiKey: "AIzaSyDxMwkCU23PB6Q60r3TWEu3elG00r4ywM0",
   authDomain: "sendai-6666.firebaseapp.com",
   databaseURL: "https://sendai-6666-default-rtdb.asia-southeast1.firebasedatabase.app",
   projectId: "sendai-6666",
   storageBucket: "sendai-6666.firebasestorage.app",
   messagingSenderId: "317293713360",
-  appId: "1:317293713360:web:e3d5175a54ae43c801cbd5"
+  appId: "1:317293713360:web:e3d5175a54ae43c801cbd5",
+  measurementId: "G-Y1EH4G7745"
 };
-var DB_ROOT = "sendaiTrip2026"; // Realtime Database 底下的資料節點
+let db = null, ROOT = null;
+try {
+  firebase.initializeApp(firebaseConfig);
+  db = firebase.database();
+  ROOT = db.ref('trip');
+} catch (e) { console.warn('firebase init failed', e); }
 
-var LAT = 38.2682, LON = 140.8694; // 仙台
+const $ = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+const linkify = s => esc(s).replace(/(https?:\/\/[^\s<]+)/g, u => `<a href="${u}" target="_blank" rel="noopener">${u.length > 34 ? u.slice(0,34) + '…' : u}</a>`);
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function toast(msg){ const t = $('#toast'); t.textContent = msg; t.classList.add('on'); clearTimeout(t._t); t._t = setTimeout(() => t.classList.remove('on'), 1900); }
 
-/* 類型設定：圖示、顯示名稱 */
-var CATS = {
-  transport:{ icon:"🚃", label:"交通" },
-  stay:{ icon:"🏨", label:"住宿" },
-  meal:{ icon:"🍴", label:"用餐" },
-  sight:{ icon:"⛩️", label:"景點" },
-  shop:{ icon:"🛍️", label:"購物" },
-  cafe:{ icon:"☕", label:"咖啡" }
+let STATE = { days:{}, tools:{}, checklist:{}, updatedAt:0 };
+let undoStack = [];
+
+function seedIfEmpty(snap){
+  const v = snap && snap.exists() ? (snap.val() || {}) : {};
+  if (v.seeded && (v.seedVersion || 1) >= SEED_VERSION) return;
+  const days = {};
+  DAYS.forEach(d => {
+    const items = {};
+    (SEED[d.id] || []).forEach((r, i) => {
+      items['s' + String(i + 1).padStart(2,'0')] = {
+        time:r[0], title:r[1], cat:r[2], mapq:r[3], desc:r[4] || '', move:r[5] || '',
+        note:'', order:(i + 1) * 10
+      };
+    });
+    days[d.id] = { items };
+  });
+  ROOT.update({ seeded:true, seedVersion:SEED_VERSION, days, updatedAt:Date.now() }).catch(err => toast('寫入失敗：' + err.code));
+}
+
+if (ROOT) {
+  ROOT.once('value').then(seedIfEmpty).catch(e => { toast('資料庫讀取失敗'); console.warn(e); });
+  ROOT.on('value', snap => {
+    const v = snap.val() || {};
+    STATE.days = v.days || {};
+    STATE.tools = v.tools || {};
+    STATE.checklist = v.checklist || {};
+    STATE.updatedAt = v.updatedAt || 0;
+    renderDays(); renderToolLists(); renderLastEdit();
+  });
+  db.ref('.info/connected').on('value', s => {
+    const on = !!s.val();
+    $('#liveDot').className = 'dot' + (on ? '' : ' off');
+    $('#liveTxt').textContent = on ? '共同編輯中' : '離線中 · 改動會在連線後同步';
+  });
+} else {
+  $('#liveTxt').textContent = '無法連線資料庫';
+}
+
+function stamp(){ if (ROOT) ROOT.child('updatedAt').set(Date.now()); }
+function pushUndo(label){
+  undoStack.push({ label, days: JSON.parse(JSON.stringify(STATE.days)) });
+  if (undoStack.length > 15) undoStack.shift();
+  $('#fabUndo').classList.remove('hide');
+}
+function doUndo(){
+  const u = undoStack.pop();
+  if (!u) return;
+  ROOT.child('days').set(u.days).then(() => { stamp(); toast('已復原：' + u.label); });
+  if (!undoStack.length) $('#fabUndo').classList.add('hide');
+}
+function renderLastEdit(){
+  const t = STATE.updatedAt;
+  if (!t) { $('#lastEdit').textContent = ''; return; }
+  const d = new Date(t);
+  const p = n => String(n).padStart(2,'0');
+  $('#lastEdit').textContent = `最後修改 ${d.getMonth()+1}/${d.getDate()} ${p(d.getHours())}:${p(d.getMinutes())}`;
+}
+
+/* ═══ 2. 渲染行程 ═══════════════════════════════════════════ */
+const ICO = {
+  map:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 21s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11z"/><circle cx="12" cy="10" r="2.6"/></svg>',
+  edit:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 20h4L20 8l-4-4L4 16v4z"/></svg>',
+  copy:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M15 5H6a2 2 0 0 0-2 2v9"/></svg>',
+  route:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 19V9a4 4 0 0 1 4-4h6"/><path d="M12 2l3 3-3 3"/><circle cx="5" cy="19" r="2"/></svg>',
+  grip:'<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="7" r="1.6"/><circle cx="15" cy="7" r="1.6"/><circle cx="9" cy="12" r="1.6"/><circle cx="15" cy="12" r="1.6"/><circle cx="9" cy="17" r="1.6"/><circle cx="15" cy="17" r="1.6"/></svg>',
+  list:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 6h12M8 12h12M8 18h12"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/></svg>'
 };
+const mapURL = q => 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(q);
+const dirURL = (a,b) => 'https://www.google.com/maps/dir/?api=1&origin=' + encodeURIComponent(a) + '&destination=' + encodeURIComponent(b) + '&travelmode=transit';
+const navHref = it => (it.mapurl && it.mapurl.trim()) ? it.mapurl.trim() : (it.mapq ? mapURL(it.mapq) : '');
+let activePanel = 'itinerary';
 
-/* =========================================================================
-   2) 預設行程（第一次啟用、資料庫還是空的時候，會拿這份去建立初始資料）
-   欄位：time / category / status / title / subtitle / transit / hours / note / loc
-   ========================================================================= */
-var SEED_DAYS = [
-  { id:"day1", iso:"2026-09-19", label:"9/19（六）", title:"第一天・抵達仙台", events:[
-    { time:"18:10", category:"transport", title:"抵達仙台機場", loc:"仙台空港" },
-    { time:"19:00", category:"transport", title:"搭仙台機場 Access 線", note:"可能搭 19:00 / 19:28 班次。行李只能放腳邊，車廂有點擠；下車要自己按開關開門。只能刷西瓜卡進站，或用機器買票選 660 日圓。抵達 3/4 號月台，搭手扶梯到二樓，左手邊是東口改札。", loc:"仙台空港アクセス線 仙台空港駅" },
-    { time:"19:27", category:"transport", title:"抵達仙台車站", subtitle:"步行前往飯店", loc:"仙台駅 東口" },
-    { time:"19:45", category:"stay", title:"Hotel Grand Bach Sendai", transit:"步行 10 分", note:"Check in、放行李。", loc:"ホテルグランバッハ仙台" },
-    { time:"20:10", category:"meal", title:"たんや善治郎 南町通り店", transit:"步行 15 分", note:"這間人潮較少。", loc:"たんや善治郎 南町通り店" }
-  ]},
-  { id:"day2", iso:"2026-09-20", label:"9/20（日）", title:"第二天・仙台城下町", events:[
-    { time:"07:15", category:"meal", title:"大廳寄放行李、飯店早餐", loc:"" },
-    { time:"08:20", category:"transport", title:"LOOPLE 盧葡兒仙台觀光巴士", note:"買一日券 630 日圓（限現金）。早點到，搭第一班人潮應該就很多。", loc:"るーぷる仙台 仙台駅前のりば" },
-    { time:"09:13", category:"sight", title:"瑞鳳殿", subtitle:"停留約 1 小時", note:"預計搭 10:13 / 10:28 / 10:43 的巴士離開。", loc:"瑞鳳殿" },
-    { time:"10:28", category:"sight", title:"仙台城跡", subtitle:"停留約 30 分", note:"一定要搭到 11:08 / 11:23 這班，不然得搭計程車回去。", loc:"仙台城跡" },
-    { time:"12:07", category:"transport", title:"回到仙台車站", transit:"步行 6 分", note:"先散步過去晃晃。", loc:"仙台駅" },
-    { time:"12:45", category:"meal", title:"仔虎燒肉 站前店", loc:"焼肉 仔虎 仙台站前店" },
-    { time:"14:15", category:"shop", title:"逛街", loc:"仙台駅前 商店街" },
-    { time:"18:00", category:"meal", title:"札幌螃蟹本家 仙台店", loc:"札幌かに本家 仙台店" }
-  ]},
-  { id:"day3", iso:"2026-09-21", label:"9/21（一）", title:"第三天・松島一日", events:[
-    { time:"", category:"stay", title:"換飯店，寄放行李", subtitle:"ホテル京阪", loc:"ホテル京阪 仙台" },
-    { time:"", category:"sight", title:"松島", subtitle:"自由散策 50 分", loc:"松島" },
-    { time:"", category:"meal", title:"牡蠣", hours:"大部分 15:00 收店", note:"40 分吃到飽或單點。", loc:"松島 牡蠣小屋" },
-    { time:"", category:"sight", title:"搭觀光船", hours:"10:00、11:00、12:00、13:00、14:00、15:00 開船", note:"15:30 過後天氣容易不好。", loc:"松島島巡り観光船" },
-    { time:"", category:"sight", title:"瑞巖寺", loc:"瑞巌寺" },
-    { time:"", category:"sight", title:"瑞巖寺五大堂", note:"必去。", loc:"五大堂 松島" },
-    { time:"", category:"sight", title:"福浦橋", loc:"福浦橋" },
-    { time:"", category:"cafe", title:"クロワッサン屋サクサク", subtitle:"可頌專賣・有分店", hours:"10:00–17:00", loc:"クロワッサン屋サクサク 松島" },
-    { time:"11:00", category:"cafe", title:"MATSUSHIMA SANDWICH STORE", subtitle:"松島三明治", hours:"11:00–16:00", loc:"MATSUSHIMA SANDWICH STORE" },
-    { time:"", category:"cafe", title:"Cafe le Roman 松島", hours:"11:00–17:00", loc:"Cafe le Roman 松島" },
-    { time:"", category:"shop", title:"松島蒲鉾本舗", subtitle:"烤魚板", loc:"松島蒲鉾本舗" },
-    { time:"", category:"shop", title:"烤仙貝", loc:"松島 焼き煎餅" }
-  ]},
-  { id:"day4", iso:"2026-09-22", label:"9/22（二）", title:"第四天・藏王御釜・山形・山寺", events:[
-    { time:"", category:"meal", title:"早餐：超商", loc:"" },
-    { time:"08:00", category:"transport", title:"出發前往藏王御釜", transit:"車程約 1 小時 20 分", loc:"蔵王 御釜" },
-    { time:"09:20", category:"sight", title:"藏王御釜", subtitle:"停留約 1 小時", loc:"蔵王 御釜" },
-    { time:"10:20", category:"transport", title:"出發前往山形", transit:"車程約 1 小時", loc:"山形市" },
-    { time:"11:30", category:"meal", title:"米澤牛 登起波 山形店", loc:"米沢牛 登起波 山形店" },
-    { time:"13:00", category:"transport", title:"出發前往山寺", transit:"車程約 30 分", loc:"山寺" },
-    { time:"13:30", category:"sight", title:"山寺", note:"爬山約 1.5 小時。", loc:"山寺 立石寺" },
-    { time:"15:00", category:"transport", title:"回仙台", transit:"車程約 1 小時 10 分", loc:"仙台市" },
-    { time:"16:20", category:"stay", title:"回飯店休息", note:"建議先去睡一下。", loc:"" },
-    { time:"18:00", category:"meal", title:"晚餐：牛舌", loc:"仙台 牛たん通り" }
-  ]},
-  { id:"day5", iso:"2026-09-23", label:"9/23（三）", title:"第五天・海洋森林水族館", events:[
-    { time:"08:30", category:"sight", title:"仙台海洋森林水族館", note:"10:30 有餵企鵝。", loc:"仙台うみの杜水族館" },
-    { time:"", category:"meal", title:"中餐", note:"去隔壁三井 Outlet 吃，或回市區吃。", loc:"三井アウトレットパーク仙台港" },
-    { time:"", category:"sight", title:"下午行程", note:"尚未決定。", loc:"" }
-  ]},
-  { id:"day6", iso:"2026-09-24", label:"9/24（四）", title:"第六天・石卷貓島", events:[
-    { time:"07:00", category:"transport", title:"開車前往石卷", loc:"石巻市" },
-    { time:"09:00", category:"transport", title:"石卷出航", loc:"石巻港" },
-    { time:"09:44", category:"sight", title:"抵達貓島", subtitle:"田代島", loc:"田代島" },
-    { time:"11:06", category:"transport", title:"回航", loc:"田代島" },
-    { time:"11:51", category:"transport", title:"抵達石卷", loc:"石巻港" },
-    { time:"13:00", category:"meal", title:"回仙台，中餐", loc:"仙台市" }
-  ]},
-  { id:"day7", iso:"2026-09-25", label:"9/25（五）", title:"第七天・金蛇水神社・購物", events:[
-    { time:"", category:"sight", title:"金蛇水神社", loc:"金蛇水神社" },
-    { time:"", category:"shop", title:"購物", loc:"仙台駅" },
-    { time:"晚上", category:"transport", title:"還車", loc:"仙台市 レンタカー返却" }
-  ]},
-  { id:"day8", iso:"2026-09-26", label:"9/26（六）", title:"第八天・賦歸", events:[
-    { time:"", category:"transport", title:"行李寄放車站", loc:"仙台駅" },
-    { time:"19:00", category:"transport", title:"搭機返程", loc:"仙台空港" }
-  ]}
+function itemsOf(dayId){
+  const raw = (STATE.days[dayId] && STATE.days[dayId].items) || {};
+  return Object.keys(raw).map(k => ({ ...raw[k], _id:k }))
+    .sort((a,b) => (a.order ?? 0) - (b.order ?? 0));
+}
+
+function renderDays(){
+  const out = DAYS.map((d, di) => {
+    const items = itemsOf(d.id);
+    const isToday = todayISO() === d.iso;
+    const rows = items.map((it, i) => {
+      const nx = items[i+1];
+      const imgs = it.images ? Object.keys(it.images).map(k => ({ k, src:it.images[k] })) : [];
+      const list = it.list ? Object.keys(it.list).map(k => ({ k, ...it.list[k] })).sort((a,b)=>(a.order||0)-(b.order||0)) : [];
+      const dimgs = it.descImages ? Object.keys(it.descImages).map(k => ({ k, src:it.descImages[k] })) : [];
+      const hasNote = !!(it.note && it.note.trim()) || imgs.length > 0;
+      return `<article class="stop" data-day="${d.id}" data-id="${it._id}">
+        <div class="when${it.time ? '' : ' empty'}">${it.time ? esc(it.time) : '—:—'}</div>
+        <i class="node"></i>
+        <div class="card">
+          <button class="grip" data-drag aria-label="拖曳排序">${ICO.grip}</button>
+          <div class="cardtop">
+            <div class="chips"><span class="cat">${CAT_ICON[catOf(it.cat)] || '📌'} ${esc(catOf(it.cat))}</span>${it.move ? `<span class="move">🚗 ${esc(it.move)}</span>` : ''}</div>
+            <div class="ctools">
+              ${navHref(it) ? `<a class="btn nav sm" target="_blank" rel="noopener" href="${esc(navHref(it))}">${ICO.map}導航</a>` : ''}
+              <button class="btn edit sm" data-act="edit">${ICO.edit}編輯</button>
+              <button class="btn ghost sm" data-act="list">${ICO.list}清單${list.length ? ' ' + list.length : ''}</button>
+            </div>
+          </div>
+          <h4>${esc(it.title || '(未命名)')}</h4>
+          ${it.desc && it.desc.trim() ? `<div class="desc">${linkify(it.desc)}</div>` : ''}
+          ${dimgs.length ? `<div class="descimgs">${dimgs.map(im => `<div class="ph"><img src="${im.src}" alt=""><button class="rm" data-act="rmdescimg" data-img="${im.k}">×</button></div>`).join('')}</div>` : ''}
+          ${list.length ? `<div class="slist">${it.listTitle && it.listTitle.trim() ? `<div class="slist-t">${esc(it.listTitle)}</div>` : ''}${list.map(l => l.url ? `<a href="${esc(l.url)}" target="_blank" rel="noopener">${ICO.map}${esc(l.name || l.url)}</a>` : `<span class="n">${ICO.map}${esc(l.name || '')}</span>`).join('')}</div>` : ''}
+          <details class="note"${hasNote ? '' : ''}>
+            <summary><span class="car">▶</span>備註${hasNote ? ' 🐈' : ''}</summary>
+            <div class="body">
+              ${it.note && it.note.trim() ? `<div class="txt">${linkify(it.note)}</div>` : ''}
+              ${imgs.length ? `<div class="imgs">${imgs.map(im => `<div class="ph"><img src="${im.src}" alt=""><button class="rm" data-act="rmimg" data-img="${im.k}">×</button></div>`).join('')}</div>` : ''}
+              <div class="noteacts">
+                <button class="btn sm" data-act="note">${ICO.edit}編輯備註</button>
+                <button class="btn sm" data-act="addimg">＋ 圖片</button>
+                <button class="btn sm" data-act="pasteimg">📋 貼上圖片</button>
+              </div>
+            </div>
+          </details>
+        </div>
+      </article>`;
+    }).join('');
+
+    return `<section class="day" id="${d.id}" data-iso="${d.iso}" style="--daycolor:${d.color}">
+      <div class="dayhead">
+        <div class="daynum">DAY${di+1}</div>
+        <div class="t">
+          <h2>${d.date}（${d.dow}）${isToday ? '<span class="badge-today">今天</span>' : ''}</h2>
+        </div>
+        <div class="dayweather" data-weather="${d.id}">${dayWeatherHTML(d)}</div>
+      </div>
+      <div class="daybar"></div>
+      <div class="tl" data-day="${d.id}">${rows}
+        <button class="addstop" data-act="add" data-day="${d.id}">＋ 新增行程</button>
+      </div>
+    </section>`;
+  }).join('');
+  $('#days').innerHTML = out;
+  renderTabs();
+  markNow();
+}
+
+function renderTabs(){
+  const ti = todayISO();
+  $('#tabs').innerHTML = DAYS.map((d,i) =>
+    `<a class="tab" href="#${d.id}" data-target="${d.id}" style="--tc:${d.color}">
+      <b>${d.date}</b>${d.dow}${d.iso === ti ? '<i class="today-dot"></i>' : ''}
+    </a>`).join('') + `<a class="tab${activePanel === 'utility' ? ' on' : ''}" href="#utilityPanel" data-tool="utility" style="--tc:var(--sea-1)"><b>工具</b>備用・記事</a>`;
+}
+
+function todayISO(){
+  const d = new Date(); const p = n => String(n).padStart(2,'0');
+  return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}`;
+}
+function markNow(){
+  const ti = todayISO();
+  const day = DAYS.find(d => d.iso === ti);
+  if (!day) return;
+  const sec = document.getElementById(day.id);
+  if (!sec) return;
+  const now = new Date().getHours() * 60 + new Date().getMinutes();
+  const stops = [...sec.querySelectorAll('.stop')];
+  let cur = null;
+  stops.forEach(s => {
+    const m = (s.querySelector('.when').textContent || '').match(/(\d{1,2}):(\d{2})/);
+    if (!m) return;
+    const mins = +m[1] * 60 + +m[2];
+    if (mins <= now) cur = s;
+  });
+  if (cur){
+    cur.classList.add('now');
+    cur.querySelector('.chips').insertAdjacentHTML('beforeend','<span class="chip-now">現在</span>');
+  }
+}
+
+/* ═══ 3. 工具：備用地點／餐廳／記事 ═══════════════════════ */
+const TOOL_GROUPS = [
+  { id:'places', title:'備用地點', hint:'想去但尚未排入行程的景點、商店或地標', icon:'📍' },
+  { id:'restaurants', title:'備用餐廳', hint:'候位太久時的替代選擇，也可留下訂位資訊', icon:'🍽️' },
+  { id:'memos', title:'記事', hint:'旅行提醒、採買清單、備忘與靈感', icon:'📝' },
+  { id:'wishes', title:'願望清單', hint:'想買、想做、想體驗的旅行願望', icon:'✨', checkable:true },
+  { id:'purchases', title:'代購清單', hint:'受託購買的品項與交辦事項', icon:'🛍️', checkable:true }
 ];
-
-/* =========================================================================
-   3) 小工具
-   ========================================================================= */
-function $(sel, root){ return (root||document).querySelector(sel); }
-function $all(sel, root){ return Array.prototype.slice.call((root||document).querySelectorAll(sel)); }
-function esc(s){
-  return String(s==null?"":s).replace(/[&<>"']/g, function(c){
-    return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c];
-  });
+let activeToolGroup = null;
+function normalizeWebURL(value){
+  const v = (value || '').trim();
+  if (!v) return '';
+  try { const u = new URL(v); return /^https?:$/.test(u.protocol) ? u.href : ''; } catch(_) { return ''; }
 }
-function uid(){ return "ev" + Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
-function showToast(msg){
-  var t = $("#toast");
-  t.textContent = msg;
-  t.classList.add("show");
-  clearTimeout(showToast._tm);
-  showToast._tm = setTimeout(function(){ t.classList.remove("show"); }, 1800);
+function isGoogleMapURL(value){
+  try {
+    const u = new URL(value), host = u.hostname.toLowerCase(), path = u.pathname.toLowerCase();
+    return host === 'maps.app.goo.gl' || host === 'goo.gl' && path.startsWith('/maps') || host.startsWith('maps.google.') || /^(.+\.)?google\.[a-z.]+$/.test(host) && path.startsWith('/maps');
+  } catch(_) { return false; }
 }
-
-/* =========================================================================
-   4) 資料狀態
-   DATA = { day1:[{id,time,category,status,title,subtitle,transit,hours,note,loc,order}, ...], ... }
-   ========================================================================= */
-var DATA = {};
-var DAY_META = {};
-SEED_DAYS.forEach(function(d){ DAY_META[d.id] = { iso:d.iso, label:d.label, title:d.title }; });
-
-var dbRef = null;
-var useFirebase = false;
-var lastRenderedJSON = {};
-var draggingDay = null;
-
-var FIELD_KEYS = ["time","category","status","title","subtitle","transit","hours","note","loc"];
-function normalizeEvent(id, raw, order){
-  var ev = { id:id, order: (typeof order==="number")?order:0 };
-  FIELD_KEYS.forEach(function(k){ ev[k] = raw && raw[k] ? raw[k] : ""; });
-  if (!ev.category || !CATS[ev.category]) ev.category = "sight";
-  return ev;
+function toolItems(group){
+  const raw = (STATE.tools && STATE.tools[group]) || {};
+  return Object.keys(raw).map(k => ({ ...raw[k], _id:k })).sort((a,b) => (b.updatedAt||0) - (a.updatedAt||0));
 }
-
-/* =========================================================================
-   5) Firebase 初始化與同步
-   ========================================================================= */
-function isConfigPlaceholder(){
-  return !firebaseConfig.apiKey || firebaseConfig.apiKey.indexOf("REPLACE_ME") === 0;
-}
-
-function seedLocalData(){
-  SEED_DAYS.forEach(function(d){
-    DATA[d.id] = d.events.map(function(ev, i){ return normalizeEvent(uid(), ev, i); });
-  });
-}
-
-function initFirebase(){
-  if (isConfigPlaceholder()) {
-    setSyncState("local", "本機模式（尚未連接 Firebase）");
-    seedLocalData();
-    loadLocalStorageFallback();
-    renderAllDays();
+function renderToolLists(){
+  const box = $('#utilityLists'); if (!box) return;
+  const menu = `<div class="utility-menu">${TOOL_GROUPS.map(g => `<button class="btn${activeToolGroup === g.id ? ' on' : ''}" data-act="tool-open" data-group="${g.id}">${g.icon} ${g.title}</button>`).join('')}</div>`;
+  if (!activeToolGroup){
+    box.innerHTML = menu;
     return;
   }
-  try{
-    firebase.initializeApp(firebaseConfig);
-    dbRef = firebase.database().ref(DB_ROOT);
-    useFirebase = true;
-    setSyncState("connecting", "連線中…");
-
-    dbRef.once("value").then(function(snap){
-      if (!snap.exists()) {
-        var initPayload = {};
-        SEED_DAYS.forEach(function(d){
-          var obj = {};
-          d.events.forEach(function(ev, i){
-            var id = uid();
-            var e = normalizeEvent(id, ev, i);
-            var payload = {}; FIELD_KEYS.forEach(function(k){ payload[k]=e[k]; }); payload.order = i;
-            obj[id] = payload;
-          });
-          initPayload[d.id] = obj;
-        });
-        dbRef.set(initPayload);
-      }
-    }).catch(function(err){
-      console.error(err);
-      setSyncState("local", "連線失敗，改用本機模式");
-      seedLocalData();
-      renderAllDays();
-    });
-
-    dbRef.on("value", function(snap){
-      var val = snap.val() || {};
-      SEED_DAYS.forEach(function(d){
-        var raw = val[d.id] || {};
-        var list = Object.keys(raw).map(function(key){ return normalizeEvent(key, raw[key], raw[key] && raw[key].order); });
-        list.sort(function(a,b){ return a.order - b.order; });
-        DATA[d.id] = list;
-      });
-      setSyncState("live", "即時同步中");
-      renderChangedDays();
-    }, function(err){
-      console.error(err);
-      setSyncState("local", "連線中斷，改用本機模式");
-    });
-  }catch(err){
-    console.error(err);
-    setSyncState("local", "本機模式（Firebase 設定有誤）");
-    seedLocalData();
-    renderAllDays();
-  }
+  const g = TOOL_GROUPS.find(x => x.id === activeToolGroup); if (!g) return;
+  const entries = toolItems(g.id);
+  box.innerHTML = `${menu}<article class="utility-card" data-tool-group="${g.id}">
+      <h3>${g.icon} ${g.title}</h3><div class="hint">${g.hint} ・ 可直接貼上圖片${g.checkable ? ' ・ 勾選代表已完成' : ''}</div>
+      <div class="utility-list">${entries.length ? entries.map(it => {
+        const imgs = it.images ? Object.keys(it.images).map(k => ({k,src:it.images[k]})) : [];
+        const url = normalizeWebURL(it.url);
+        const link = url ? `<a class="btn nav sm" href="${esc(url)}" target="_blank" rel="noopener">${isGoogleMapURL(url) ? ICO.map + '導航' : '↗ 開啟網頁'}</a>` : '';
+        return `<div class="utility-item${it.done ? ' done' : ''}" data-tool-id="${it._id}">
+          <div class="utility-item-top">${g.checkable ? `<input class="utility-done" type="checkbox" data-act="tool-done" data-group="${g.id}" data-id="${it._id}" ${it.done ? 'checked' : ''} aria-label="${it.done ? '取消完成' : '標示完成'}">` : ''}<div class="utility-item-title">${esc(it.title || '(未命名)')}</div>
+            ${link}
+            <button class="btn sm" data-act="tool-edit" data-group="${g.id}" data-id="${it._id}">編輯</button>
+            <button class="btn ghost sm" data-act="tool-rm" data-group="${g.id}" data-id="${it._id}">×</button></div>
+          ${it.text && it.text.trim() ? `<div class="utility-item-text">${linkify(it.text)}</div>` : ''}
+          ${imgs.length ? `<div class="imgs">${imgs.map(im => `<div class="ph"><img src="${im.src}" alt=""><button class="rm" data-act="tool-rmimg" data-group="${g.id}" data-id="${it._id}" data-img="${im.k}">×</button></div>`).join('')}</div>` : ''}
+        </div>`;
+      }).join('') : '<div class="utility-empty">尚未新增</div>'}</div>
+      <button class="btn sm" data-act="tool-add" data-group="${g.id}">＋ 新增${g.title}</button>
+    </article>`;
+}
+function toolSheet(group,id){
+  const meta = TOOL_GROUPS.find(g => g.id === group); const it = id ? (((STATE.tools||{})[group]||{})[id] || {}) : {};
+  const hasURL = group === 'places' || group === 'restaurants' || group === 'memos';
+  openSheet(`<h3>${id ? '編輯' : '新增'}${meta.title}</h3>
+    <div class="f"><label>標題</label><input id="u-title" value="${esc(it.title||'')}" placeholder="${meta.title === '記事' ? '例：出發前確認' : '名稱'}"></div>
+    ${hasURL ? `<div class="f"><label>網址（Google 地圖或一般網頁）</label><input id="u-url" type="url" inputmode="url" value="${esc(it.url||'')}" placeholder="https://maps.app.goo.gl/... 或網站網址"></div>` : ''}
+    <div class="f"><label>內容</label><textarea id="u-text" placeholder="可直接貼上文字或圖片">${esc(it.text||'')}</textarea></div>
+    <div class="pastebox" id="u-paste" tabindex="0">在內容欄或此處按 <b>Ctrl/⌘+V</b>，可直接貼上圖片</div>
+    <div class="sheetacts"><button class="btn" data-act="cancel">取消</button><button class="btn primary" data-act="save">儲存</button></div>`);
+  const savedId = id || ROOT.child('tools/' + group).push().key;
+  const onPaste = ev => { const f = [...((ev.clipboardData||{}).items||[])].map(x => x.type.indexOf('image/') === 0 ? x.getAsFile() : null).find(Boolean); if (f) { ev.preventDefault(); uploadToolImage(group, savedId, f); } };
+  $('#u-text').addEventListener('paste', onPaste); $('#u-paste').addEventListener('paste', onPaste);
+  sheet.querySelector('[data-act=cancel]').onclick = closeSheet;
+  sheet.querySelector('[data-act=save]').onclick = () => {
+    const enteredURL = hasURL ? $('#u-url').value.trim() : '';
+    const url = normalizeWebURL(enteredURL);
+    if (enteredURL && !url) { toast('請輸入完整的 http:// 或 https:// 網址'); return; }
+    ROOT.child('tools/' + group + '/' + savedId).update({title:$('#u-title').value.trim(), text:$('#u-text').value, ...(hasURL ? {url} : {}), updatedAt:Date.now()}).then(() => { stamp(); closeSheet(); toast('已儲存'); });
+  };
+}
+function uploadToolImage(group,id,f){
+  if (!f) return; toast('處理圖片中…'); const img = new Image(), fr = new FileReader();
+  fr.onload = () => { img.src = fr.result; };
+  img.onload = () => { const max=900, sc=Math.min(1,max/Math.max(img.width,img.height)), c=document.createElement('canvas'); c.width=Math.round(img.width*sc); c.height=Math.round(img.height*sc); c.getContext('2d').drawImage(img,0,0,c.width,c.height); const data=c.toDataURL('image/jpeg',.62); if(data.length>900000){toast('圖片太大，請選小一點的');return;} ROOT.child('tools/'+group+'/'+id+'/images').push(data).then(()=>{stamp();toast('圖片已加入');}); };
+  fr.readAsDataURL(f);
 }
 
-function setSyncState(state, text){
-  var pill = $("#syncPill");
-  pill.className = "sync-pill " + (state==="live" ? "live" : "local");
-  $("#syncText").textContent = text;
-}
+/* ═══ 4. Checklist ═════════════════════════════════════════ */
+/* ═══ 4. 互動：編輯 / 新增 / 刪除 / 複製 / 圖片 ═══════════════ */
+const mask = $('#mask'), sheet = $('#sheet');
+function openSheet(html){ sheet.innerHTML = html; mask.classList.add('on'); document.body.style.overflow = 'hidden'; }
+function closeSheet(){ mask.classList.remove('on'); document.body.style.overflow = ''; }
+mask.addEventListener('click', e => { if (e.target === mask) closeSheet(); });
 
-function loadLocalStorageFallback(){
-  try{
-    var raw = localStorage.getItem("sendaiTripLocal");
-    if (raw) {
-      var parsed = JSON.parse(raw);
-      Object.keys(parsed).forEach(function(k){ if (DATA[k]) DATA[k] = parsed[k]; });
-    }
-  }catch(e){}
-}
-function saveLocalStorageFallback(){
-  try{ localStorage.setItem("sendaiTripLocal", JSON.stringify(DATA)); }catch(e){}
-}
+function itemRef(day,id){ return ROOT.child('days/' + day + '/items/' + id); }
+function findItem(day,id){ return ((STATE.days[day] || {}).items || {})[id]; }
 
-/* =========================================================================
-   6) 寫入操作
-   ========================================================================= */
-function writeEvent(dayId, ev){
-  if (useFirebase) {
-    var payload = {}; FIELD_KEYS.forEach(function(k){ payload[k]=ev[k]||""; }); payload.order = ev.order||0;
-    dbRef.child(dayId).child(ev.id).set(payload);
-  } else {
-    var list = DATA[dayId] || (DATA[dayId] = []);
-    var idx = list.findIndex(function(x){ return x.id===ev.id; });
-    if (idx>=0) list[idx] = ev; else list.push(ev);
-    saveLocalStorageFallback();
-    renderDay(dayId);
-  }
-}
-function deleteEvent(dayId, evId){
-  if (useFirebase) {
-    dbRef.child(dayId).child(evId).remove();
-  } else {
-    DATA[dayId] = (DATA[dayId]||[]).filter(function(x){ return x.id!==evId; });
-    saveLocalStorageFallback();
-    renderDay(dayId);
-  }
-}
-function writeOrder(dayId, orderedIds){
-  if (useFirebase) {
-    var updates = {};
-    orderedIds.forEach(function(id, i){ updates[dayId + "/" + id + "/order"] = i; });
-    dbRef.root.update(prefixUpdates(updates));
-  } else {
-    var list = DATA[dayId]||[];
-    orderedIds.forEach(function(id, i){
-      var it = list.find(function(x){ return x.id===id; });
-      if (it) it.order = i;
-    });
-    list.sort(function(a,b){ return a.order-b.order; });
-    saveLocalStorageFallback();
-  }
-}
-function prefixUpdates(updates){
-  var out = {};
-  Object.keys(updates).forEach(function(k){ out[DB_ROOT + "/" + k] = updates[k]; });
-  return out;
-}
-
-/* =========================================================================
-   7) 畫面渲染
-   ========================================================================= */
-function buildTabs(){
-  var nav = $("#dayTabs");
-  nav.innerHTML = SEED_DAYS.map(function(d, i){
-    return '<button type="button" class="tab" data-day="'+d.id+'"><span class="n">DAY '+(i+1)+'</span>'+d.label.replace(/（.+）/,'')+'</button>';
-  }).join("");
-  nav.addEventListener("click", function(e){
-    var btn = e.target.closest(".tab");
-    if (!btn) return;
-    var sec = document.getElementById(btn.dataset.day);
-    if (sec) sec.scrollIntoView({ behavior:"smooth", block:"start" });
+function editSheet(day,id){
+  const it = findItem(day,id) || {};
+  openSheet(`<h3>編輯行程</h3>
+    <div class="f2">
+      <div class="f"><label>時間（可留空）</label><input id="e-time" value="${esc(it.time||'')}" placeholder="09:30"></div>
+      <div class="f"><label>分類</label><select id="e-cat">${CATS.map(c => `<option value="${c}"${c === catOf(it.cat) ? ' selected' : ''}>${CAT_ICON[c]} ${c}</option>`).join('')}</select></div>
+    </div>
+    <div class="f"><label>名稱</label><input id="e-title" value="${esc(it.title||'')}"></div>
+    <div class="f"><label>說明</label><textarea id="e-desc" style="min-height:62px" placeholder="這個行程的簡短說明（可直接貼圖片）">${esc(it.desc||'')}</textarea>
+      <div style="display:flex;align-items:center;gap:8px;margin-top:6px">
+        <button class="btn sm" id="e-descimg">🖼 加圖片</button>
+        <span style="font-size:11.5px;color:var(--ink-3)">在說明欄長按「貼上」也可直接貼圖</span>
+      </div></div>
+    <div class="f"><label>移動時間（顯示在卡片上）</label><input id="e-move" value="${esc(it.move||'')}" placeholder="步行10分 / 車程 1H20M"></div>
+    <div class="f"><label>地圖搜尋詞（店名／地點）</label><input id="e-mapq" value="${esc(it.mapq||'')}" placeholder="瑞巌寺"></div>
+    <div class="f"><label>自訂 Google 地圖導航連結（填了就優先用這個）</label><input id="e-mapurl" value="${esc(it.mapurl||'')}" placeholder="https://maps.app.goo.gl/..."></div>
+    <div class="sheetacts">
+      <button class="btn danger" data-act="del">刪除</button>
+      <button class="btn" data-act="cancel">取消</button>
+      <button class="btn primary" data-act="save">儲存</button>
+    </div>`);
+  sheet.querySelector('[data-act=cancel]').onclick = closeSheet;
+  $('#e-desc').addEventListener('paste', ev => {
+    const items = [...((ev.clipboardData || {}).items || [])];
+    const f = items.map(i => i.type.indexOf('image') === 0 ? i.getAsFile() : null).find(Boolean);
+    if (!f) return;
+    ev.preventDefault();
+    uploadImage(day, id, f, 'descImages');
   });
-}
-
-function buildSkeleton(){
-  var main = $("#main");
-  main.innerHTML = SEED_DAYS.map(function(d){
-    return (
-      '<section class="day-section" id="'+d.id+'">'+
-        '<div class="day-head"><div class="d-label">'+esc(d.label)+'</div><h2>'+esc(d.title)+'</h2></div>'+
-        '<ul class="timeline" id="tl-'+d.id+'"></ul>'+
-        '<button type="button" class="add-item" data-day="'+d.id+'">＋ 新增行程</button>'+
-      '</section>'
-    );
-  }).join("");
-}
-
-function eventCardHTML(dayId, ev){
-  var mapQ = encodeURIComponent((ev.loc && ev.loc.trim()) ? ev.loc.trim() : ev.title);
-  var mapHref = "https://www.google.com/maps/search/?api=1&query=" + mapQ;
-  var cat = CATS[ev.category] || CATS.sight;
-
-  var badges = '<span class="badge cat-'+ev.category+'">'+cat.icon+' '+cat.label+'</span>';
-  if (ev.status) badges += '<span class="badge status">✓ '+esc(ev.status)+'</span>';
-
-  var subtitle = ev.subtitle ? '<div class="subtitle">'+esc(ev.subtitle)+'</div>' : '';
-  var transitRow = ev.transit ? '<div class="meta-row"><span class="ic">🚶</span>'+esc(ev.transit)+'</div>' : '';
-  var hoursRow = ev.hours ? '<div class="meta-row"><span class="ic">🕐</span>'+esc(ev.hours)+'</div>' : '';
-  var tip = ev.note ? '<div class="tip"><span class="ic">📍</span><p>'+esc(ev.note)+'</p></div>' : '';
-
-  return (
-    '<li class="item" data-id="'+ev.id+'" data-day="'+dayId+'">'+
-      '<div class="time'+(ev.time?'':' empty')+'">'+(esc(ev.time)||'－')+'</div>'+
-      '<div class="dot"></div>'+
-      '<div class="card">'+
-        '<span class="grip" data-grip>⠿</span>'+
-        '<div class="badges">'+badges+'</div>'+
-        '<h3>'+esc(ev.title || "（未命名）")+'</h3>'+
-        subtitle + transitRow + hoursRow + tip +
-        '<div class="actions">'+
-          '<a href="'+mapHref+'" target="_blank" rel="noopener">🗺️ 導航</a>'+
-          '<button type="button" data-edit>✏️ 編輯</button>'+
-        '</div>'+
-      '</div>'+
-    '</li>'
-  );
-}
-
-function renderDay(dayId){
-  var list = (DATA[dayId]||[]).slice().sort(function(a,b){ return a.order-b.order; });
-  var ul = document.getElementById("tl-"+dayId);
-  if (!ul) return;
-  ul.innerHTML = list.map(function(ev){ return eventCardHTML(dayId, ev); }).join("");
-  lastRenderedJSON[dayId] = JSON.stringify(list);
-}
-function renderAllDays(){ SEED_DAYS.forEach(function(d){ renderDay(d.id); }); }
-function renderChangedDays(){
-  SEED_DAYS.forEach(function(d){
-    if (draggingDay === d.id) return;
-    var list = (DATA[d.id]||[]).slice().sort(function(a,b){ return a.order-b.order; });
-    var json = JSON.stringify(list);
-    if (json !== lastRenderedJSON[d.id]) renderDay(d.id);
-  });
-}
-
-function setupActiveTabObserver(){
-  var tabs = $all(".tab");
-  var sections = SEED_DAYS.map(function(d){ return document.getElementById(d.id); });
-  var io = new IntersectionObserver(function(entries){
-    entries.forEach(function(entry){
-      if (!entry.isIntersecting) return;
-      var id = entry.target.id;
-      tabs.forEach(function(t){ t.classList.toggle("active", t.dataset.day===id); });
-    });
-  }, { rootMargin: "-120px 0px -70% 0px", threshold: 0 });
-  sections.forEach(function(s){ if (s) io.observe(s); });
-}
-
-/* =========================================================================
-   8) 事件代理：導航、編輯、刪除、新增
-   ========================================================================= */
-var editingCtx = null;
-var pickedCat = "sight";
-
-function setPickedCat(cat){
-  pickedCat = cat;
-  $all(".cat-opt", $("#catSelect")).forEach(function(el){
-    el.classList.toggle("picked", el.dataset.cat===cat);
-  });
-}
-$("#catSelect").addEventListener("click", function(e){
-  var opt = e.target.closest(".cat-opt");
-  if (opt) setPickedCat(opt.dataset.cat);
-});
-
-function openEditSheet(dayId, evId){
-  var meta = DAY_META[dayId];
-  var isNew = !evId;
-  var ev = isNew ? { time:"", category:"sight", status:"", title:"", subtitle:"", transit:"", hours:"", note:"", loc:"" }
-                 : (DATA[dayId]||[]).find(function(x){ return x.id===evId; });
-  if (!ev) return;
-  editingCtx = { dayId:dayId, evId: isNew? null : evId, isNew: isNew };
-  $("#editTitle").textContent = isNew ? "新增行程" : "編輯行程";
-  $("#editDayLabel").textContent = meta ? (meta.label + "　" + meta.title) : "";
-  setPickedCat(ev.category || "sight");
-  $("#fTime").value = ev.time||"";
-  $("#fStatus").value = ev.status||"";
-  $("#fTitle").value = ev.title||"";
-  $("#fSubtitle").value = ev.subtitle||"";
-  $("#fTransit").value = ev.transit||"";
-  $("#fHours").value = ev.hours||"";
-  $("#fNote").value = ev.note||"";
-  $("#fLoc").value = ev.loc||"";
-  $("#btnDelete").style.display = isNew ? "none" : "inline-block";
-  openSheet("#editSheet");
-  setTimeout(function(){ $("#fTitle").focus(); }, 260);
-}
-
-function collectForm(){
-  return {
-    time: $("#fTime").value.trim(),
-    category: pickedCat,
-    status: $("#fStatus").value.trim(),
-    title: $("#fTitle").value.trim(),
-    subtitle: $("#fSubtitle").value.trim(),
-    transit: $("#fTransit").value.trim(),
-    hours: $("#fHours").value.trim(),
-    note: $("#fNote").value.trim(),
-    loc: $("#fLoc").value.trim()
+  $('#e-descimg').onclick = ev => { ev.preventDefault(); addImage(day, id, 'descImages'); };
+  sheet.querySelector('[data-act=save]').onclick = () => {
+    pushUndo('編輯行程');
+    itemRef(day,id).update({
+      time:$('#e-time').value.trim(), cat:$('#e-cat').value,
+      title:$('#e-title').value.trim(), mapq:$('#e-mapq').value.trim(),
+      move:$('#e-move').value.trim(), mapurl:$('#e-mapurl').value.trim(),
+      desc:$('#e-desc').value
+    }).then(() => { stamp(); closeSheet(); toast('已儲存'); });
+  };
+  sheet.querySelector('[data-act=del]').onclick = () => {
+    if (!confirm('刪除「' + (it.title || '此行程') + '」？')) return;
+    pushUndo('刪除行程');
+    itemRef(day,id).remove().then(() => { stamp(); closeSheet(); toast('已刪除，可按 ↶ 復原'); });
   };
 }
 
-function saveEditSheet(){
-  if (!editingCtx) return;
-  var form = collectForm();
-  if (!form.title) { showToast("請輸入標題"); return; }
-  var dayId = editingCtx.dayId;
-  if (editingCtx.isNew) {
-    var list = DATA[dayId]||[];
-    var maxOrder = list.reduce(function(m,x){ return Math.max(m, x.order||0); }, -1);
-    form.id = uid(); form.order = maxOrder+1;
-    writeEvent(dayId, form);
-  } else {
-    var cur = (DATA[dayId]||[]).find(function(x){ return x.id===editingCtx.evId; });
-    form.id = editingCtx.evId; form.order = cur ? cur.order : 0;
-    writeEvent(dayId, form);
-  }
-  closeSheets();
-  showToast("已儲存");
+function listSheet(day,id){
+  const it = findItem(day,id) || {};
+  const rows = it.list ? Object.keys(it.list).map(k => ({ k, ...it.list[k] })).sort((a,b)=>(a.order||0)-(b.order||0)) : [];
+  const row = r => `<div class="lrow" data-k="${r ? esc(r.k) : ''}">
+      <button class="lgrip" data-lgrip aria-label="拖曳排序">${ICO.grip}</button>
+      <input class="l-name" placeholder="店名／地點" value="${r ? esc(r.name||'') : ''}">
+      <input class="l-url" placeholder="Google 地圖網址" value="${r ? esc(r.url||'') : ''}">
+      <button data-lrm aria-label="刪除">×</button></div>`;
+  openSheet(`<h3>清單 ・ ${esc(it.title||'')}</h3>
+    <div class="hint" style="font-size:11.5px;color:var(--ink-3);margin-bottom:9px">填店名與 Google 地圖導航網址，會列在卡片上直接點開</div>
+    <div class="f"><label>清單標題</label><input id="l-title" value="${esc(it.listTitle||'')}" placeholder="例：午餐備選、伴手禮清單"></div>
+    <div id="l-rows">${rows.length ? rows.map(row).join('') : row(null)}</div>
+    <button class="btn sm" id="l-add">＋ 再加一項</button>
+    <div class="sheetacts">
+      <button class="btn" data-act="cancel">取消</button>
+      <button class="btn primary" data-act="save">儲存</button>
+    </div>`);
+  $('#l-add').onclick = () => $('#l-rows').insertAdjacentHTML('beforeend', row(null));
+  wireRowDrag($('#l-rows'));
+  sheet.addEventListener('click', ev => { const b = ev.target.closest('[data-lrm]'); if (b) b.closest('.lrow').remove(); });
+  sheet.querySelector('[data-act=cancel]').onclick = closeSheet;
+  sheet.querySelector('[data-act=save]').onclick = () => {
+    const out = {};
+    [...$('#l-rows').querySelectorAll('.lrow')].forEach((r,i) => {
+      const name = r.querySelector('.l-name').value.trim();
+      const url = r.querySelector('.l-url').value.trim();
+      if (!name && !url) return;
+      out['l' + String(i+1).padStart(2,'0')] = { name, url, order:(i+1)*10 };
+    });
+    pushUndo('編輯清單');
+    itemRef(day,id).child('listTitle').set($('#l-title').value.trim() || null);
+    itemRef(day,id).child('list').set(Object.keys(out).length ? out : null)
+      .then(() => { stamp(); closeSheet(); toast('清單已更新'); });
+  };
 }
 
-function deleteCurrentEvent(){
-  if (!editingCtx || editingCtx.isNew) return;
-  deleteEvent(editingCtx.dayId, editingCtx.evId);
-  closeSheets();
-  showToast("已刪除");
-}
-
-document.addEventListener("click", function(e){
-  var addBtn = e.target.closest(".add-item");
-  if (addBtn) { openEditSheet(addBtn.dataset.day, null); return; }
-  var editBtn = e.target.closest("[data-edit]");
-  if (editBtn) {
-    var li = editBtn.closest(".item");
-    openEditSheet(li.dataset.day, li.dataset.id);
-    return;
-  }
-});
-
-$("#btnSave").addEventListener("click", saveEditSheet);
-$("#btnDelete").addEventListener("click", function(){
-  if (confirm("確定要刪除這個行程項目嗎？")) deleteCurrentEvent();
-});
-
-/* =========================================================================
-   9) 拖拉排序（Pointer Events）
-   ========================================================================= */
-(function setupDragReorder(){
-  var dragEl = null, dayId = null, startY = 0, placeholderIndex = -1, itemsEls = [];
-
-  document.addEventListener("pointerdown", function(e){
-    var grip = e.target.closest("[data-grip]");
-    if (!grip) return;
-    var li = grip.closest(".item");
-    if (!li) return;
+function wireRowDrag(box){
+  let cur = null;
+  const yOf = e => e.touches ? e.touches[0].clientY : e.clientY;
+  const xOf = e => e.touches ? e.touches[0].clientX : e.clientX;
+  const down = e => {
+    const g = e.target.closest('[data-lgrip]'); if (!g) return;
     e.preventDefault();
-    dragEl = li;
-    dayId = li.dataset.day;
-    draggingDay = dayId;
-    startY = e.clientY;
-    var ul = document.getElementById("tl-"+dayId);
-    itemsEls = $all(".item", ul);
-    placeholderIndex = itemsEls.indexOf(li);
-    li.classList.add("dragging");
-    grip.setPointerCapture && grip.setPointerCapture(e.pointerId);
-    document.addEventListener("pointermove", onMove);
-    document.addEventListener("pointerup", onUp, { once:true });
-  });
-
-  function onMove(e){
-    if (!dragEl) return;
-    var dy = e.clientY - startY;
-    dragEl.style.transform = "translateY("+dy+"px)";
-    dragEl.style.zIndex = "5";
-    dragEl.style.position = "relative";
-
-    var overEl = null;
-    for (var i=0;i<itemsEls.length;i++){
-      var el = itemsEls[i];
-      if (el===dragEl) continue;
-      var r = el.getBoundingClientRect();
-      if (e.clientY > r.top && e.clientY < r.bottom) { overEl = el; break; }
+    cur = g.closest('.lrow'); cur.classList.add('ldrag');
+    if (navigator.vibrate) navigator.vibrate(10);
+  };
+  const move = e => {
+    if (!cur) return;
+    e.preventDefault();
+    const el = document.elementFromPoint(xOf(e), yOf(e));
+    const over = el && el.closest('.lrow');
+    box.querySelectorAll('.lover').forEach(n => n.classList.remove('lover'));
+    if (over && over !== cur && over.parentNode === box){
+      over.classList.add('lover');
+      const r = over.getBoundingClientRect();
+      box.insertBefore(cur, yOf(e) > r.top + r.height / 2 ? over.nextSibling : over);
     }
-    itemsEls.forEach(function(el){ el.classList.remove("drag-over-before","drag-over-after"); });
-    if (overEl) {
-      var idx = itemsEls.indexOf(overEl);
-      var r2 = overEl.getBoundingClientRect();
-      var before = e.clientY < (r2.top + r2.height/2);
-      overEl.classList.add(before ? "drag-over-before" : "drag-over-after");
-      placeholderIndex = before ? idx : idx+1;
-      if (placeholderIndex > itemsEls.indexOf(dragEl)) placeholderIndex--;
+  };
+  const up = () => {
+    if (!cur) return;
+    cur.classList.remove('ldrag'); cur = null;
+    box.querySelectorAll('.lover').forEach(n => n.classList.remove('lover'));
+  };
+  box.addEventListener('touchstart', down, {passive:false});
+  box.addEventListener('mousedown', down);
+  box.addEventListener('touchmove', move, {passive:false});
+  document.addEventListener('mousemove', move);
+  box.addEventListener('touchend', up);
+  document.addEventListener('mouseup', up);
+}
+
+function noteSheet(day,id){
+  const it = findItem(day,id) || {};
+  openSheet(`<h3>備註</h3>
+    <div class="f"><label>文字</label><textarea id="n-note" style="min-height:140px">${esc(it.note||'')}</textarea></div>
+    <div class="pastebox" id="n-paste" tabindex="0">在上面欄位或這裡按 <b>貼上</b>（Ctrl/⌘+V）可直接貼圖片</div>
+    <div class="sheetacts">
+      <button class="btn" data-act="cancel">取消</button>
+      <button class="btn primary" data-act="save">儲存</button>
+    </div>`);
+  const onPaste = ev => {
+    const items = [...((ev.clipboardData || {}).items || [])];
+    const f = items.map(i => i.type.indexOf('image') === 0 ? i.getAsFile() : null).find(Boolean);
+    if (!f) return;
+    ev.preventDefault();
+    uploadImage(day, id, f);
+  };
+  $('#n-note').addEventListener('paste', onPaste);
+  $('#n-paste').addEventListener('paste', onPaste);
+  sheet.querySelector('[data-act=cancel]').onclick = closeSheet;
+  sheet.querySelector('[data-act=save]').onclick = () => {
+    pushUndo('編輯備註');
+    itemRef(day,id).child('note').set($('#n-note').value).then(() => { stamp(); closeSheet(); toast('備註已更新'); });
+  };
+}
+
+function uploadImage(day,id,f,field){
+  if (!f) return;
+  const target = field || 'images';
+  toast('處理圖片中…');
+  const img = new Image(), fr = new FileReader();
+  fr.onload = () => { img.src = fr.result; };
+  img.onload = () => {
+    const max = 900, sc = Math.min(1, max / Math.max(img.width, img.height));
+    const c = document.createElement('canvas');
+    c.width = Math.round(img.width * sc); c.height = Math.round(img.height * sc);
+    c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+    const data = c.toDataURL('image/jpeg', .62);
+    if (data.length > 900000) { toast('圖片太大，請選小一點的'); return; }
+    pushUndo('新增圖片');
+    itemRef(day,id).child(target).push(data).then(() => { stamp(); toast('圖片已加入'); });
+  };
+  fr.readAsDataURL(f);
+}
+const picker = document.createElement('input');
+picker.type = 'file'; picker.accept = 'image/*';
+function addImage(day,id,field){
+  picker.value = '';
+  picker.onchange = () => uploadImage(day, id, picker.files[0], field);
+  picker.click();
+}
+
+function addStop(day){
+  const items = itemsOf(day);
+  const order = items.length ? (items[items.length-1].order || 0) + 10 : 10;
+  pushUndo('新增行程');
+  ROOT.child('days/' + day + '/items').push({ time:'', title:'新行程', cat:'其他', mapq:'', note:'', order })
+    .then(r => { stamp(); editSheet(day, r.key); });
+}
+
+document.addEventListener('click', e => {
+  const btn = e.target.closest('[data-act]');
+  const tab = e.target.closest('.tab');
+  if (tab){ e.preventDefault(); tab.dataset.tool ? showPanel('utility') : scrollToDay(tab.dataset.target); return; }
+  if (!btn) return;
+  const stop = btn.closest('.stop');
+  const day = stop ? stop.dataset.day : btn.dataset.day;
+  const id = stop ? stop.dataset.id : null;
+  const act = btn.dataset.act;
+  if (act === 'tool-open') { activeToolGroup = btn.dataset.group; renderToolLists(); }
+  else if (act === 'tool-done') ROOT.child('tools/' + btn.dataset.group + '/' + btn.dataset.id + '/done').set(!!btn.checked).then(stamp);
+  else if (act === 'tool-add') toolSheet(btn.dataset.group);
+  else if (act === 'tool-edit') toolSheet(btn.dataset.group, btn.dataset.id);
+  else if (act === 'tool-rm') { if (confirm('刪除這一項？')) ROOT.child('tools/' + btn.dataset.group + '/' + btn.dataset.id).remove().then(() => { stamp(); toast('已刪除'); }); }
+  else if (act === 'tool-rmimg') ROOT.child('tools/' + btn.dataset.group + '/' + btn.dataset.id + '/images/' + btn.dataset.img).remove().then(() => { stamp(); toast('圖片已刪除'); });
+  else if (act === 'edit') editSheet(day,id);
+  else if (act === 'note') noteSheet(day,id);
+  else if (act === 'list') listSheet(day,id);
+  else if (act === 'addimg') addImage(day,id);
+  else if (act === 'pasteimg') pasteFromClipboard(day,id);
+  else if (act === 'add') addStop(day);
+  else if (act === 'rmimg'){ pushUndo('刪除圖片'); itemRef(day,id).child('images/' + btn.dataset.img).remove().then(stamp); }
+  else if (act === 'rmdescimg'){ pushUndo('刪除圖片'); itemRef(day,id).child('descImages/' + btn.dataset.img).remove().then(stamp); }
+});
+async function pasteFromClipboard(day,id){
+  if (!navigator.clipboard || !navigator.clipboard.read){ toast('此瀏覽器請用「＋ 圖片」或在備註欄按 Ctrl+V'); return; }
+  try {
+    const items = await navigator.clipboard.read();
+    for (const it of items){
+      const type = it.types.find(t => t.indexOf('image/') === 0);
+      if (type){ uploadImage(day, id, await it.getType(type)); return; }
     }
+    toast('剪貼簿裡沒有圖片');
+  } catch(_){ toast('讀取剪貼簿被拒絕，請改用「＋ 圖片」'); }
+}
+
+
+/* ═══ 5. 長按拖曳排序 ═══════════════════════════════════════ */
+let drag = null;
+function onDown(e){
+  const stop = e.target.closest('.stop'); if (!stop) return;
+  const onGrip = !!e.target.closest('[data-drag]');
+  if (!onGrip && e.target.closest('a,button,input,textarea,summary,select')) return;
+  const sy = e.touches ? e.touches[0].clientY : e.clientY;
+  const start = () => {
+    drag = { stop, day:stop.dataset.day, startY:sy, list:[...stop.parentNode.querySelectorAll('.stop')] };
+    stop.classList.add('drag');
+    if (navigator.vibrate) navigator.vibrate(12);
+    document.body.style.overflow = 'hidden';
+  };
+  if (onGrip) start(); else { stop._t = setTimeout(start, 380); }
+  stop._cancel = () => clearTimeout(stop._t);
+}
+function onMove(e){
+  const stop = e.target.closest('.stop');
+  if (!drag){ if (stop && stop._cancel) stop._cancel(); return; }
+  e.preventDefault();
+  const y = e.touches ? e.touches[0].clientY : e.clientY;
+  const el = document.elementFromPoint(e.touches ? e.touches[0].clientX : e.clientX, y);
+  const over = el && el.closest('.stop');
+  if (over && over !== drag.stop && over.dataset.day === drag.day){
+    const r = over.getBoundingClientRect();
+    const after = y > r.top + r.height / 2;
+    over.parentNode.insertBefore(drag.stop, after ? over.nextSibling : over);
   }
+}
+function onUp(){
+  document.querySelectorAll('.stop').forEach(s => s._cancel && s._cancel());
+  if (!drag) return;
+  const d = drag; drag = null;
+  d.stop.classList.remove('drag');
+  document.body.style.overflow = '';
+  const order = {};
+  [...d.stop.parentNode.querySelectorAll('.stop')].forEach((s,i) => { order[s.dataset.id] = (i+1) * 10; });
+  pushUndo('調整順序');
+  const up = {};
+  Object.keys(order).forEach(k => { up['days/' + d.day + '/items/' + k + '/order'] = order[k]; });
+  up['updatedAt'] = Date.now();
+  ROOT.update(up).then(() => toast('順序已更新'));
+}
+document.addEventListener('touchstart', onDown, {passive:true});
+document.addEventListener('mousedown', onDown);
+document.addEventListener('touchmove', onMove, {passive:false});
+document.addEventListener('mousemove', onMove);
+document.addEventListener('touchend', onUp);
+document.addEventListener('touchcancel', onUp);
+document.addEventListener('mouseup', onUp);
 
-  function onUp(){
-    document.removeEventListener("pointermove", onMove);
-    if (!dragEl) return;
-    dragEl.style.transform = "";
-    dragEl.style.zIndex = "";
-    dragEl.style.position = "";
-    dragEl.classList.remove("dragging");
-    itemsEls.forEach(function(el){ el.classList.remove("drag-over-before","drag-over-after"); });
-
-    var ul = document.getElementById("tl-"+dayId);
-    var order = $all(".item", ul).map(function(el){ return el.dataset.id; });
-    var fromIdx = order.indexOf(dragEl.dataset.id);
-    order.splice(fromIdx, 1);
-    var insertAt = Math.max(0, Math.min(placeholderIndex, order.length));
-    order.splice(insertAt, 0, dragEl.dataset.id);
-
-    order.forEach(function(id){
-      var el = ul.querySelector('.item[data-id="'+id+'"]');
-      if (el) ul.appendChild(el);
+/* ═══ 6. 分頁捲動 / 浮動鈕 ═══════════════════════════════════ */
+function scrollToDay(id){
+  if (activePanel !== 'itinerary') showPanel('itinerary', false);
+  const el = document.getElementById(id); if (!el) return;
+  const top = el.getBoundingClientRect().top + window.pageYOffset - 70;
+  window.scrollTo({ top, behavior:'smooth' });
+}
+function showPanel(panel, scroll=true){
+  activePanel = panel;
+  if (panel === 'utility') activeToolGroup = null;
+  $('#itineraryPanel').hidden = panel !== 'itinerary';
+  $('#utilityPanel').hidden = panel !== 'utility';
+  renderTabs();
+  if (scroll) window.scrollTo({ top:0, behavior:'smooth' });
+}
+let io = null;
+function observeDays(){
+  if (io) io.disconnect();
+  io = new IntersectionObserver(es => {
+    es.forEach(en => {
+      if (!en.isIntersecting) return;
+      const id = en.target.id;
+      $$('.tab').forEach(t => {
+        const on = t.dataset.target === id;
+        t.classList.toggle('on', on);
+        if (on) t.scrollIntoViewIfNeeded ? t.scrollIntoViewIfNeeded() :
+          t.parentNode.scrollTo({ left:t.offsetLeft - t.parentNode.clientWidth / 2 + t.offsetWidth / 2, behavior:'smooth' });
+      });
+      const d = DAYS.find(x => x.id === id);
+      if (d) setWeather(d);
     });
+  }, { rootMargin:'-70px 0px -65% 0px' });
+  $$('.day[id]').forEach(d => io.observe(d));
+}
+const mo = new MutationObserver(() => observeDays());
+mo.observe($('#days'), { childList:true });
 
-    writeOrder(dayId, order);
-    draggingDay = null;
-    dragEl = null;
+$('#fabTop').onclick = () => window.scrollTo({ top:0, behavior:'smooth' });
+$('#fabUndo').onclick = doUndo;
+addEventListener('scroll', () => { $('#fabTop').classList.toggle('hide', window.pageYOffset < 600); }, {passive:true});
+
+let jumped = false;
+function jumpToToday(){
+  if (jumped) return;
+  const d = DAYS.find(x => x.iso === todayISO());
+  if (d && document.getElementById(d.id)){ jumped = true; setTimeout(() => scrollToDay(d.id), 500); }
+}
+setInterval(markNow, 5 * 60 * 1000);
+
+/* ═══ 7. 匯率（免金鑰） ═════════════════════════════════════ */
+let RATE = 0.215, rateSrc = '預設參考值';
+try { const s = localStorage.getItem('sendai.rate'); if (s) { RATE = +s; rateSrc = '你手動設定的'; } } catch(_){}
+function paintRate(){
+  $('#fxRate').textContent = rateLabel();
+  calc();
+}
+function rateLabel(){
+  const w = ($('#fxCard') || {}).clientWidth || innerWidth;
+  return w < 210 ? `1円≒${RATE.toFixed(4)}` : `1 円 ≒ ${RATE.toFixed(4)} 台幣 ・ ${rateSrc}`;
+}
+function nt(v){ return 'NT$ ' + (Math.round(v * 100) / 100).toLocaleString('zh-TW', {maximumFractionDigits:1}); }
+function calc(){
+  $('#fxOut').textContent = nt((+$('#fxJpy').value || 0) * RATE);
+}
+$('#fxJpy').addEventListener('input', calc);
+addEventListener('resize', () => { if (RATE) $('#fxRate').textContent = rateLabel(); });
+async function fetchRate(){
+  const manual = (() => { try { return !!localStorage.getItem('sendai.rate'); } catch(_){ return false; } })();
+  const sources = [
+    ['https://open.er-api.com/v6/latest/JPY', d => d && d.rates && d.rates.TWD],
+    ['https://api.frankfurter.app/latest?from=JPY&to=TWD', d => d && d.rates && d.rates.TWD],
+    ['https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/jpy.json', d => d && d.jpy && d.jpy.twd]
+  ];
+  for (const [url, pick] of sources){
+    try {
+      const r = await fetch(url, {cache:'no-store'});
+      const v = pick(await r.json());
+      if (v){ if (!manual){ RATE = v; rateSrc = '即時匯率'; paintRate(); } return; }
+    } catch(_){}
   }
-})();
-
-/* =========================================================================
-   10) 底部彈出面板
-   ========================================================================= */
-function openSheet(sel){ $(sel).classList.add("show"); $("#backdrop").classList.add("show"); }
-function closeSheets(){ $all(".sheet").forEach(function(s){ s.classList.remove("show"); }); $("#backdrop").classList.remove("show"); editingCtx = null; }
-$("#backdrop").addEventListener("click", closeSheets);
-document.addEventListener("click", function(e){ if (e.target.closest("[data-close]")) closeSheets(); });
-$("#fabWeather").addEventListener("click", function(){ openSheet("#weatherSheet"); loadWeather(); });
-$("#fabCurrency").addEventListener("click", function(){ openSheet("#currencySheet"); loadRate(); });
-
-/* =========================================================================
-   11) 匯率速算（open.er-api.com，免金鑰）
-   ========================================================================= */
-var FALLBACK_RATE = 0.215;
-var currentRate = null;
-var rateLoaded = false;
-
-function loadRate(){
-  if (rateLoaded) return;
-  rateLoaded = true;
-  fetch("https://open.er-api.com/v6/latest/JPY")
-    .then(function(r){ return r.json(); })
-    .then(function(data){
-      if (data && data.rates && data.rates.TWD) {
-        currentRate = data.rates.TWD;
-        $("#rateLine").innerHTML = "即時匯率　1 <b>JPY</b> ≈ <b>"+currentRate.toFixed(4)+"</b> TWD";
-      } else { throw new Error("no rate"); }
-    })
-    .catch(function(){
-      currentRate = FALLBACK_RATE;
-      $("#rateLine").innerHTML = "（即時匯率取得失敗，暫用參考值）1 <b>JPY</b> ≈ <b>"+FALLBACK_RATE+"</b> TWD";
-    });
+  paintRate();
 }
-var jpyEl = $("#jpyInput"), twdEl = $("#twdInput");
-jpyEl.addEventListener("input", function(){
-  var r = currentRate || FALLBACK_RATE;
-  var v = parseFloat(jpyEl.value);
-  twdEl.value = isNaN(v) ? "" : Math.round(v * r * 100)/100;
-});
-twdEl.addEventListener("input", function(){
-  var r = currentRate || FALLBACK_RATE;
-  var v = parseFloat(twdEl.value);
-  jpyEl.value = isNaN(v) ? "" : Math.round((v / r) * 100)/100;
-});
+paintRate(); fetchRate();
 
-/* =========================================================================
-   12) 天氣（Open-Meteo，免金鑰）
-   ========================================================================= */
-var wxLoaded = false;
-function wmoIcon(code){
-  if (code===0) return "☀️";
-  if (code===1) return "🌤️";
-  if (code===2) return "⛅";
-  if (code===3) return "☁️";
-  if (code===45||code===48) return "🌫️";
-  if ([51,53,55,56,57].indexOf(code)>=0) return "🌦️";
-  if ([61,63,65,66,67,80,81,82].indexOf(code)>=0) return "🌧️";
-  if ([71,73,75,77,85,86].indexOf(code)>=0) return "❄️";
-  if ([95,96,99].indexOf(code)>=0) return "⛈️";
-  return "🌡️";
+/* ═══ 8. 天氣（Open-Meteo 免金鑰） ══════════════════════════ */
+const WX = {0:['☀️','晴'],1:['🌤','晴時多雲'],2:['⛅','多雲'],3:['☁️','陰'],45:['🌫','霧'],48:['🌫','霧'],
+51:['🌦','毛毛雨'],53:['🌦','小雨'],55:['🌧','雨'],61:['🌧','小雨'],63:['🌧','雨'],65:['🌧','大雨'],
+71:['🌨','小雪'],73:['🌨','雪'],75:['❄️','大雪'],80:['🌦','陣雨'],81:['🌧','陣雨'],82:['⛈','強陣雨'],
+95:['⛈','雷雨'],96:['⛈','雷雨'],99:['⛈','雷雨']};
+const wxCache = {};
+async function setWeather(day){
+  if (wxCache[day.id]) return;
+  try {
+    const u = `https://api.open-meteo.com/v1/forecast?latitude=${day.lat}&longitude=${day.lon}`
+      + `&daily=weather_code,temperature_2m_max,temperature_2m_min&current=temperature_2m,weather_code`
+      + `&timezone=Asia%2FTokyo&start_date=${day.iso}&end_date=${day.iso}`;
+    const d = await (await fetch(u)).json();
+    const isToday = todayISO() === day.iso;
+    const code = isToday && d.current ? d.current.weather_code : (d.daily && d.daily.weather_code ? d.daily.weather_code[0] : null);
+    const hi = d.daily && d.daily.temperature_2m_max ? d.daily.temperature_2m_max[0] : null;
+    const lo = d.daily && d.daily.temperature_2m_min ? d.daily.temperature_2m_min[0] : null;
+    const cur = isToday && d.current ? d.current.temperature_2m : null;
+    wxCache[day.id] = { code, hi, lo, cur, date:day.date };
+    paintDayWeather();
+  } catch(_){}
 }
-function wmoText(code){
-  var map = {0:"晴朗",1:"晴時多雲",2:"多雲時晴",3:"陰天",45:"有霧",48:"霧淞",
-    51:"小毛毛雨",53:"毛毛雨",55:"大毛毛雨",56:"凍雨",57:"凍雨",
-    61:"小雨",63:"中雨",65:"大雨",66:"凍雨",67:"凍雨",
-    71:"小雪",73:"中雪",75:"大雪",77:"雪粒",
-    80:"陣雨",81:"陣雨",82:"強陣雨",85:"陣雪",86:"強陣雪",
-    95:"雷雨",96:"雷雨挾冰雹",99:"強雷雨挾冰雹"};
-  return map[code] || "－";
+function dayWeatherHTML(day){
+  const w = wxCache[day.id];
+  if (!w) return '<span class="temp">天氣讀取中…</span>';
+  const m = WX[w.code] || ['🌡','天氣'];
+  const t = w.hi != null && w.lo != null ? `${Math.round(w.lo)}–${Math.round(w.hi)}°` : '--';
+  return `<span class="wi">${m[0]}</span><span class="wt">${m[1]}</span><span class="temp">${t}</span>`;
 }
-function loadWeather(){
-  if (wxLoaded) return;
-  wxLoaded = true;
-  var start = SEED_DAYS[0].iso, end = SEED_DAYS[SEED_DAYS.length-1].iso;
-  var url = "https://api.open-meteo.com/v1/forecast?latitude="+LAT+"&longitude="+LON+
-    "&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max"+
-    "&timezone=Asia%2FTokyo&start_date="+start+"&end_date="+end;
-  fetch(url).then(function(r){ return r.json(); }).then(function(data){
-    if (!data || !data.daily || !data.daily.time) throw new Error("no data");
-    var byIso = {};
-    data.daily.time.forEach(function(iso, i){
-      byIso[iso] = { code: data.daily.weather_code[i], max: data.daily.temperature_2m_max[i], min: data.daily.temperature_2m_min[i], pop: data.daily.precipitation_probability_max[i] };
-    });
-    var html = SEED_DAYS.map(function(d){
-      var w = byIso[d.iso];
-      if (!w) return '<li><span class="wx-date">'+d.label.replace(/（.+）/,'')+'</span><span class="wx-desc" style="flex:1">預報尚未開放（僅提供約 16 天內）</span></li>';
-      return '<li><span class="wx-date">'+d.label.replace(/（.+）/,'')+'</span>'+
-        '<span class="wx-icon">'+wmoIcon(w.code)+'</span>'+
-        '<span class="wx-desc">'+wmoText(w.code)+'・降雨 '+Math.round(w.pop)+'%</span>'+
-        '<span class="wx-temp">'+Math.round(w.min)+'° / '+Math.round(w.max)+'°</span></li>';
-    }).join("");
-    $("#wxList").innerHTML = html;
-  }).catch(function(){
-    $("#wxList").innerHTML = '<li class="wx-empty">天氣資料取得失敗，稍後再試一次。</li>';
-    wxLoaded = false;
-  });
+function paintDayWeather(){
+  DAYS.forEach(d => { const el = document.querySelector('[data-weather="' + d.id + '"]'); if (el) el.innerHTML = dayWeatherHTML(d); });
 }
+async function fetchAllWeather(){
+  const spots = {};
+  DAYS.forEach(d => { const k = d.lat + ',' + d.lon; (spots[k] = spots[k] || { lat:d.lat, lon:d.lon, days:[] }).days.push(d); });
+  const first = DAYS[0].iso, last = DAYS[DAYS.length-1].iso;
+  await Promise.all(Object.values(spots).map(async sp => {
+    try {
+      const u = `https://api.open-meteo.com/v1/forecast?latitude=${sp.lat}&longitude=${sp.lon}`
+        + `&daily=weather_code,temperature_2m_max,temperature_2m_min&current=temperature_2m,weather_code`
+        + `&timezone=Asia%2FTokyo&start_date=${first}&end_date=${last}`;
+      const d = await (await fetch(u)).json();
+      const idx = {}; (d.daily && d.daily.time || []).forEach((t,i) => idx[t] = i);
+      sp.days.forEach(day => {
+        const i = idx[day.iso];
+        if (i == null) return;
+        const isToday = todayISO() === day.iso;
+        wxCache[day.id] = {
+          code: isToday && d.current ? d.current.weather_code : d.daily.weather_code[i],
+          hi: d.daily.temperature_2m_max[i], lo: d.daily.temperature_2m_min[i],
+          cur: isToday && d.current ? d.current.temperature_2m : null, date: day.date
+        };
+      });
+    } catch(_){}
+  }));
+  paintDayWeather();
 
-/* =========================================================================
-   13) PWA：註冊 Service Worker
-   ========================================================================= */
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", function(){
-    navigator.serviceWorker.register("sw.js").catch(function(err){ console.warn("SW 註冊失敗", err); });
-  });
 }
+fetchAllWeather();
+setWeather(DAYS[0]);
+setTimeout(jumpToToday, 900);
 
-/* =========================================================================
-   14) 啟動
-   ========================================================================= */
-buildTabs();
-buildSkeleton();
-setupActiveTabObserver();
-initFirebase();
-
-})();
+/* ═══ 9. PWA ═══════════════════════════════════════════════ */
+if ('serviceWorker' in navigator){
+  addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
+}
 </script>
 </body>
 </html>
