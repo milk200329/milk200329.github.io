@@ -154,7 +154,7 @@ a:hover{color:var(--sea-2)}
 .descimgs .rm{position:absolute;top:-6px;right:-6px;width:22px;height:22px;border-radius:50%;
   border:none;background:#24323c;color:#fff;font-size:13px;line-height:1;cursor:pointer}
 .cardtop{display:flex;align-items:flex-start;gap:8px;flex-wrap:wrap;margin-bottom:6px}
-.ctools{display:flex;gap:6px;margin-left:auto;flex-wrap:wrap;justify-content:flex-end}
+.ctools{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
 .slist{margin-top:9px;display:flex;flex-direction:column;gap:5px}
 .slist-t{font-family:var(--gothic);font-size:12px;font-weight:500;color:var(--ink-3);letter-spacing:.14em;margin-bottom:2px}
 .slist a,.slist span.n{display:flex;align-items:center;gap:6px;font-size:13px;color:#3d6f68;
@@ -534,16 +534,16 @@ function renderDays(){
           <button class="grip" data-drag aria-label="拖曳排序">${ICO.grip}</button>
           <div class="cardtop">
             <div class="chips"><span class="cat">${CAT_ICON[catOf(it.cat)] || '📌'} ${esc(catOf(it.cat))}</span>${it.move ? `<span class="move">🚗 ${esc(it.move)}</span>` : ''}</div>
-            <div class="ctools">
-              ${navHref(it) ? `<a class="btn nav sm" target="_blank" rel="noopener" href="${esc(navHref(it))}">${ICO.map}導航</a>` : ''}
-              <button class="btn edit sm" data-act="edit">${ICO.edit}編輯</button>
-              <button class="btn ghost sm" data-act="list">${ICO.list}清單${list.length ? ' ' + list.length : ''}</button>
-            </div>
           </div>
           <h4>${esc(it.title || '(未命名)')}</h4>
           ${it.desc && it.desc.trim() ? `<div class="desc">${linkify(it.desc)}</div>` : ''}
           ${dimgs.length ? `<div class="descimgs">${dimgs.map(im => `<div class="ph"><img src="${im.src}" alt=""><button class="rm" data-act="rmdescimg" data-img="${im.k}">×</button></div>`).join('')}</div>` : ''}
           ${list.length ? `<div class="slist">${it.listTitle && it.listTitle.trim() ? `<div class="slist-t">${esc(it.listTitle)}</div>` : ''}${list.map(l => l.url ? `<a href="${esc(l.url)}" target="_blank" rel="noopener">${ICO.map}${esc(l.name || l.url)}</a>` : `<span class="n">${ICO.map}${esc(l.name || '')}</span>`).join('')}</div>` : ''}
+          <div class="ctools">
+            ${navHref(it) ? `<a class="btn nav sm" target="_blank" rel="noopener" href="${esc(navHref(it))}">${ICO.map}導航</a>` : ''}
+            <button class="btn edit sm" data-act="edit">${ICO.edit}編輯</button>
+            <button class="btn ghost sm" data-act="list">${ICO.list}清單${list.length ? ' ' + list.length : ''}</button>
+          </div>
           <details class="note"${hasNote ? '' : ''}>
             <summary><span class="car">▶</span>備註${hasNote ? ' 🐈' : ''}</summary>
             <div class="body">
