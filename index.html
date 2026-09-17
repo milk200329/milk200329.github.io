@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
 <title>仙台遊 9/19－9/26</title>
 <meta name="theme-color" content="#f7faf9">
 <link rel="manifest" href="manifest.webmanifest">
@@ -133,6 +133,8 @@ a:hover{color:var(--sea-2)}
 .card .sub{font-size:13.5px;color:var(--ink-3);margin-top:3px}
 .move{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;letter-spacing:.08em;
   color:#3d6f68;background:#eef5f3;border:1px solid #dfece9;border-radius:20px;padding:2px 9px}
+.hours{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;letter-spacing:.08em;
+  color:#7a6340;background:#f7f1e6;border:1px solid #ece0cb;border-radius:20px;padding:2px 9px}
 .pastebox{border:1px dashed var(--line);border-radius:10px;padding:10px;text-align:center;
   font-size:12px;color:var(--ink-3);background:var(--sand);margin-top:8px}
 .acts{display:flex;flex-wrap:wrap;gap:7px;margin-top:11px;padding-top:9px;border-top:1px dashed var(--line-2)}
@@ -208,7 +210,7 @@ a:hover{color:var(--sea-2)}
 .f{margin-bottom:11px}
 .f label{display:block;font-size:11px;letter-spacing:.12em;color:var(--ink-3);margin-bottom:4px}
 .f input,.f select,.f textarea{width:100%;border:1px solid var(--line);border-radius:9px;
-  padding:10px;font:400 15px var(--gothic);color:var(--ink);background:#fff}
+  padding:10px;font:400 16px var(--gothic);color:var(--ink);background:#fff}
 .f textarea{min-height:80px;line-height:1.6;resize:vertical}
 .f2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .sheetacts{display:flex;gap:8px;margin-top:14px}
@@ -631,7 +633,7 @@ function renderDays(){
         <div class="card">
           <button class="grip" data-drag aria-label="拖曳排序">${ICO.grip}</button>
           <div class="cardtop">
-            <div class="chips"><span class="cat">${CAT_ICON[catOf(it.cat)] || '📌'} ${esc(catOf(it.cat))}</span>${it.move ? `<span class="move">🚗 ${esc(it.move)}</span>` : ''}</div>
+            <div class="chips"><span class="cat">${CAT_ICON[catOf(it.cat)] || '📌'} ${esc(catOf(it.cat))}</span>${it.move ? `<span class="move">🚗 ${esc(it.move)}</span>` : ''}${it.hours && it.hours.trim() ? `<span class="hours">🕗 ${esc(it.hours)}</span>` : ''}</div>
           </div>
           <h4>${esc(it.title || '(未命名)')}</h4>
           ${it.desc && it.desc.trim() ? `<div class="desc">${linkify(it.desc)}</div>` : ''}
@@ -811,6 +813,7 @@ function editSheet(day,id){
         <button class="btn sm" id="e-descimg">🖼 加圖片</button>
         <span style="font-size:11.5px;color:var(--ink-3)">在說明欄長按「貼上」也可直接貼圖</span>
       </div></div>
+    <div class="f"><label>營業時間（顯示在卡片上）</label><input id="e-hours" value="${esc(it.hours||'')}" placeholder="10:00-17:00 / 週三休"></div>
     <div class="f"><label>移動時間（顯示在卡片上）</label><input id="e-move" value="${esc(it.move||'')}" placeholder="步行10分 / 車程 1H20M"></div>
     <div class="f"><label>地圖搜尋詞（店名／地點）</label><input id="e-mapq" value="${esc(it.mapq||'')}" placeholder="瑞巌寺"></div>
     <div class="f"><label>自訂 Google 地圖導航連結（填了就優先用這個）</label><input id="e-mapurl" value="${esc(it.mapurl||'')}" placeholder="https://maps.app.goo.gl/..."></div>
@@ -834,6 +837,7 @@ function editSheet(day,id){
       time:$('#e-time').value.trim(), cat:$('#e-cat').value,
       title:$('#e-title').value.trim(), mapq:$('#e-mapq').value.trim(),
       move:$('#e-move').value.trim(), mapurl:$('#e-mapurl').value.trim(),
+      hours:$('#e-hours').value.trim(),
       desc:$('#e-desc').value
     }).then(() => { stamp(); closeSheet(); toast('已儲存'); });
   };
