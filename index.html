@@ -97,7 +97,10 @@ a:hover{color:var(--sea-2)}
 .daynum{font-family:var(--gothic);font-size:13px;line-height:1.2;font-weight:500;color:var(--sea-1);
   letter-spacing:.14em;padding-top:4px}
 .dayhead .t{flex:1;min-width:0}
-.dayhead h2{font-family:var(--mincho);font-size:18px;font-weight:600;margin:0;letter-spacing:.05em}
+.dayhead h2{font-family:var(--mincho);font-size:18px;font-weight:600;margin:0;letter-spacing:.05em;
+  display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.dayedit{border:none;background:none;padding:2px;color:#bcb1a2;cursor:pointer;display:inline-grid;place-items:center}
+.dayedit svg{width:14px;height:14px}
 .dayhead .m{font-size:11.5px;color:var(--ink-3);letter-spacing:.06em;margin-top:2px}
 .dayweather{margin-left:auto;display:flex;align-items:center;gap:5px;white-space:nowrap;color:var(--ink-2);font-size:12px;letter-spacing:.02em;padding-top:3px}
 .dayweather .wi{font-size:17px;line-height:1}.dayweather .wt{font-weight:500}.dayweather .temp{font-size:11px;color:var(--ink-3)}
@@ -260,7 +263,7 @@ a:hover{color:var(--sea-2)}
 .seg.sm{flex:0 0 auto;grid-auto-columns:42px;border-radius:9px}
 .seg.sm .segb{padding:9px 0}
 .splitform{display:flex;flex-direction:column;gap:9px}
-.splitform select,.splitform input[type=text]{width:100%;font:500 14px/1.2 var(--gothic);color:var(--ink);
+.splitform select,.splitform input[type=text],.splitform textarea{width:100%;font:500 14px/1.2 var(--gothic);color:var(--ink);
   border:1px solid var(--line);border-radius:10px;padding:10px 9px;background:#fff}
 .splitform .fxrow{margin:0}
 .catchip{font:500 12px/1 var(--gothic);letter-spacing:.06em;color:var(--ink-2);background:#fff;
@@ -283,9 +286,10 @@ a:hover{color:var(--sea-2)}
 .spitem .ic{font-size:15px;line-height:1.3}
 .spitem .tx{flex:1;min-width:0}
 .spitem .t1{font-size:13.5px;font-weight:500;word-break:break-word;display:block}
-.spitem .t2{font-size:11px;color:var(--ink-3);letter-spacing:.04em;margin-top:2px;display:block}
+.spitem .t2{font-size:13px;color:var(--ink-3);letter-spacing:.04em;margin-top:2px;display:block}
 .spitem .am{font:500 13.5px/1.3 var(--gothic);white-space:nowrap;text-align:right}
-.spitem .am small{display:block;font-size:10px;color:var(--ink-3);font-weight:400}
+.spitem .am small{display:block;font-size:13.5px;color:var(--ink-3);font-weight:400}
+.spitem .t2 .payer{font-weight:600;color:var(--sea-1)}
 .spstat{font:500 10px/1 var(--gothic);letter-spacing:.1em;border-radius:20px;padding:4px 8px;white-space:nowrap}
 .spstat.done{background:#e8f3f0;color:#2f6a62}
 .spstat.wait{background:#fdeee8;color:#b4553f}
@@ -295,6 +299,24 @@ a:hover{color:var(--sea-2)}
 .paychip.on{background:#e8f3f0;border-style:solid;border-color:#9bc9c2;color:#2f6a62}
 .paychip i{font-style:normal;font-size:11px}
 .spfilter{display:flex;gap:5px;margin-bottom:8px;flex-wrap:wrap}
+.spacts{display:flex;flex-direction:column;gap:2px}
+.spdesc{font-size:12.5px;line-height:1.5;color:var(--ink-2);white-space:pre-wrap;word-break:break-word;margin-top:5px}
+.mgbar{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:8px}
+.mgbar select{flex:1 1 130px;min-width:120px;font:500 13px var(--gothic);color:var(--ink);
+  border:1px solid var(--line);border-radius:10px;padding:9px 8px;background:#fff}
+.btn.mgdel{background:#fdeee8;border-color:#f0cdc0;color:#b4553f}
+.mghead{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.mghead h3{margin:0}
+.mgsel{margin-left:auto;font:500 11px/1 var(--gothic);letter-spacing:.06em;color:var(--ink-2);
+  background:#fff;border:1px solid var(--line);border-radius:20px;padding:6px 10px;cursor:pointer}
+.mgrow{display:flex;align-items:flex-start;gap:9px;border-top:1px dashed var(--line-2);padding:9px 0 0}
+.mgrow:first-child{border-top:0}
+.mgbox{flex:0 0 auto;width:20px;height:20px;border-radius:6px;border:1.5px solid var(--line);
+  background:#fff;color:#fff;font-size:12px;line-height:17px;text-align:center;cursor:pointer;padding:0}
+.mgbox.on{background:var(--sea-1);border-color:var(--sea-1)}
+.mgrow .tx{flex:1;min-width:0}
+.mgrow .t1{font-size:13.5px;font-weight:500;word-break:break-word;display:block}
+.mgrow .t2{font-size:11px;color:var(--ink-3);letter-spacing:.04em;margin-top:2px;display:block}
 .spitem .x{border:none;background:none;color:var(--ink-3);font-size:16px;line-height:1;padding:2px 0 0 2px;cursor:pointer}
 
 /* ── floats ───────────────────────── */
@@ -359,7 +381,7 @@ footer{text-align:center;font-size:11px;color:var(--ink-3);margin-top:30px;lette
         <div class="thead"><div class="lbl" id="fxLbl">日円 → 台幣</div>
           <div class="fxsw"><button class="fxb on" data-fx="jt">円→NT$</button><button class="fxb" data-fx="tj">NT$→円</button></div>
         </div>
-        <div class="fxrow"><input id="fxJpy" type="number" inputmode="decimal" value="1000" aria-label="日幣金額"><span id="fxUnit">円</span></div>
+        <div class="fxrow"><input id="fxJpy" type="number" inputmode="decimal" value="0" aria-label="日幣金額"><span id="fxUnit">円</span></div>
         <div class="big" id="fxOut" style="margin-top:5px">NT$ --</div>
         <div class="fine" id="fxRate">匯率讀取中</div>
       </div>
@@ -367,10 +389,25 @@ footer{text-align:center;font-size:11px;color:var(--ink-3);margin-top:30px;lette
     <section class="utility"><div class="utility-grid" id="utilityLists"></div></section>
   </section>
 
+  <section id="managePanel" hidden>
+    <section class="tools">
+      <div class="tool">
+        <div class="thead"><button class="btn ghost sm" data-act="go-utility">← 工具</button><div class="lbl">調整行程</div><div class="fine tr" id="mgCount">已選 0 筆</div></div>
+        <div class="mgbar">
+          <select id="mgTarget" aria-label="移動到哪一天"></select>
+          <button class="btn nav sm" id="mgCopy">移動到該天</button>
+          <button class="btn ghost sm" id="mgClear">取消選取</button>
+          <button class="btn sm mgdel" id="mgDel">刪除已選</button>
+        </div>
+      </div>
+    </section>
+    <section class="utility"><div class="utility-grid" id="mgList"></div></section>
+  </section>
+
   <section id="splitPanel" hidden>
     <section class="tools">
       <div class="tool">
-        <div class="thead"><div class="lbl">分帳 ・ 5 人均分</div><div class="fine tr" id="spTotal">NT$ 0</div></div>
+        <div class="thead"><button class="btn ghost sm" data-act="go-utility">← 工具</button><div class="lbl">支出統計 ・ 誰要給誰錢</div><div class="fine tr" id="spTotal">NT$ 0</div></div>
         <div class="splitsum" id="spSummary"></div>
       </div>
     </section>
@@ -385,7 +422,8 @@ footer{text-align:center;font-size:11px;color:var(--ink-3);margin-top:30px;lette
             <div class="seg sm" id="spCur"><button class="segb on" data-cur="JPY">¥</button><button class="segb" data-cur="TWD">NT$</button></div>
           </div>
           <select id="spDate" aria-label="日期"></select>
-          <input id="spNote" type="text" placeholder="這筆是什麼？（選填）">
+          <input id="spNote" type="text" placeholder="支出名稱（例：牛舌午餐）">
+          <textarea id="spDesc" placeholder="說明（選填，儲存後可貼圖片）" style="min-height:56px"></textarea>
           <div class="chips" id="spCat"></div>
           <div class="splitwho"><span class="wholbl">這筆誰要分？</span><div class="chips" id="spWho"></div></div>
           <button class="btn edit" id="spSave" style="justify-content:center;min-height:46px">✓ 記下這筆</button>
@@ -394,6 +432,7 @@ footer{text-align:center;font-size:11px;color:var(--ink-3);margin-top:30px;lette
       <article class="utility-card">
         <h3>📋 明細與分帳</h3>
         <div class="spfilter" id="spFilter"></div>
+        <div class="spfilter" id="spCatFilter"></div>
         <div class="utility-list" id="spList"></div>
       </article>
     </div></section>
@@ -566,7 +605,8 @@ if (ROOT) {
     STATE.checklist = v.checklist || {};
     STATE.expenses = v.expenses || {};
     STATE.updatedAt = v.updatedAt || 0;
-    renderDays(); renderToolLists(); renderLastEdit(); renderSplit();
+    renderDays(); renderToolLists(); renderLastEdit();
+    try { if (activePanel === 'manage') renderManage(); } catch(_){} renderSplit();
   });
   db.ref('.info/connected').on('value', s => {
     const on = !!s.val();
@@ -611,6 +651,10 @@ const dirURL = (a,b) => 'https://www.google.com/maps/dir/?api=1&origin=' + encod
 const navHref = it => (it.mapurl && it.mapurl.trim()) ? it.mapurl.trim() : (it.mapq ? mapURL(it.mapq) : '');
 let activePanel = 'itinerary';
 
+function dayHeading(d){
+  const v = (STATE.days[d.id] || {}).heading;
+  return d.date + '（' + d.dow + '）' + ((v && v.trim()) ? ' ' + v.trim() : '');
+}
 function itemsOf(dayId){
   const raw = (STATE.days[dayId] && STATE.days[dayId].items) || {};
   return Object.keys(raw).map(k => ({ ...raw[k], _id:k }))
@@ -664,7 +708,7 @@ function renderDays(){
       <div class="dayhead">
         <div class="daynum">DAY${di+1}</div>
         <div class="t">
-          <h2>${d.date}（${d.dow}）${isToday ? '<span class="badge-today">今天</span>' : ''}</h2>
+          <h2>${esc(dayHeading(d))}${isToday ? '<span class="badge-today">今天</span>' : ''}<button class="dayedit" data-act="dayedit" data-day="${d.id}" aria-label="編輯標題">${ICO.edit}</button></h2>
         </div>
         <div class="dayweather" data-weather="${d.id}">${dayWeatherHTML(d)}</div>
       </div>
@@ -684,7 +728,7 @@ function renderTabs(){
   $('#tabs').innerHTML = DAYS.map((d,i) =>
     `<a class="tab" href="#${d.id}" data-target="${d.id}" style="--tc:${d.color}">
       <b>${d.date}</b>${d.dow}${d.iso === ti ? '<i class="today-dot"></i>' : ''}
-    </a>`).join('') + `<a class="tab${activePanel === 'utility' ? ' on' : ''}" href="#utilityPanel" data-tool="utility" style="--tc:var(--sea-1)"><b>工具</b>備用・記事</a><a class="tab${activePanel === 'split' ? ' on' : ''}" href="#splitPanel" data-tool="split" style="--tc:var(--sea-5)"><b>分帳</b>工具</a>`;
+    </a>`).join('') + `<a class="tab${activePanel === 'utility' ? ' on' : ''}" href="#utilityPanel" data-tool="utility" style="--tc:var(--sea-1)"><b>工具</b>備用・記事</a><a class="tab${activePanel === 'split' ? ' on' : ''}" href="#splitPanel" data-tool="split" style="--tc:var(--sea-5)"><b>分帳</b>支出・結算</a>`;
 }
 
 function todayISO(){
@@ -738,7 +782,7 @@ function toolItems(group){
 }
 function renderToolLists(){
   const box = $('#utilityLists'); if (!box) return;
-  const menu = `<div class="utility-menu">${TOOL_GROUPS.map(g => `<button class="btn${activeToolGroup === g.id ? ' on' : ''}" data-act="tool-open" data-group="${g.id}">${g.icon} ${g.title}</button>`).join('')}</div>`;
+  const menu = `<div class="utility-menu">${TOOL_GROUPS.map(g => `<button class="btn${activeToolGroup === g.id ? ' on' : ''}" data-act="tool-open" data-group="${g.id}">${g.icon} ${g.title}</button>`).join('')}<button class="btn" data-act="go-manage">🗂 調整行程</button></div>`;
   if (!activeToolGroup){
     box.innerHTML = menu;
     return;
@@ -800,6 +844,22 @@ mask.addEventListener('click', e => { if (e.target === mask) closeSheet(); });
 function itemRef(day,id){ return ROOT.child('days/' + day + '/items/' + id); }
 function findItem(day,id){ return ((STATE.days[day] || {}).items || {})[id]; }
 
+function dayHeadSheet(dayId){
+  const d = DAYS.find(x => x.id === dayId); if (!d) return;
+  const cur = (STATE.days[dayId] || {}).heading || '';
+  openSheet('<h3>編輯每日標題</h3>'
+    + '<div class="f"><label>' + d.date + '（' + d.dow + '） 後面要接的文字</label>'
+    + '<input id="dh-title" value="' + esc(cur) + '" placeholder="例：抵達仙台・牛舌開場"></div>'
+    + '<div class="hint" style="font-size:11.5px;color:var(--ink-3)">日期會固定保留，留空就只顯示日期</div>'
+    + '<div class="sheetacts"><button class="btn" data-act="cancel">取消</button>'
+    + '<button class="btn edit" data-act="save">儲存</button></div>');
+  sheet.querySelector('[data-act=cancel]').onclick = closeSheet;
+  sheet.querySelector('[data-act=save]').onclick = () => {
+    const v = $('#dh-title').value.trim();
+    ROOT.child('days/' + dayId + '/heading').set(v || null)
+      .then(() => { stamp(); closeSheet(); toast('標題已更新'); });
+  };
+}
 function editSheet(day,id){
   const it = findItem(day,id) || {};
   openSheet(`<h3>編輯行程</h3>
@@ -993,7 +1053,11 @@ document.addEventListener('click', e => {
   const day = stop ? stop.dataset.day : btn.dataset.day;
   const id = stop ? stop.dataset.id : null;
   const act = btn.dataset.act;
-  if (act === 'tool-open') { activeToolGroup = btn.dataset.group; renderToolLists(); }
+  if (act === 'dayedit') { dayHeadSheet(btn.dataset.day); return; }
+  else if (act === 'go-utility') { showPanel('utility'); return; }
+  else if (act === 'go-split') { showPanel('split'); return; }
+  else if (act === 'go-manage') { showPanel('manage'); return; }
+  else if (act === 'tool-open') { activeToolGroup = btn.dataset.group; renderToolLists(); }
   else if (act === 'tool-done') ROOT.child('tools/' + btn.dataset.group + '/' + btn.dataset.id + '/done').set(!!btn.checked).then(stamp);
   else if (act === 'tool-add') toolSheet(btn.dataset.group);
   else if (act === 'tool-edit') toolSheet(btn.dataset.group, btn.dataset.id);
@@ -1084,6 +1148,8 @@ function showPanel(panel, scroll=true){
   $('#itineraryPanel').hidden = panel !== 'itinerary';
   $('#utilityPanel').hidden = panel !== 'utility';
   $('#splitPanel').hidden = panel !== 'split';
+  $('#managePanel').hidden = panel !== 'manage';
+  if (panel === 'manage') renderManage();
   renderTabs();
   if (scroll) window.scrollTo({ top:0, behavior:'smooth' });
 }
@@ -1242,11 +1308,90 @@ fetchAllWeather();
 setWeather(DAYS[0]);
 setTimeout(jumpToToday, 900);
 
+/* ═══ 8.5 調整行程（複製／刪除） ═══════════════════════════ */
+var mgSel = {};
+function mgKeys(){ return Object.keys(mgSel).filter(k => mgSel[k]); }
+function renderManage(){
+  if (!$('#mgList')) return;
+  if (!$('#mgTarget').children.length)
+    $('#mgTarget').innerHTML = DAYS.map(d => '<option value="' + d.id + '">移動到 ' + d.date + '（' + d.dow + '）</option>').join('');
+  $('#mgCount').textContent = '已選 ' + mgKeys().length + ' 筆';
+  $('#mgList').innerHTML = DAYS.map(d => {
+    const items = itemsOf(d.id);
+    const allOn = items.length && items.every(it => mgSel[d.id + '/' + it._id]);
+    return '<article class="utility-card"><div class="mghead"><h3>' + esc(dayHeading(d)) + '</h3>'
+      + (items.length ? '<button class="mgsel" data-mgall="' + d.id + '">' + (allOn ? '取消全選' : '全選') + '</button>' : '') + '</div>'
+      + (items.length ? items.map(it => {
+          const k = d.id + '/' + it._id;
+          return '<div class="mgrow"><button class="mgbox' + (mgSel[k] ? ' on' : '') + '" data-mgk="' + k + '">'
+            + (mgSel[k] ? '✓' : '') + '</button><span class="tx"><span class="t1">'
+            + (it.time ? esc(it.time) + '　' : '') + esc(it.title || '(未命名)') + '</span>'
+            + '<span class="t2">' + esc(catOf(it.cat)) + (it.hours ? ' ・ ' + esc(it.hours) : '') + '</span></span></div>';
+        }).join('') : '<div class="utility-empty">這天還沒有行程</div>') + '</article>';
+  }).join('');
+}
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-mgk]');
+  if (b){ const k = b.dataset.mgk; mgSel[k] = !mgSel[k]; renderManage(); return; }
+  const a = e.target.closest('[data-mgall]');
+  if (a){
+    const day = a.dataset.mgall, items = itemsOf(day);
+    const allOn = items.every(it => mgSel[day + '/' + it._id]);
+    items.forEach(it => { mgSel[day + '/' + it._id] = !allOn; });
+    renderManage(); return;
+  }
+});
+function mgSelectedItems(){
+  return mgKeys().map(k => {
+    const p = k.split('/');
+    const it = findItem(p[0], p[1]);
+    return it ? { day:p[0], id:p[1], it } : null;
+  }).filter(Boolean);
+}
+function mgInit(){
+  if (!$('#mgCopy')) return;
+  $('#mgClear').onclick = () => { mgSel = {}; renderManage(); };
+  $('#mgCopy').onclick = () => {
+    const sel = mgSelectedItems();
+    if (!sel.length) { toast('請先勾選行程'); return; }
+    const target = $('#mgTarget').value;
+    if (!ROOT) { toast('目前無法連線資料庫'); return; }
+    const moving = sel.filter(s => s.day !== target);
+    if (!moving.length) { toast('已選行程都在該天了'); return; }
+    pushUndo('移動行程');
+    let order = (itemsOf(target).slice(-1)[0] || {}).order || 0;
+    const ups = {};
+    moving.forEach(s => {
+      order += 10;
+      const copy = JSON.parse(JSON.stringify(s.it));
+      delete copy._id;
+      copy.order = order;
+      ups[ROOT.child('days/' + target + '/items').push().key] = copy;
+    });
+    ROOT.child('days/' + target + '/items').update(ups)
+      .then(() => Promise.all(moving.map(s => ROOT.child('days/' + s.day + '/items/' + s.id).remove())))
+      .then(() => {
+        stamp(); mgSel = {}; renderManage();
+        const d = DAYS.find(x => x.id === target);
+        toast('已移動 ' + moving.length + ' 筆到 ' + (d ? d.date : target));
+      });
+  };
+  $('#mgDel').onclick = () => {
+    const sel = mgSelectedItems();
+    if (!sel.length) { toast('請先勾選行程'); return; }
+    if (!confirm('確定刪除已選的 ' + sel.length + ' 筆行程？')) return;
+    pushUndo('刪除行程');
+    Promise.all(sel.map(s => ROOT.child('days/' + s.day + '/items/' + s.id).remove()))
+      .then(() => { stamp(); mgSel = {}; renderManage(); toast('已刪除 ' + sel.length + ' 筆'); });
+  };
+}
+mgInit();
+
 /* ═══ 9. 分帳 ═════════════════════════════════════════════ */
 var MEMBERS = ['米居','拎拎','家伃','老吳','弟弟'];
-var SP_CATS = ['吃飯','伴手禮','交通','門票','住宿'];
-var SP_ICON = {吃飯:'🍳', 伴手禮:'🎁', 交通:'🚄', 門票:'🎟️', 住宿:'🏨'};
-var spPayer = MEMBERS[0], spCur = 'JPY', spCat = SP_CATS[0], spWho = MEMBERS.slice(), spFilter = 'all';
+var SP_CATS = ['吃飯','伴手禮','交通','門票','住宿','代購','其他'];
+var SP_ICON = {吃飯:'🍳', 伴手禮:'🎁', 交通:'🚄', 門票:'🎟️', 住宿:'🏨', 代購:'🛍️', 其他:'🧾'};
+var spPayer = MEMBERS[0], spCur = 'JPY', spCat = SP_CATS[0], spWho = MEMBERS.slice(), spFilter = 'all', spCatFilter = 'all';
 
 function spBuildForm(){
   $('#spPayer').innerHTML = MEMBERS.map(m =>
@@ -1268,6 +1413,7 @@ function spPerJpy(e){
   return jpy / spWhoOf(e).length;
 }
 function jp(v){ return '¥ ' + Math.round(v).toLocaleString('zh-TW'); }
+function jpOf(twd){ return jp(twd / (RATE || 1)); }
 function spDebtors(e){ return spWhoOf(e).filter(m => m !== e.payer); }
 function spIsPaid(e, m){ return !!(e.settled && e.settled[m]); }
 function spDone(e){ return spDebtors(e).every(m => spIsPaid(e, m)); }
@@ -1283,8 +1429,9 @@ function spSaveEntry(){
   if (!ROOT) { toast('目前無法連線資料庫'); return; }
   ROOT.child('expenses').push({
     payer:spPayer, amt, cur:spCur, date:$('#spDate').value, who:spWho.slice(),
-    cat:spCat, note:$('#spNote').value.trim(), createdAt:Date.now()
-  }).then(() => { stamp(); $('#spAmt').value = ''; $('#spNote').value = ''; toast('已記下這筆'); });
+    cat:spCat, note:$('#spNote').value.trim(), desc:$('#spDesc').value.trim(),
+    rate:RATE, createdAt:Date.now()
+  }).then(() => { stamp(); $('#spAmt').value = ''; $('#spNote').value = ''; $('#spDesc').value = ''; toast('已記下這筆'); });
 }
 function spSettleText(paid, owe){
   const deb = [], cre = [];
@@ -1293,7 +1440,7 @@ function spSettleText(paid, owe){
   const out = []; let i = 0, j = 0;
   while (i < deb.length && j < cre.length){
     const v = Math.min(deb[i].v, cre[j].v);
-    out.push(deb[i].m + ' → ' + cre[j].m + '　' + nt(v));
+    out.push(deb[i].m + ' → ' + cre[j].m + '　' + nt(v) + '（' + jpOf(v) + '）');
     deb[i].v -= v; cre[j].v -= v;
     if (deb[i].v < 0.5) i++;
     if (cre[j].v < 0.5) j++;
@@ -1305,27 +1452,38 @@ function renderSplit(){
   if (!$('#spPayer').children.length) spBuildForm();
   const items = spAll();
   const total = items.reduce((s,e) => s + spTwd(e), 0);
-  $('#spTotal').textContent = nt(total);
+  $('#spTotal').textContent = nt(total) + '（' + jpOf(total) + '）';
   const paid = {}, owe = {};
   MEMBERS.forEach(m => { paid[m] = 0; owe[m] = 0; });
   items.forEach(e => {
-    paid[e.payer] = (paid[e.payer] || 0) + spTwd(e);
     const per = spPer(e);
-    spWhoOf(e).forEach(m => { owe[m] = (owe[m] || 0) + per; });
+    let recovered = 0;
+    spWhoOf(e).forEach(m => {
+      if (m === e.payer) { owe[m] = (owe[m] || 0) + per; return; }
+      if (spIsPaid(e, m)) { recovered += per; return; }   // 已還錢：兩邊都不再計
+      owe[m] = (owe[m] || 0) + per;
+    });
+    paid[e.payer] = (paid[e.payer] || 0) + spTwd(e) - recovered;
   });
-  $('#spSummary').innerHTML = MEMBERS.map(m => {
-    const bal = (paid[m] || 0) - (owe[m] || 0);
-    return '<div class="sprow"><b>' + m + '</b><span>付了 ' + nt(paid[m] || 0) + ' ・ 應付 ' + nt(owe[m] || 0) + '</span>'
-      + '<span class="v ' + (bal >= 0 ? 'pos' : 'neg') + '">'
-      + (bal >= 0 ? '可收回 ' : '要再付 ') + nt(Math.abs(bal)) + '</span></div>';
-  }).join('') + (total ? '<div class="spsettle">全程總額 ' + nt(total) + ' ・ 5 人均分每人 ' + nt(total / MEMBERS.length)
-      + '<br>' + spSettleText(paid, owe) + '</div>' : '');
+  const spent = {}; MEMBERS.forEach(m => spent[m] = 0);
+  items.forEach(e => { spent[e.payer] = (spent[e.payer] || 0) + spTwd(e); });
+  $('#spSummary').innerHTML = MEMBERS.filter(m => spent[m] > 0.5).map(m =>
+      '<div class="sprow"><b>' + m + '</b><span>支出 ' + nt(spent[m]) + '（' + jpOf(spent[m]) + '）</span>'
+      + '<span class="v">' + Math.round(spent[m] / (total || 1) * 100) + '%</span></div>'
+    ).join('')
+    + (total ? '<div class="spsettle"><b style="font-weight:500">誰要給誰錢</b><br>' + spSettleText(paid, owe) + '</div>'
+             : '<div class="utility-empty">還沒有支出紀錄</div>');
 
   const nDone = items.filter(spDone).length;
   const fl = [['all','全部 ' + items.length], ['wait','待收錢 ' + (items.length - nDone)], ['done','已收完 ' + nDone]];
   $('#spFilter').innerHTML = fl.map(f =>
     '<button class="catchip' + (spFilter === f[0] ? ' on' : '') + '" data-spf="' + f[0] + '">' + f[1] + '</button>').join('');
-  const shown = items.filter(e => spFilter === 'all' || (spFilter === 'done' ? spDone(e) : !spDone(e)));
+  const stageItems = items.filter(e => spFilter === 'all' || (spFilter === 'done' ? spDone(e) : !spDone(e)));
+  const cf = [['all','全部類型']].concat(SP_CATS.map(c =>
+    [c, (SP_ICON[c] || '') + ' ' + c + ' ' + stageItems.filter(e => e.cat === c).length]));
+  $('#spCatFilter').innerHTML = cf.map(f =>
+    '<button class="catchip' + (spCatFilter === f[0] ? ' on' : '') + '" data-spcf="' + f[0] + '">' + f[1] + '</button>').join('');
+  const shown = stageItems.filter(e => spCatFilter === 'all' || e.cat === spCatFilter);
   const byDay = {};
   shown.forEach(e => { (byDay[e.date] = byDay[e.date] || []).push(e); });
   const keys = Object.keys(byDay).sort();
@@ -1335,11 +1493,16 @@ function renderSplit(){
     return '<div class="spday">' + (d ? d.date + '（' + d.dow + '）' : iso) + ' ・ ' + rows.length + ' 筆 ・ ' + nt(sum) + '</div>'
       + rows.map(e => '<div class="spitem"><span class="ic">' + (SP_ICON[e.cat] || '🧾') + '</span>'
         + '<span class="tx"><span class="t1">' + esc(e.note || e.cat) + '</span>'
-        + '<span class="t2">' + esc(e.payer) + ' 付 ・ ' + esc(e.cat)
-        + ' ・ ' + spWhoOf(e).length + ' 人分，每人 ' + jp(spPerJpy(e)) + '（' + nt(spPer(e)) + '）</span></span>'
+        + '<span class="t2"><b class="payer">' + esc(e.payer) + '</b> 付 ・ ' + esc(e.cat)
+        + ' ・ ' + spWhoOf(e).length + ' 人分，每人 ' + jp(spPerJpy(e)) + '（' + nt(spPer(e)) + '）'
+        + ' ・ 匯率 ' + (+(e.rate || RATE)).toFixed(4) + '</span></span>'
         + '<span class="am">' + (e.cur === 'JPY' ? '¥ ' + (+e.amt).toLocaleString('zh-TW') : nt(e.amt))
         + (e.cur === 'JPY' ? '<small>' + nt(spTwd(e)) + '</small>' : '') + '</span>'
-        + '<button class="x" data-sp-del="' + e._id + '" aria-label="刪除">×</button></div>'
+        + '<span class="spacts"><button class="x" data-sp-edit="' + e._id + '" aria-label="編輯">✎</button>'
+        + '<button class="x" data-sp-del="' + e._id + '" aria-label="刪除">×</button></span></div>'
+        + (e.desc && e.desc.trim() ? '<div class="spdesc">' + linkify(e.desc) + '</div>' : '')
+        + (e.images ? '<div class="descimgs">' + Object.keys(e.images).map(k =>
+              '<div class="ph"><img src="' + e.images[k] + '" alt=""><button class="rm" data-sp-rmimg="' + e._id + '|' + k + '">×</button></div>').join('') + '</div>' : '')
         + '<div class="sppays">'
         + '<span class="spstat ' + (spDone(e) ? 'done' : 'wait') + '">' + (spDone(e) ? '已收完' : '待收錢') + '</span>'
         + spDebtors(e).map(m => '<button class="paychip' + (spIsPaid(e, m) ? ' on' : '')
@@ -1364,6 +1527,8 @@ document.addEventListener('click', e => {
   }
   const f = e.target.closest('[data-spf]');
   if (f){ spFilter = f.dataset.spf; renderSplit(); return; }
+  const cf2 = e.target.closest('[data-spcf]');
+  if (cf2){ spCatFilter = cf2.dataset.spcf; renderSplit(); return; }
   const pay = e.target.closest('[data-sp-paid]');
   if (pay && ROOT){
     const parts = pay.dataset.spPaid.split('|');
@@ -1371,9 +1536,74 @@ document.addEventListener('click', e => {
     ROOT.child('expenses/' + parts[0] + '/settled/' + parts[1]).set(cur ? null : true).then(stamp);
     return;
   }
+  const rmi = e.target.closest('[data-sp-rmimg]');
+  if (rmi && ROOT){
+    const p = rmi.dataset.spRmimg.split('|');
+    ROOT.child('expenses/' + p[0] + '/images/' + p[1]).remove().then(stamp);
+    return;
+  }
+  const ed = e.target.closest('[data-sp-edit]');
+  if (ed){ spEditSheet(ed.dataset.spEdit); return; }
   const del = e.target.closest('[data-sp-del]');
   if (del && ROOT){ ROOT.child('expenses/' + del.dataset.spDel).remove().then(() => { stamp(); toast('已刪除'); }); }
 });
+function spUploadImage(id, f){
+  if (!f || !ROOT) return;
+  const fr = new FileReader(), img = new Image();
+  fr.onload = () => { img.src = fr.result; };
+  img.onload = () => {
+    const max = 900, sc = Math.min(1, max / Math.max(img.width, img.height));
+    const c = document.createElement('canvas');
+    c.width = Math.round(img.width * sc); c.height = Math.round(img.height * sc);
+    c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+    const data = c.toDataURL('image/jpeg', .62);
+    if (data.length > 900000) { toast('圖片太大，請選小一點的'); return; }
+    ROOT.child('expenses/' + id + '/images').push(data).then(() => { stamp(); toast('圖片已加入'); });
+  };
+  fr.readAsDataURL(f);
+}
+function spEditSheet(id){
+  const e = (STATE.expenses || {})[id]; if (!e) return;
+  const who = (e.who && e.who.length) ? e.who : MEMBERS;
+  openSheet('<h3>編輯這筆支出</h3>'
+    + '<div class="f"><label>付款人</label><select id="x-payer">'
+    + MEMBERS.map(m => '<option' + (m === e.payer ? ' selected' : '') + '>' + m + '</option>').join('') + '</select></div>'
+    + '<div class="f2"><div class="f"><label>金額</label><input id="x-amt" type="number" inputmode="decimal" value="' + (+e.amt || 0) + '"></div>'
+    + '<div class="f"><label>幣別</label><select id="x-cur"><option value="JPY"' + (e.cur === 'JPY' ? ' selected' : '') + '>日円 ¥</option>'
+    + '<option value="TWD"' + (e.cur === 'TWD' ? ' selected' : '') + '>台幣 NT$</option></select></div></div>'
+    + '<div class="f"><label>日期</label><select id="x-date">'
+    + DAYS.map(d => '<option value="' + d.iso + '"' + (d.iso === e.date ? ' selected' : '') + '>' + d.date + '（' + d.dow + '）</option>').join('')
+    + '</select></div>'
+    + '<div class="f"><label>類型</label><select id="x-cat">'
+    + SP_CATS.map(c => '<option' + (c === e.cat ? ' selected' : '') + '>' + c + '</option>').join('') + '</select></div>'
+    + '<div class="f"><label>支出名稱</label><input id="x-note" value="' + esc(e.note || '') + '" placeholder="例：牛舌午餐"></div>'
+    + '<div class="f"><label>說明</label><textarea id="x-desc" style="min-height:80px">' + esc(e.desc || '') + '</textarea>'
+    + '<div class="pastebox" id="x-paste" tabindex="0">在上面欄位或這裡按 <b>貼上</b>（Ctrl/⌘+V）可直接貼圖片</div></div>'
+    + '<div class="f"><label>參與者</label><div class="chips" id="x-who">'
+    + MEMBERS.map(m => '<button class="whochip' + (who.indexOf(m) > -1 ? ' on' : '') + '" data-xwho="' + m + '">' + m + '</button>').join('')
+    + '</div></div>'
+    + '<div class="row"><button class="btn ghost" data-close>取消</button><button class="btn edit" id="x-save">儲存</button></div>');
+  const onPasteSp = ev => {
+    const f = [...((ev.clipboardData || {}).items || [])]
+      .map(i => i.type.indexOf('image') === 0 ? i.getAsFile() : null).find(Boolean);
+    if (f){ ev.preventDefault(); spUploadImage(id, f); }
+  };
+  $('#x-desc').addEventListener('paste', onPasteSp);
+  $('#x-paste').addEventListener('paste', onPasteSp);
+  $('#x-who').addEventListener('click', ev => {
+    const b = ev.target.closest('[data-xwho]'); if (b) b.classList.toggle('on');
+  });
+  $('#x-save').onclick = () => {
+    const w = Array.from($('#x-who').querySelectorAll('.whochip.on')).map(b => b.dataset.xwho);
+    if (!w.length) { toast('請至少選一位參與者'); return; }
+    const amt = +$('#x-amt').value;
+    if (!amt || amt <= 0) { toast('請輸入金額'); return; }
+    ROOT.child('expenses/' + id).update({
+      payer:$('#x-payer').value, amt, cur:$('#x-cur').value, date:$('#x-date').value,
+      cat:$('#x-cat').value, note:$('#x-note').value.trim(), desc:$('#x-desc').value.trim(), who:w
+    }).then(() => { stamp(); closeSheet(); toast('已更新'); });
+  };
+}
 $('#spSave').onclick = spSaveEntry;
 spBuildForm(); renderSplit();
 
