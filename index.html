@@ -290,6 +290,8 @@ a:hover{color:var(--sea-2)}
 .spitem .am{font:500 13.5px/1.3 var(--gothic);white-space:nowrap;text-align:right}
 .spitem .am small{display:block;font-size:13.5px;color:var(--ink-3);font-weight:400}
 .spitem .t2 .payer{font-weight:600;color:var(--sea-1)}
+.spitem .t2 .ln{display:block;margin-top:1px}
+.spitem .t2 .ln.dim{font-size:11.5px;color:var(--ink-3)}
 .spstat{font:500 10px/1 var(--gothic);letter-spacing:.1em;border-radius:20px;padding:4px 8px;white-space:nowrap}
 .spstat.done{background:#e8f3f0;color:#2f6a62}
 .spstat.wait{background:#fdeee8;color:#b4553f}
@@ -1493,9 +1495,9 @@ function renderSplit(){
     return '<div class="spday">' + (d ? d.date + '（' + d.dow + '）' : iso) + ' ・ ' + rows.length + ' 筆 ・ ' + nt(sum) + '</div>'
       + rows.map(e => '<div class="spitem"><span class="ic">' + (SP_ICON[e.cat] || '🧾') + '</span>'
         + '<span class="tx"><span class="t1">' + esc(e.note || e.cat) + '</span>'
-        + '<span class="t2"><b class="payer">' + esc(e.payer) + '</b> 付 ・ ' + esc(e.cat)
-        + ' ・ ' + spWhoOf(e).length + ' 人分，每人 ' + jp(spPerJpy(e)) + '（' + nt(spPer(e)) + '）'
-        + ' ・ 匯率 ' + (+(e.rate || RATE)).toFixed(4) + '</span></span>'
+        + '<span class="t2"><span class="ln"><b class="payer">' + esc(e.payer) + '</b> 付 ・ ' + esc(e.cat) + '</span>'
+        + '<span class="ln">' + spWhoOf(e).length + ' 人分，每人 ' + jp(spPerJpy(e)) + '（' + nt(spPer(e)) + '）</span>'
+        + '<span class="ln dim">匯率 ' + (+(e.rate || RATE)).toFixed(4) + '</span></span></span>'
         + '<span class="am">' + (e.cur === 'JPY' ? '¥ ' + (+e.amt).toLocaleString('zh-TW') : nt(e.amt))
         + (e.cur === 'JPY' ? '<small>' + nt(spTwd(e)) + '</small>' : '') + '</span>'
         + '<span class="spacts"><button class="x" data-sp-edit="' + e._id + '" aria-label="編輯">✎</button>'
