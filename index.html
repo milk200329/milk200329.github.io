@@ -317,6 +317,13 @@ a:hover{color:var(--sea-2)}
   background:#fff;color:#fff;font-size:12px;line-height:17px;text-align:center;cursor:pointer;padding:0}
 .mgbox.on{background:var(--sea-1);border-color:var(--sea-1)}
 .mgrow .tx{flex:1;min-width:0}
+.mggrip{flex:0 0 auto;display:grid;place-items:center;width:22px;height:30px;color:#bcb1a2;
+  background:none;border:none;padding:0;cursor:grab;touch-action:none}
+.mggrip svg{width:16px;height:16px}
+.mgacts{display:flex;gap:2px;flex:0 0 auto}
+.mgacts .x{border:none;background:none;color:var(--ink-3);font-size:16px;line-height:1;padding:3px 4px;cursor:pointer}
+.mgrow.mgdragging{opacity:.4}
+.mgrow.mgover{box-shadow:inset 0 2px 0 var(--sea-1)}
 .mgrow .t1{font-size:13.5px;font-weight:500;word-break:break-word;display:block}
 .mgrow .t2{font-size:11px;color:var(--ink-3);letter-spacing:.04em;margin-top:2px;display:block}
 .spitem .x{border:none;background:none;color:var(--ink-3);font-size:16px;line-height:1;padding:2px 0 0 2px;cursor:pointer}
@@ -689,8 +696,9 @@ function renderDays(){
             ${navHref(it) ? `<a class="btn nav sm" target="_blank" rel="noopener" href="${esc(navHref(it))}">${ICO.map}導航</a>` : ''}
             <button class="btn edit sm" data-act="edit">${ICO.edit}編輯</button>
             <button class="btn ghost sm" data-act="list">${ICO.list}清單${list.length ? ' ' + list.length : ''}</button>
+            ${hasNote ? '' : `<button class="btn ghost sm" data-act="note">${ICO.edit}備註</button>`}
           </div>
-          <details class="note"${hasNote ? '' : ''}>
+          ${hasNote ? `<details class="note">
             <summary><span class="car">▶</span>備註${hasNote ? ' 🐈' : ''}</summary>
             <div class="body">
               ${it.note && it.note.trim() ? `<div class="txt">${linkify(it.note)}</div>` : ''}
@@ -701,7 +709,7 @@ function renderDays(){
                 <button class="btn sm" data-act="pasteimg">📋 貼上圖片</button>
               </div>
             </div>
-          </details>
+          </details>` : ''}
         </div>
       </article>`;
     }).join('');
@@ -1323,18 +1331,34 @@ function renderManage(){
     const allOn = items.length && items.every(it => mgSel[d.id + '/' + it._id]);
     return '<article class="utility-card"><div class="mghead"><h3>' + esc(dayHeading(d)) + '</h3>'
       + (items.length ? '<button class="mgsel" data-mgall="' + d.id + '">' + (allOn ? '取消全選' : '全選') + '</button>' : '') + '</div>'
-      + (items.length ? items.map(it => {
+      + (items.length ? '<div class="mgrows" data-mgday="' + d.id + '">' + items.map(it => {
           const k = d.id + '/' + it._id;
-          return '<div class="mgrow"><button class="mgbox' + (mgSel[k] ? ' on' : '') + '" data-mgk="' + k + '">'
+          return '<div class="mgrow" data-mgrow="' + k + '">'
+            + '<button class="mggrip" data-mgdrag aria-label="拖曳排序">' + ICO.grip + '</button>'
+            + '<button class="mgbox' + (mgSel[k] ? ' on' : '') + '" data-mgk="' + k + '">'
             + (mgSel[k] ? '✓' : '') + '</button><span class="tx"><span class="t1">'
             + (it.time ? esc(it.time) + '　' : '') + esc(it.title || '(未命名)') + '</span>'
-            + '<span class="t2">' + esc(catOf(it.cat)) + (it.hours ? ' ・ ' + esc(it.hours) : '') + '</span></span></div>';
-        }).join('') : '<div class="utility-empty">這天還沒有行程</div>') + '</article>';
+            + '<span class="t2">' + esc(catOf(it.cat)) + (it.hours ? ' ・ ' + esc(it.hours) : '') + '</span></span>'
+            + '<span class="mgacts"><button class="x" data-mgedit="' + k + '" aria-label="編輯">✎</button>'
+            + '<button class="x" data-mgdel="' + k + '" aria-label="刪除">×</button></span></div>';
+        }).join('') + '</div>' : '<div class="utility-empty">這天還沒有行程</div>') + '</article>';
   }).join('');
 }
 document.addEventListener('click', e => {
   const b = e.target.closest('[data-mgk]');
   if (b){ const k = b.dataset.mgk; mgSel[k] = !mgSel[k]; renderManage(); return; }
+  const ed = e.target.closest('[data-mgedit]');
+  if (ed){ const p = ed.dataset.mgedit.split('/'); editSheet(p[0], p[1]); return; }
+  const dl = e.target.closest('[data-mgdel]');
+  if (dl && ROOT){
+    const p = dl.dataset.mgdel.split('/');
+    const it = findItem(p[0], p[1]) || {};
+    if (!confirm('刪除「' + (it.title || '此行程') + '」？')) return;
+    pushUndo('刪除行程');
+    ROOT.child('days/' + p[0] + '/items/' + p[1]).remove()
+      .then(() => { stamp(); delete mgSel[p[0] + '/' + p[1]]; renderManage(); toast('已刪除'); });
+    return;
+  }
   const a = e.target.closest('[data-mgall]');
   if (a){
     const day = a.dataset.mgall, items = itemsOf(day);
@@ -1343,6 +1367,49 @@ document.addEventListener('click', e => {
     renderManage(); return;
   }
 });
+let mgDrag = null;
+function mgDown(e){
+  const grip = e.target.closest('[data-mgdrag]'); if (!grip) return;
+  const row = grip.closest('.mgrow'), box = row.closest('.mgrows');
+  if (!row || !box) return;
+  e.preventDefault();
+  mgDrag = { row, box };
+  row.classList.add('mgdragging');
+}
+function mgMove(e){
+  if (!mgDrag) return;
+  e.preventDefault();
+  const y = e.touches ? e.touches[0].clientY : e.clientY;
+  const rows = Array.from(mgDrag.box.querySelectorAll('.mgrow'));
+  let target = null;
+  for (const r of rows){
+    if (r === mgDrag.row) continue;
+    const b = r.getBoundingClientRect();
+    if (y < b.top + b.height / 2) { target = r; break; }
+  }
+  if (target) mgDrag.box.insertBefore(mgDrag.row, target);
+  else mgDrag.box.appendChild(mgDrag.row);
+}
+function mgUp(){
+  if (!mgDrag) return;
+  const box = mgDrag.box, day = box.dataset.mgday;
+  mgDrag.row.classList.remove('mgdragging');
+  mgDrag = null;
+  if (!ROOT) return;
+  const ups = {};
+  Array.from(box.querySelectorAll('.mgrow')).forEach((r, i) => {
+    ups[r.dataset.mgrow.split('/')[1] + '/order'] = (i + 1) * 10;
+  });
+  pushUndo('排序行程');
+  ROOT.child('days/' + day + '/items').update(ups).then(stamp);
+}
+document.addEventListener('mousedown', mgDown);
+document.addEventListener('touchstart', mgDown, {passive:false});
+document.addEventListener('mousemove', mgMove);
+document.addEventListener('touchmove', mgMove, {passive:false});
+document.addEventListener('mouseup', mgUp);
+document.addEventListener('touchend', mgUp);
+
 function mgSelectedItems(){
   return mgKeys().map(k => {
     const p = k.split('/');
