@@ -99,6 +99,9 @@ a:hover{color:var(--sea-2)}
 .dayhead .t{flex:1;min-width:0}
 .dayhead h2{font-family:var(--mincho);font-size:18px;font-weight:600;margin:0;letter-spacing:.05em;
   display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.dh-d{white-space:nowrap}
+.dh-w{margin-left:-1px}
+.dh-s{margin-left:-5px}
 .dayedit{border:none;background:none;padding:2px;color:#bcb1a2;cursor:pointer;display:inline-grid;place-items:center}
 .dayedit svg{width:14px;height:14px}
 .dayhead .m{font-size:11.5px;color:var(--ink-3);letter-spacing:.06em;margin-top:2px}
@@ -664,6 +667,11 @@ function dayHeading(d){
   const v = (STATE.days[d.id] || {}).heading;
   return d.date + '（' + d.dow + '）' + ((v && v.trim()) ? ' ' + v.trim() : '');
 }
+function dayHeadingHTML(d){
+  const v = (STATE.days[d.id] || {}).heading;
+  return '<span class="dh-d">' + esc(d.date) + '<span class="dh-w">（' + esc(d.dow) + '）</span></span>'
+    + ((v && v.trim()) ? '<span class="dh-s">' + esc(v.trim()) + '</span>' : '');
+}
 function itemsOf(dayId){
   const raw = (STATE.days[dayId] && STATE.days[dayId].items) || {};
   return Object.keys(raw).map(k => ({ ...raw[k], _id:k }))
@@ -718,7 +726,7 @@ function renderDays(){
       <div class="dayhead">
         <div class="daynum">DAY${di+1}</div>
         <div class="t">
-          <h2>${esc(dayHeading(d))}${isToday ? '<span class="badge-today">今天</span>' : ''}<button class="dayedit" data-act="dayedit" data-day="${d.id}" aria-label="編輯標題">${ICO.edit}</button></h2>
+          <h2>${dayHeadingHTML(d)}${isToday ? '<span class="badge-today">今天</span>' : ''}<button class="dayedit" data-act="dayedit" data-day="${d.id}" aria-label="編輯標題">${ICO.edit}</button></h2>
         </div>
         <div class="dayweather" data-weather="${d.id}">${dayWeatherHTML(d)}</div>
       </div>
