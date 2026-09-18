@@ -1495,8 +1495,9 @@ function renderSplit(){
     return '<div class="spday">' + (d ? d.date + '（' + d.dow + '）' : iso) + ' ・ ' + rows.length + ' 筆 ・ ' + nt(sum) + '</div>'
       + rows.map(e => '<div class="spitem"><span class="ic">' + (SP_ICON[e.cat] || '🧾') + '</span>'
         + '<span class="tx"><span class="t1">' + esc(e.note || e.cat) + '</span>'
-        + '<span class="t2"><span class="ln"><b class="payer">' + esc(e.payer) + '</b> 付 ・ ' + esc(e.cat) + '</span>'
-        + '<span class="ln">' + spWhoOf(e).length + ' 人分，每人 ' + jp(spPerJpy(e)) + '（' + nt(spPer(e)) + '）</span>'
+        + '<span class="t2"><span class="ln"><b class="payer">' + esc(e.payer) + '</b> 付 ・ ' + esc(e.cat)
+        + ' ・ ' + spWhoOf(e).length + ' 人分</span>'
+        + '<span class="ln">每人 ' + jp(spPerJpy(e)) + '（' + nt(spPer(e)) + '）</span>'
         + '<span class="ln dim">匯率 ' + (+(e.rate || RATE)).toFixed(4) + '</span></span></span>'
         + '<span class="am">' + (e.cur === 'JPY' ? '¥ ' + (+e.amt).toLocaleString('zh-TW') : nt(e.amt))
         + (e.cur === 'JPY' ? '<small>' + nt(spTwd(e)) + '</small>' : '') + '</span>'
