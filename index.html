@@ -93,15 +93,15 @@ a:hover{color:var(--sea-2)}
 
 /* ── day ──────────────────────────── */
 .day{scroll-margin-top:74px;padding-top:26px}
-.dayhead{display:flex;align-items:center;gap:10px}
-.daynum{font-family:var(--gothic);font-size:13px;line-height:1.2;font-weight:500;color:var(--sea-1);
+.dayhead{display:flex;align-items:center;gap:7px}
+.daynum{font-family:var(--gothic);font-size:16px;line-height:1.2;font-weight:500;color:var(--sea-1);
   letter-spacing:.14em;padding-top:4px}
 .dayhead .t{flex:1;min-width:0}
 .dayhead h2{font-family:var(--mincho);font-size:18px;font-weight:600;margin:0;letter-spacing:.05em;
-  display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+  display:flex;align-items:center;gap:6px;flex-wrap:nowrap;min-width:0}
 .dh-d{white-space:nowrap}
 .dh-w{margin-left:-1px}
-.dh-s{margin-left:-5px}
+.dh-s{margin-left:-5px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .dayedit{border:none;background:none;padding:2px;color:#bcb1a2;cursor:pointer;display:inline-grid;place-items:center}
 .dayedit svg{width:14px;height:14px}
 .dayhead .m{font-size:11.5px;color:var(--ink-3);letter-spacing:.06em;margin-top:2px}
@@ -724,7 +724,7 @@ function renderDays(){
 
     return `<section class="day" id="${d.id}" data-iso="${d.iso}" style="--daycolor:${d.color}">
       <div class="dayhead">
-        <div class="daynum">DAY${di+1}</div>
+        <div class="daynum">D${di+1}</div>
         <div class="t">
           <h2>${dayHeadingHTML(d)}${isToday ? '<span class="badge-today">今天</span>' : ''}<button class="dayedit" data-act="dayedit" data-day="${d.id}" aria-label="編輯標題">${ICO.edit}</button></h2>
         </div>
